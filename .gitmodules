@@ -4,3 +4,7 @@
 [submodule "lib/aave-v3-origin-private"]
 	path = lib/aave-v3-origin-private
 	url = https://github.com/bgd-labs/aave-v3-origin-private
+	branch = feat/eMode-umbrella
+[submodule "lib/aave-helpers"]
+	path = lib/aave-helpers
+	url = https://github.com/bgd-labs/aave-helpers
