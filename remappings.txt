@@ -8,4 +8,4 @@ erc4626-tests/=lib/aave-v3-origin-private/lib/solidity-utils/lib/openzeppelin-co
 forge-std/=lib/forge-std/src/
 openzeppelin-contracts-upgradeable/=lib/aave-v3-origin-private/lib/solidity-utils/lib/openzeppelin-contracts-upgradeable/
 openzeppelin-contracts/=lib/aave-v3-origin-private/lib/solidity-utils/lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/
-solidity-utils/=lib/aave-v3-origin-private/lib/solidity-utils/
+solidity-utils/=lib/aave-v3-origin-private/lib/solidity-utils/src/
