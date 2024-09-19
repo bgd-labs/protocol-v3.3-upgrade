@@ -6,6 +6,8 @@ import {IPool} from 'aave-v3-origin/contracts/interfaces/IPool.sol';
 import {IPoolAddressesProvider} from 'aave-v3-origin/contracts/interfaces/IPoolAddressesProvider.sol';
 import {IPoolConfigurator} from 'aave-v3-origin/contracts/interfaces/IPoolConfigurator.sol';
 import {EModeConfiguration} from 'aave-v3-origin/contracts/protocol/libraries/configuration/EModeConfiguration.sol';
+import {DefaultReserveInterestRateStrategyV2} from 'aave-v3-origin/contracts/misc/DefaultReserveInterestRateStrategyV2.sol';
+import {IDefaultInterestRateStrategyV2} from 'aave-v3-origin/contracts/interfaces/IDefaultInterestRateStrategyV2.sol';
 import {ReserveConfiguration as ReserveConfigurationLegacy} from './lib/LegacyReserveConfiguration.sol';
 
 contract UpgradePayload {
@@ -13,9 +15,9 @@ contract UpgradePayload {
   using ReserveConfigurationLegacy for DataTypes.ReserveConfigurationMap;
 
   struct ConstructorParams {
-    address poolAddressesProvider;
-    address pool;
-    address poolConfigurator;
+    IPoolAddressesProvider poolAddressesProvider;
+    IPool pool;
+    IPoolConfigurator poolConfigurator;
     address poolImpl;
     address poolConfiguratorImpl;
     address poolDataProvider;
@@ -29,9 +31,9 @@ contract UpgradePayload {
   address public immutable POOL_DATA_PROVIDER;
 
   constructor(ConstructorParams memory params) {
-    POOL_ADDRESSES_PROVIDER = IPoolAddressesProvider(params.poolAddressesProvider);
-    POOL = IPool(params.pool);
-    CONFIGURATOR = IPoolConfigurator(params.poolConfigurator);
+    POOL_ADDRESSES_PROVIDER = params.poolAddressesProvider;
+    POOL = params.pool;
+    CONFIGURATOR = params.poolConfigurator;
     POOL_IMPL = params.poolImpl;
     POOL_CONFIGURATOR_IMPL = params.poolConfiguratorImpl;
     POOL_DATA_PROVIDER = params.poolDataProvider;
@@ -40,27 +42,42 @@ contract UpgradePayload {
   function execute() external {
     // delete and cache all eModes
     address[] memory reservesList = POOL.getReservesList();
-    uint256[] memory eModeCache = new uint256[](reservesList.length);
+    uint8[] memory eModeCache = new uint8[](reservesList.length);
+    bytes[] memory cachedInterestRate = new bytes[](reservesList.length);
     for (uint256 i = 0; i < reservesList.length; i++) {
-      DataTypes.ReserveDataLegacy memory currentReserve = POOL.getReserveData(reservesList[i]);
-      DataTypes.ReserveConfigurationMap memory currentConfiguration = currentReserve.configuration;
+      DataTypes.ReserveDataLegacy memory reserveData = POOL.getReserveData(reservesList[i]);
+      DataTypes.ReserveConfigurationMap memory currentConfiguration = reserveData.configuration;
 
-      uint256 eMode = currentConfiguration.getEModeCategory();
+      cachedInterestRate[i] = abi.encode(
+        IDefaultInterestRateStrategyV2(reserveData.interestRateStrategyAddress).getInterestRateData(
+          reservesList[i]
+        )
+      );
+
+      uint8 eMode = uint8(currentConfiguration.getEModeCategory());
       if (eMode != 0) {
         eModeCache[i] = eMode;
-        CONFIGURATOR.setAssetEModeCategory(reservesList[i], 0);
       }
     }
     // upgrade to v3.2.0
     POOL_ADDRESSES_PROVIDER.setPoolConfiguratorImpl(POOL_CONFIGURATOR_IMPL);
     POOL_ADDRESSES_PROVIDER.setPoolImpl(POOL_IMPL);
     POOL_ADDRESSES_PROVIDER.setPoolDataProvider(POOL_DATA_PROVIDER);
-    // set all eModes
+    DefaultReserveInterestRateStrategyV2 strategy = new DefaultReserveInterestRateStrategyV2(
+      address(POOL_ADDRESSES_PROVIDER)
+    );
     for (uint256 i = 0; i < reservesList.length; i++) {
+      // set all eModes
       if (eModeCache[i] != 0) {
         CONFIGURATOR.setAssetCollateralInEMode(reservesList[i], eModeCache[i], true);
         CONFIGURATOR.setAssetBorrowableInEMode(reservesList[i], eModeCache[i], true);
       }
+      // set all irs
+      CONFIGURATOR.setReserveInterestRateStrategyAddress(
+        reservesList[i],
+        address(strategy),
+        cachedInterestRate[i]
+      );
     }
   }
 }

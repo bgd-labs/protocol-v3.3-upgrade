@@ -8,8 +8,4 @@ contract PolygonTest is UpgradeTest('polygon', 61627144) {
   function _getPayload() internal virtual override returns (address) {
     return DeploymentLibrary._deployPolygon();
   }
-
-  function test_stub() external {
-    assertEq(true, true);
-  }
 }
