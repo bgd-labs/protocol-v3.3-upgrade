@@ -40,6 +40,8 @@ gnosis = "${RPC_GNOSIS}"
 bnb = "${RPC_BNB}"
 celo = "${RPC_CELO}"
 scroll = "${RPC_SCROLL}"
+zksync = "${RPC_ZKSYNC}"
+
 
 [etherscan]
 mainnet = { key = "${ETHERSCAN_API_KEY_MAINNET}", chainId = 1 }
