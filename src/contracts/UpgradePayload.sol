@@ -49,9 +49,8 @@ contract UpgradePayload {
       DataTypes.ReserveConfigurationMap memory currentConfiguration = reserveData.configuration;
 
       cachedInterestRate[i] = abi.encode(
-        IDefaultInterestRateStrategyV2(reserveData.interestRateStrategyAddress).getInterestRateData(
-          reservesList[i]
-        )
+        IDefaultInterestRateStrategyV2(reserveData.interestRateStrategyAddress)
+          .getInterestRateDataBps(reservesList[i])
       );
 
       uint8 eMode = uint8(currentConfiguration.getEModeCategory());
