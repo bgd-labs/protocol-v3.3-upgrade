@@ -13,6 +13,7 @@ import {AaveV3Ethereum} from 'aave-address-book/AaveV3Ethereum.sol';
 import {AaveV3BNB} from 'aave-address-book/AaveV3BNB.sol';
 import {AaveV3Gnosis} from 'aave-address-book/AaveV3Gnosis.sol';
 import {AaveV3Scroll} from 'aave-address-book/AaveV3Scroll.sol';
+import {AaveV3Base} from 'aave-address-book/AaveV3Base.sol';
 import {AaveV3Metis} from 'aave-address-book/AaveV3Metis.sol';
 import {AaveV3EthereumLido} from 'aave-address-book/AaveV3EthereumLido.sol';
 import {AaveV3EthereumEtherFi} from 'aave-address-book/AaveV3EthereumEtherFi.sol';
@@ -22,14 +23,20 @@ import {PoolInstance3_2} from '../src/contracts/PoolInstance.sol';
 import {L2PoolInstance3_2} from '../src/contracts/L2PoolInstance.sol';
 
 library DeploymentLibrary {
-  // TODO: add missing networks
-
   // rollups
   function _deployOptimism() internal returns (address) {
     UpgradePayload.ConstructorParams memory params;
     params.pool = AaveV3Optimism.POOL;
     params.poolConfigurator = AaveV3Optimism.POOL_CONFIGURATOR;
     params.poolAddressesProvider = AaveV3Optimism.POOL_ADDRESSES_PROVIDER;
+    return _deployL2(params);
+  }
+
+  function _deployBase() internal returns (address) {
+    UpgradePayload.ConstructorParams memory params;
+    params.pool = AaveV3Base.POOL;
+    params.poolConfigurator = AaveV3Base.POOL_CONFIGURATOR;
+    params.poolAddressesProvider = AaveV3Base.POOL_ADDRESSES_PROVIDER;
     return _deployL2(params);
   }
 

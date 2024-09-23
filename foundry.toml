@@ -10,6 +10,21 @@ metadata = 'none'
 ffi = true
 evm_version = 'shanghai'
 
+[profile.zksync]
+src = 'zksync/src'
+test = 'zksync/tests'
+libs = ['lib']
+solc = '0.8.20'
+fs_permissions = [{ access = "write", path = "./reports" }]
+ffi = true
+evm_version = 'shanghai'
+
+[profile.zksync.zksync]
+compile = true
+fallback_oz = true
+mode = '3'
+zksolc = '1.5.1'
+
 [rpc_endpoints]
 mainnet = "${RPC_MAINNET}"
 optimism = "${RPC_OPTIMISM}"
