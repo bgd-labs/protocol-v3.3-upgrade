@@ -8,6 +8,7 @@ remappings = []
 fs_permissions = [{ access = "write", path = "./reports" }]
 metadata = 'none'
 ffi = true
+evm_version = 'shanghai'
 
 [rpc_endpoints]
 mainnet = "${RPC_MAINNET}"
@@ -23,6 +24,7 @@ zkevm = "${RPC_ZKEVM}"
 gnosis = "${RPC_GNOSIS}"
 bnb = "${RPC_BNB}"
 celo = "${RPC_CELO}"
+scroll = "${RPC_SCROLL}"
 
 [etherscan]
 mainnet = { key = "${ETHERSCAN_API_KEY_MAINNET}", chainId = 1 }

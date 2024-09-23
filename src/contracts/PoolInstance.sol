@@ -8,7 +8,7 @@ import {CustomInitialize} from './CustomInitialize.sol';
 /**
  * @notice Pool instance
  */
-contract PoolInstanceRev5 is PoolInstance {
+contract PoolInstance3_2 is PoolInstance {
   constructor(IPoolAddressesProvider provider) PoolInstance(provider) {}
 
   function initialize(IPoolAddressesProvider provider) external virtual override initializer {
