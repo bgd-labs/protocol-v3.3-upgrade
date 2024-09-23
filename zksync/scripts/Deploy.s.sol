@@ -22,7 +22,7 @@ library DeploymentLibrary {
   }
 
   function _deployL2(UpgradePayload.ConstructorParams memory params) internal returns (address) {
-    params.poolImpl = GovV3Helpers.deployDeterministic(
+    params.poolImpl = GovV3Helpers.deployDeterministicZkSync(
       type(L2PoolInstance3_2).creationCode,
       abi.encode(params.poolAddressesProvider)
     );
@@ -32,10 +32,10 @@ library DeploymentLibrary {
   function _deployPayload(
     UpgradePayload.ConstructorParams memory params
   ) private returns (address) {
-    params.poolConfiguratorImpl = GovV3Helpers.deployDeterministic(
+    params.poolConfiguratorImpl = GovV3Helpers.deployDeterministicZkSync(
       type(PoolConfiguratorInstance).creationCode
     );
-    params.poolDataProvider = GovV3Helpers.deployDeterministic(
+    params.poolDataProvider = GovV3Helpers.deployDeterministicZkSync(
       type(AaveProtocolDataProvider).creationCode,
       abi.encode(params.poolAddressesProvider)
     );

@@ -1,6 +1,7 @@
 @openzeppelin/contracts-upgradeable/=lib/aave-v3-origin-private/lib/solidity-utils/lib/openzeppelin-contracts-upgradeable/contracts/
 @openzeppelin/contracts/=lib/aave-v3-origin-private/lib/solidity-utils/lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/
 aave-v3-origin/=lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/
+aave-v3-origin-test/=lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/test/
 ds-test/=lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/lib/forge-std/lib/ds-test/src/
 erc4626-tests/=lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/lib/solidity-utils/lib/openzeppelin-contracts-upgradeable/lib/erc4626-tests/
 forge-std/=lib/forge-std/src/
