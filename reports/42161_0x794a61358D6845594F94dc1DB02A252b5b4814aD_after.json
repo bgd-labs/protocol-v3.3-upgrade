@@ -27,10 +27,10 @@
     "pool": "0x794a61358D6845594F94dc1DB02A252b5b4814aD",
     "poolAddressesProvider": "0xa97684ead0e402dC232d5A977953DF7ECBaB3CDb",
     "poolConfigurator": "0x8145eddDf43f50276641b55bd3AD95944510021E",
-    "poolConfiguratorImpl": "0x543f9a9644Fd4431cD7fa480495bA563ba0894E4",
-    "poolImpl": "0xF13ed4F1D1971FFb11D5877313aAb2Fd90D970d8",
+    "poolConfiguratorImpl": "0xFB4AA6e2a49a09FF7bb706Ebc00E6826B721e230",
+    "poolImpl": "0x217A19D267A28B1395c8F284c05241c6b0e222b2",
     "priceOracleSentinel": "0x7A9ff54A6eE4a21223036890bB8c4ea2D62c686b",
-    "protocolDataProvider": "0xd4038A3745407a53C2de1A021C2b05C7C12b3d3D"
+    "protocolDataProvider": "0x242F20F19D7Caf45f46E688a9f047165DF117c29"
   },
   "reserves": {
     "0x17FC002b466eEc40DaE837Fc4bE5c67993ddBd6F": {
@@ -38,7 +38,7 @@
       "aTokenImpl": "0x1Be1798b70aEe431c2986f7ff48d9D1fa350786a",
       "aTokenName": "Aave Arbitrum FRAX",
       "aTokenSymbol": "aArbFRAX",
-      "aTokenUnderlyingBalance": "199375390725020102240437",
+      "aTokenUnderlyingBalance": "165632812052625330837059",
       "borrowCap": 5500000,
       "borrowingEnabled": true,
       "debtCeiling": 100000000,
@@ -58,7 +58,7 @@
       "oracle": "0x06919EB75Bd6BA817D38CC70C1CA588ac7a01C10",
       "oracleDecimals": 8,
       "oracleDescription": "Capped FRAX/USD",
-      "oracleLatestAnswer": "99705010",
+      "oracleLatestAnswer": "99873762",
       "reserveFactor": 2000,
       "supplyCap": 7000000,
       "symbol": "FRAX",
@@ -69,14 +69,14 @@
       "variableDebtTokenName": "Aave Arbitrum Variable Debt FRAX",
       "variableDebtTokenSymbol": "variableDebtArbFRAX",
       "virtualAccountingActive": true,
-      "virtualBalance": "199375359440020102240437"
+      "virtualBalance": "165632780767625330837059"
     },
     "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f": {
       "aToken": "0x078f358208685046a11C85e8ad32895DED33A249",
       "aTokenImpl": "0x1Be1798b70aEe431c2986f7ff48d9D1fa350786a",
       "aTokenName": "Aave Arbitrum WBTC",
       "aTokenSymbol": "aArbWBTC",
-      "aTokenUnderlyingBalance": "309581424714",
+      "aTokenUnderlyingBalance": "310296762366",
       "borrowCap": 1115,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -96,7 +96,7 @@
       "oracle": "0x6ce185860a4963106506C203335A2910413708e9",
       "oracleDecimals": 8,
       "oracleDescription": "BTC / USD",
-      "oracleLatestAnswer": "6346440000000",
+      "oracleLatestAnswer": "6346691530000",
       "reserveFactor": 2000,
       "supplyCap": 5000,
       "symbol": "WBTC",
@@ -107,14 +107,14 @@
       "variableDebtTokenName": "Aave Arbitrum Variable Debt WBTC",
       "variableDebtTokenSymbol": "variableDebtArbWBTC",
       "virtualAccountingActive": true,
-      "virtualBalance": "309581424714"
+      "virtualBalance": "310296762366"
     },
     "0x35751007a407ca6FEFfE80b3cB397736D2cf4dbe": {
       "aToken": "0x8437d7C167dFB82ED4Cb79CD44B7a32A1dd95c77",
       "aTokenImpl": "0x1Be1798b70aEe431c2986f7ff48d9D1fa350786a",
       "aTokenName": "Aave Arbitrum weETH",
       "aTokenSymbol": "aArbweETH",
-      "aTokenUnderlyingBalance": "69216373703577070728616",
+      "aTokenUnderlyingBalance": "70529305051473456176577",
       "borrowCap": 25000,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -134,7 +134,7 @@
       "oracle": "0x517276B5972C4Db7E88B9F76Ee500E888a2D73C3",
       "oracleDecimals": 8,
       "oracleDescription": "Capped weETH / eETH(ETH) / USD",
-      "oracleLatestAnswer": "277646619328",
+      "oracleLatestAnswer": "277161826395",
       "reserveFactor": 4500,
       "supplyCap": 77000,
       "symbol": "weETH",
@@ -145,7 +145,7 @@
       "variableDebtTokenName": "Aave Arbitrum Variable Debt weETH",
       "variableDebtTokenSymbol": "variableDebtArbweETH",
       "virtualAccountingActive": true,
-      "virtualBalance": "69216373703577070728616"
+      "virtualBalance": "70529305051473456176577"
     },
     "0x3F56e0c36d275367b8C502090EDF38289b3dEa0d": {
       "aToken": "0xc45A479877e1e9Dfe9FcD4056c699575a1045dAA",
@@ -172,7 +172,7 @@
       "oracle": "0x7a7cE08a1057723CCEDeA2462407427Ae33FFEb2",
       "oracleDecimals": 8,
       "oracleDescription": "Capped MAI/USD",
-      "oracleLatestAnswer": "99961522",
+      "oracleLatestAnswer": "99881209",
       "reserveFactor": 9500,
       "supplyCap": 325000,
       "symbol": "MAI",
@@ -190,7 +190,7 @@
       "aTokenImpl": "0x1Be1798b70aEe431c2986f7ff48d9D1fa350786a",
       "aTokenName": "Aave Arbitrum wstETH",
       "aTokenSymbol": "aArbwstETH",
-      "aTokenUnderlyingBalance": "34433486784534901223315",
+      "aTokenUnderlyingBalance": "34570216643673377356133",
       "borrowCap": 4800,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -210,7 +210,7 @@
       "oracle": "0x87fE1503beFBF98C35c7526B0c488d950F822C0F",
       "oracleDecimals": 8,
       "oracleDescription": "Capped wstETH / stETH(ETH) / USD",
-      "oracleLatestAnswer": "312341461213",
+      "oracleLatestAnswer": "311798928197",
       "reserveFactor": 500,
       "supplyCap": 69000,
       "symbol": "wstETH",
@@ -221,14 +221,14 @@
       "variableDebtTokenName": "Aave Arbitrum Variable Debt wstETH",
       "variableDebtTokenSymbol": "variableDebtArbwstETH",
       "virtualAccountingActive": true,
-      "virtualBalance": "34433486782614159518610"
+      "virtualBalance": "34570216641752635651428"
     },
     "0x7dfF72693f6A4149b17e7C6314655f6A9F7c8B33": {
       "aToken": "0xeBe517846d0F36eCEd99C735cbF6131e1fEB775D",
       "aTokenImpl": "0x1Be1798b70aEe431c2986f7ff48d9D1fa350786a",
       "aTokenName": "Aave Arbitrum GHO",
       "aTokenSymbol": "aArbGHO",
-      "aTokenUnderlyingBalance": "5676168995773743290377575",
+      "aTokenUnderlyingBalance": "5647403450701636129071587",
       "borrowCap": 9000000,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -258,14 +258,14 @@
       "variableDebtTokenName": "Aave Arbitrum Variable Debt GHO",
       "variableDebtTokenSymbol": "variableDebtArbGHO",
       "virtualAccountingActive": true,
-      "virtualBalance": "5676168975455281864388443"
+      "virtualBalance": "5647403430383174703082455"
     },
     "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1": {
       "aToken": "0xe50fA9b3c56FfB159cB0FCA61F5c9D750e8128c8",
       "aTokenImpl": "0x1Be1798b70aEe431c2986f7ff48d9D1fa350786a",
       "aTokenName": "Aave Arbitrum WETH",
       "aTokenSymbol": "aArbWETH",
-      "aTokenUnderlyingBalance": "14650817785614206153896",
+      "aTokenUnderlyingBalance": "14132163205958862989187",
       "borrowCap": 120000,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -285,7 +285,7 @@
       "oracle": "0x639Fe6ab55C921f74e7fac1ee960C0B6293ba612",
       "oracleDecimals": 8,
       "oracleDescription": "ETH / USD",
-      "oracleLatestAnswer": "264781540000",
+      "oracleLatestAnswer": "264298530000",
       "reserveFactor": 1500,
       "supplyCap": 140000,
       "symbol": "WETH",
@@ -296,14 +296,14 @@
       "variableDebtTokenName": "Aave Arbitrum Variable Debt WETH",
       "variableDebtTokenSymbol": "variableDebtArbWETH",
       "virtualAccountingActive": true,
-      "virtualBalance": "14650817785614206153896"
+      "virtualBalance": "14132163205958862989187"
     },
     "0x912CE59144191C1204E64559FE8253a0e49E6548": {
       "aToken": "0x6533afac2E7BCCB20dca161449A13A32D391fb00",
       "aTokenImpl": "0x1Be1798b70aEe431c2986f7ff48d9D1fa350786a",
       "aTokenName": "Aave Arbitrum ARB",
       "aTokenSymbol": "aArbARB",
-      "aTokenUnderlyingBalance": "29284523679645542632737443",
+      "aTokenUnderlyingBalance": "29808723942625948463701223",
       "borrowCap": 16500000,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -323,7 +323,7 @@
       "oracle": "0xb2A824043730FE05F3DA2efaFa1CBbe83fa548D6",
       "oracleDecimals": 8,
       "oracleDescription": "ARB / USD",
-      "oracleLatestAnswer": "60165000",
+      "oracleLatestAnswer": "59897014",
       "reserveFactor": 2000,
       "supplyCap": 60000000,
       "symbol": "ARB",
@@ -334,14 +334,14 @@
       "variableDebtTokenName": "Aave Arbitrum Variable Debt ARB",
       "variableDebtTokenSymbol": "variableDebtArbARB",
       "virtualAccountingActive": true,
-      "virtualBalance": "29284523648500354967183809"
+      "virtualBalance": "29808723911480760798147589"
     },
     "0x93b346b6BC2548dA6A1E7d98E9a421B42541425b": {
       "aToken": "0x8ffDf2DE812095b1D19CB146E4c004587C0A0692",
       "aTokenImpl": "0x1Be1798b70aEe431c2986f7ff48d9D1fa350786a",
       "aTokenName": "Aave Arbitrum LUSD",
       "aTokenSymbol": "aArbLUSD",
-      "aTokenUnderlyingBalance": "119750638604740131800272",
+      "aTokenUnderlyingBalance": "119556435865815533694904",
       "borrowCap": 1800000,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -361,7 +361,7 @@
       "oracle": "0x341B110bDF665A20F0D5f84A92FcAF5EbeEBC629",
       "oracleDecimals": 8,
       "oracleDescription": "Capped LUSD/USD",
-      "oracleLatestAnswer": "100184727",
+      "oracleLatestAnswer": "99988268",
       "reserveFactor": 2000,
       "supplyCap": 2200000,
       "symbol": "LUSD",
@@ -372,7 +372,7 @@
       "variableDebtTokenName": "Aave Arbitrum Variable Debt LUSD",
       "variableDebtTokenSymbol": "variableDebtArbLUSD",
       "virtualAccountingActive": true,
-      "virtualBalance": "119750479495515908104118"
+      "virtualBalance": "119556276756591309998750"
     },
     "0xD22a58f79e9481D1a88e00c343885A588b34b68B": {
       "aToken": "0x6d80113e533a2C0fe82EaBD35f1875DcEA89Ea97",
@@ -399,7 +399,7 @@
       "oracle": "0xA14d53bC1F1c0F31B4aA3BD109344E5009051a84",
       "oracleDecimals": 8,
       "oracleDescription": "EUR / USD",
-      "oracleLatestAnswer": "111200000",
+      "oracleLatestAnswer": "111280000",
       "reserveFactor": 2000,
       "supplyCap": 80000,
       "symbol": "EURS",
@@ -417,7 +417,7 @@
       "aTokenImpl": "0x1Be1798b70aEe431c2986f7ff48d9D1fa350786a",
       "aTokenName": "Aave Arbitrum DAI",
       "aTokenSymbol": "aArbDAI",
-      "aTokenUnderlyingBalance": "1502001220129149034148140",
+      "aTokenUnderlyingBalance": "1281558110074060381218523",
       "borrowCap": 30000000,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -437,7 +437,7 @@
       "oracle": "0x4a838a3Dac6633bB1fd932B6f356DecFCAf7803D",
       "oracleDecimals": 8,
       "oracleDescription": "Capped DAI/USD",
-      "oracleLatestAnswer": "100018462",
+      "oracleLatestAnswer": "99990547",
       "reserveFactor": 2500,
       "supplyCap": 50000000,
       "symbol": "DAI",
@@ -448,14 +448,14 @@
       "variableDebtTokenName": "Aave Arbitrum Variable Debt DAI",
       "variableDebtTokenSymbol": "variableDebtArbDAI",
       "virtualAccountingActive": true,
-      "virtualBalance": "1501991913730191782273140"
+      "virtualBalance": "1281548803675103129343523"
     },
     "0xEC70Dcb4A1EFa46b8F2D97C310C9c4790ba5ffA8": {
       "aToken": "0x8Eb270e296023E9D92081fdF967dDd7878724424",
       "aTokenImpl": "0x1Be1798b70aEe431c2986f7ff48d9D1fa350786a",
       "aTokenName": "Aave Arbitrum rETH",
       "aTokenSymbol": "aArbrETH",
-      "aTokenUnderlyingBalance": "3064264665189757627582",
+      "aTokenUnderlyingBalance": "3076884216731899995097",
       "borrowCap": 1360,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -475,7 +475,7 @@
       "oracle": "0x256f33FC0110B1297f78f48524631D30B752480D",
       "oracleDecimals": 8,
       "oracleDescription": "Capped rETH / ETH / USD",
-      "oracleLatestAnswer": "295650340593",
+      "oracleLatestAnswer": "295131988641",
       "reserveFactor": 1500,
       "supplyCap": 5100,
       "symbol": "rETH",
@@ -486,14 +486,14 @@
       "variableDebtTokenName": "Aave Arbitrum Variable Debt rETH",
       "variableDebtTokenSymbol": "variableDebtArbrETH",
       "virtualAccountingActive": true,
-      "virtualBalance": "3064264638794082826017"
+      "virtualBalance": "3076884190336225193532"
     },
     "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8": {
       "aToken": "0x625E7708f30cA75bfd92586e17077590C60eb4cD",
       "aTokenImpl": "0x1Be1798b70aEe431c2986f7ff48d9D1fa350786a",
       "aTokenName": "Aave Arbitrum USDC",
       "aTokenSymbol": "aArbUSDC",
-      "aTokenUnderlyingBalance": "1540027429832",
+      "aTokenUnderlyingBalance": "1514419400315",
       "borrowCap": 24000000,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -513,7 +513,7 @@
       "oracle": "0xDe25a88F87FEd9F8999fAbF6729dCB121893623C",
       "oracleDecimals": 8,
       "oracleDescription": "Capped USDC/USD",
-      "oracleLatestAnswer": "100015000",
+      "oracleLatestAnswer": "100000580",
       "reserveFactor": 4000,
       "supplyCap": 26000000,
       "symbol": "USDC",
@@ -524,14 +524,14 @@
       "variableDebtTokenName": "Aave Arbitrum Variable Debt USDC",
       "variableDebtTokenSymbol": "variableDebtArbUSDC",
       "virtualAccountingActive": true,
-      "virtualBalance": "1539914900274"
+      "virtualBalance": "1514306870757"
     },
     "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9": {
       "aToken": "0x6ab707Aca953eDAeFBc4fD23bA73294241490620",
       "aTokenImpl": "0x1Be1798b70aEe431c2986f7ff48d9D1fa350786a",
       "aTokenName": "Aave Arbitrum USDT",
       "aTokenSymbol": "aArbUSDT",
-      "aTokenUnderlyingBalance": "12778660036642",
+      "aTokenUnderlyingBalance": "13064803371699",
       "borrowCap": 120000000,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -551,7 +551,7 @@
       "oracle": "0x84dC1C52D7C340AA54B4e8799FBB31C3D28E67aD",
       "oracleDecimals": 8,
       "oracleDescription": "Capped USDT/USD",
-      "oracleLatestAnswer": "99996000",
+      "oracleLatestAnswer": "99993615",
       "reserveFactor": 1000,
       "supplyCap": 130000000,
       "symbol": "USDT",
@@ -562,14 +562,14 @@
       "variableDebtTokenName": "Aave Arbitrum Variable Debt USDT",
       "variableDebtTokenSymbol": "variableDebtArbUSDT",
       "virtualAccountingActive": true,
-      "virtualBalance": "12778615413875"
+      "virtualBalance": "13064758748932"
     },
     "0xaf88d065e77c8cC2239327C5EDb3A432268e5831": {
       "aToken": "0x724dc807b04555b71ed48a6896b6F41593b8C637",
       "aTokenImpl": "0x1Be1798b70aEe431c2986f7ff48d9D1fa350786a",
       "aTokenName": "Aave Arbitrum USDCn",
       "aTokenSymbol": "aArbUSDCn",
-      "aTokenUnderlyingBalance": "32001543935607",
+      "aTokenUnderlyingBalance": "30488584635785",
       "borrowCap": 320000000,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -589,7 +589,7 @@
       "oracle": "0xDe25a88F87FEd9F8999fAbF6729dCB121893623C",
       "oracleDecimals": 8,
       "oracleDescription": "Capped USDC/USD",
-      "oracleLatestAnswer": "100015000",
+      "oracleLatestAnswer": "100000580",
       "reserveFactor": 1000,
       "supplyCap": 350000000,
       "symbol": "USDC",
@@ -600,14 +600,14 @@
       "variableDebtTokenName": "Aave Arbitrum Variable Debt USDCn",
       "variableDebtTokenSymbol": "variableDebtArbUSDCn",
       "virtualAccountingActive": true,
-      "virtualBalance": "32001521549694"
+      "virtualBalance": "30488562249871"
     },
     "0xba5DdD1f9d7F570dc94a51479a000E3BCE967196": {
       "aToken": "0xf329e36C7bF6E5E86ce2150875a84Ce77f477375",
       "aTokenImpl": "0x1Be1798b70aEe431c2986f7ff48d9D1fa350786a",
       "aTokenName": "Aave Arbitrum AAVE",
       "aTokenSymbol": "aArbAAVE",
-      "aTokenUnderlyingBalance": "9660912491667475092278",
+      "aTokenUnderlyingBalance": "9947589281325495102399",
       "borrowCap": 0,
       "borrowingEnabled": false,
       "debtCeiling": 0,
@@ -627,7 +627,7 @@
       "oracle": "0xaD1d5344AaDE45F43E596773Bcc4c423EAbdD034",
       "oracleDecimals": 8,
       "oracleDescription": "AAVE / USD",
-      "oracleLatestAnswer": "17187730000",
+      "oracleLatestAnswer": "16902680000",
       "reserveFactor": 0,
       "supplyCap": 14000,
       "symbol": "AAVE",
@@ -638,14 +638,14 @@
       "variableDebtTokenName": "Aave Arbitrum Variable Debt AAVE",
       "variableDebtTokenSymbol": "variableDebtArbAAVE",
       "virtualAccountingActive": true,
-      "virtualBalance": "9660912491667475092278"
+      "virtualBalance": "9947589281325495102399"
     },
     "0xf97f4df75117a78c1A5a0DBb814Af92458539FB4": {
       "aToken": "0x191c10Aa4AF7C30e871E70C95dB0E4eb77237530",
       "aTokenImpl": "0x1Be1798b70aEe431c2986f7ff48d9D1fa350786a",
       "aTokenName": "Aave Arbitrum LINK",
       "aTokenSymbol": "aArbLINK",
-      "aTokenUnderlyingBalance": "1760443332532630188974485",
+      "aTokenUnderlyingBalance": "1769867642263984303559972",
       "borrowCap": 484490,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -665,7 +665,7 @@
       "oracle": "0x86E53CF1B870786351Da77A57575e79CB55812CB",
       "oracleDecimals": 8,
       "oracleDescription": "LINK / USD",
-      "oracleLatestAnswer": "1146120000",
+      "oracleLatestAnswer": "1146777200",
       "reserveFactor": 2000,
       "supplyCap": 2000000,
       "symbol": "LINK",
@@ -676,7 +676,7 @@
       "variableDebtTokenName": "Aave Arbitrum Variable Debt LINK",
       "variableDebtTokenSymbol": "variableDebtArbLINK",
       "virtualAccountingActive": true,
-      "virtualBalance": "1760443330260339342866125"
+      "virtualBalance": "1769867639991693457451612"
     }
   },
   "strategies": {

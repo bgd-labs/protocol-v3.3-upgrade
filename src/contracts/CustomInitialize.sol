@@ -18,7 +18,7 @@ library CustomInitialize {
     uint256 reservesCount,
     mapping(uint256 => address) storage _reservesList,
     mapping(address => DataTypes.ReserveData) storage _reserves
-  ) external {
+  ) internal {
     for (uint256 i = 0; i < reservesCount; i++) {
       address currentReserveAddress = _reservesList[i];
       DataTypes.ReserveData storage currentReserve = _reserves[currentReserveAddress];

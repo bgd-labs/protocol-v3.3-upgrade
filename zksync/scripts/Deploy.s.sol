@@ -12,7 +12,6 @@ import {PoolInstance3_2} from '../../src/contracts/PoolInstance.sol';
 import {L2PoolInstance3_2} from '../../src/contracts/L2PoolInstance.sol';
 
 library DeploymentLibrary {
-  // rollups
   function _deployZKSync() internal returns (address) {
     UpgradePayload.ConstructorParams memory params;
     params.pool = AaveV3ZkSync.POOL;

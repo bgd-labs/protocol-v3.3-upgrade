@@ -17,10 +17,10 @@
     "pool": "0x11fCfe756c05AD438e312a7fd934381537D3cFfe",
     "poolAddressesProvider": "0x69850D0B276776781C063771b161bd8894BCdD04",
     "poolConfigurator": "0x32BCab42a2bb5AC577D24b425D46d8b8e0Df9b7f",
-    "poolConfiguratorImpl": "0x543f9a9644Fd4431cD7fa480495bA563ba0894E4",
-    "poolImpl": "0xA4364dF8E276406b74e9365707932f0F39502790",
+    "poolConfiguratorImpl": "0xFB4AA6e2a49a09FF7bb706Ebc00E6826B721e230",
+    "poolImpl": "0x40aA8Af94dC90d41217729AA29d5aE7e2EE5d1Db",
     "priceOracleSentinel": "0xfD0Ba55775C1e53f50736FA5528d8aa45FBcA391",
-    "protocolDataProvider": "0x5b0B0308B330244391abcBe6fF6EECB1BC1843Bf"
+    "protocolDataProvider": "0x9A3892A8BFD70fEAfE4065BFD40334128F86D0Ac"
   },
   "reserves": {
     "0x01f0a31698C4d065659b9bdC21B3610292a1c506": {

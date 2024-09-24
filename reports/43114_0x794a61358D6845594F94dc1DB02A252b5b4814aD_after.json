@@ -27,10 +27,10 @@
     "pool": "0x794a61358D6845594F94dc1DB02A252b5b4814aD",
     "poolAddressesProvider": "0xa97684ead0e402dC232d5A977953DF7ECBaB3CDb",
     "poolConfigurator": "0x8145eddDf43f50276641b55bd3AD95944510021E",
-    "poolConfiguratorImpl": "0x543f9a9644Fd4431cD7fa480495bA563ba0894E4",
-    "poolImpl": "0xDe46D6aa62076B615Aa1d027144DA2Ae7e763310",
+    "poolConfiguratorImpl": "0xFB4AA6e2a49a09FF7bb706Ebc00E6826B721e230",
+    "poolImpl": "0x62ea0043Ee0710df08f7FcfA80012e8E9Bb0c834",
     "priceOracleSentinel": "0x0000000000000000000000000000000000000000",
-    "protocolDataProvider": "0xd4038A3745407a53C2de1A021C2b05C7C12b3d3D"
+    "protocolDataProvider": "0x242F20F19D7Caf45f46E688a9f047165DF117c29"
   },
   "reserves": {
     "0x152b9d0FdC40C096757F570A51E494bd4b943E50": {
@@ -38,7 +38,7 @@
       "aTokenImpl": "0x1E81af09001aD208BDa68FF022544dB2102A752d",
       "aTokenName": "Aave Avalanche BTC.b",
       "aTokenSymbol": "aAvaBTC.b",
-      "aTokenUnderlyingBalance": "275014813892",
+      "aTokenUnderlyingBalance": "257060898140",
       "borrowCap": 900,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -58,7 +58,7 @@
       "oracle": "0x2779D32d5166BAaa2B2b658333bA7e6Ec0C65743",
       "oracleDecimals": 8,
       "oracleDescription": "BTC / USD",
-      "oracleLatestAnswer": "6344811000000",
+      "oracleLatestAnswer": "6344317186741",
       "reserveFactor": 2000,
       "supplyCap": 3000,
       "symbol": "BTC.b",
@@ -69,14 +69,14 @@
       "variableDebtTokenName": "Aave Avalanche Variable Debt BTC.b",
       "variableDebtTokenSymbol": "variableDebtAvaBTC.b",
       "virtualAccountingActive": true,
-      "virtualBalance": "275014682021"
+      "virtualBalance": "257060766269"
     },
     "0x2b2C81e08f1Af8835a78Bb2A90AE924ACE0eA4bE": {
       "aToken": "0x513c7E3a9c69cA3e22550eF58AC1C0088e918FFf",
       "aTokenImpl": "0x1E81af09001aD208BDa68FF022544dB2102A752d",
       "aTokenName": "Aave Avalanche SAVAX",
       "aTokenSymbol": "aAvaSAVAX",
-      "aTokenUnderlyingBalance": "1616332183320958659067199",
+      "aTokenUnderlyingBalance": "1617230026073858443943392",
       "borrowCap": 0,
       "borrowingEnabled": false,
       "debtCeiling": 0,
@@ -96,7 +96,7 @@
       "oracle": "0xB2B332f27e4B7305649a228C31Ed9858c5a6bAD9",
       "oracleDecimals": 8,
       "oracleDescription": "Capped sAVAX / AVAX / USD",
-      "oracleLatestAnswer": "3222356410",
+      "oracleLatestAnswer": "3209723073",
       "reserveFactor": 1000,
       "supplyCap": 2200000,
       "symbol": "sAVAX",
@@ -107,14 +107,14 @@
       "variableDebtTokenName": "Aave Avalanche Variable Debt SAVAX",
       "variableDebtTokenSymbol": "variableDebtAvaSAVAX",
       "virtualAccountingActive": true,
-      "virtualBalance": "1616332183320958659067199"
+      "virtualBalance": "1617230026073858443943392"
     },
     "0x49D5c2BdFfac6CE2BFdB6640F4F80f226bc10bAB": {
       "aToken": "0xe50fA9b3c56FfB159cB0FCA61F5c9D750e8128c8",
       "aTokenImpl": "0x1E81af09001aD208BDa68FF022544dB2102A752d",
       "aTokenName": "Aave Avalanche WETH",
       "aTokenSymbol": "aAvaWETH",
-      "aTokenUnderlyingBalance": "7560200893069107211980",
+      "aTokenUnderlyingBalance": "7628358987498316743435",
       "borrowCap": 20500,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -134,7 +134,7 @@
       "oracle": "0x976B3D034E162d8bD72D6b9C989d545b839003b0",
       "oracleDecimals": 8,
       "oracleDescription": "ETH / USD",
-      "oracleLatestAnswer": "264718000000",
+      "oracleLatestAnswer": "264412750000",
       "reserveFactor": 1500,
       "supplyCap": 38000,
       "symbol": "WETH.e",
@@ -145,14 +145,14 @@
       "variableDebtTokenName": "Aave Avalanche Variable Debt WETH",
       "variableDebtTokenSymbol": "variableDebtAvaWETH",
       "virtualAccountingActive": true,
-      "virtualBalance": "7560200893069107211980"
+      "virtualBalance": "7628358987498316743435"
     },
     "0x50b7545627a5162F82A992c33b87aDc75187B218": {
       "aToken": "0x078f358208685046a11C85e8ad32895DED33A249",
       "aTokenImpl": "0x1E81af09001aD208BDa68FF022544dB2102A752d",
       "aTokenName": "Aave Avalanche WBTC",
       "aTokenSymbol": "aAvaWBTC",
-      "aTokenUnderlyingBalance": "14413804065",
+      "aTokenUnderlyingBalance": "14413547989",
       "borrowCap": 1100,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -172,7 +172,7 @@
       "oracle": "0x2779D32d5166BAaa2B2b658333bA7e6Ec0C65743",
       "oracleDecimals": 8,
       "oracleDescription": "BTC / USD",
-      "oracleLatestAnswer": "6344811000000",
+      "oracleLatestAnswer": "6344317186741",
       "reserveFactor": 2000,
       "supplyCap": 2000,
       "symbol": "WBTC.e",
@@ -183,14 +183,14 @@
       "variableDebtTokenName": "Aave Avalanche Variable Debt WBTC",
       "variableDebtTokenSymbol": "variableDebtAvaWBTC",
       "virtualAccountingActive": true,
-      "virtualBalance": "14413804065"
+      "virtualBalance": "14413547989"
     },
     "0x5947BB275c521040051D82396192181b413227A3": {
       "aToken": "0x191c10Aa4AF7C30e871E70C95dB0E4eb77237530",
       "aTokenImpl": "0x1E81af09001aD208BDa68FF022544dB2102A752d",
       "aTokenName": "Aave Avalanche LINK",
       "aTokenSymbol": "aAvaLINK",
-      "aTokenUnderlyingBalance": "174548409005306015509659",
+      "aTokenUnderlyingBalance": "174827815425968695721851",
       "borrowCap": 220000,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -210,7 +210,7 @@
       "oracle": "0x49ccd9ca821EfEab2b98c60dC60F518E765EDe9a",
       "oracleDecimals": 8,
       "oracleDescription": "LINK / USD",
-      "oracleLatestAnswer": "1147050000",
+      "oracleLatestAnswer": "1146682672",
       "reserveFactor": 2000,
       "supplyCap": 440000,
       "symbol": "LINK.e",
@@ -221,7 +221,7 @@
       "variableDebtTokenName": "Aave Avalanche Variable Debt LINK",
       "variableDebtTokenSymbol": "variableDebtAvaLINK",
       "virtualAccountingActive": true,
-      "virtualBalance": "174548409005306015509659"
+      "virtualBalance": "174827815425968695721851"
     },
     "0x5c49b268c9841AFF1Cc3B0a418ff5c3442eE3F3b": {
       "aToken": "0x8Eb270e296023E9D92081fdF967dDd7878724424",
@@ -248,7 +248,7 @@
       "oracle": "0xCcC55Db26B78a19Dba1beE0066F9c1665575439A",
       "oracleDecimals": 8,
       "oracleDescription": "Capped MAI/USD",
-      "oracleLatestAnswer": "99971501",
+      "oracleLatestAnswer": "99878107",
       "reserveFactor": 9500,
       "supplyCap": 20000,
       "symbol": "MAI",
@@ -266,7 +266,7 @@
       "aTokenImpl": "0x1E81af09001aD208BDa68FF022544dB2102A752d",
       "aTokenName": "Aave Avalanche AAVE",
       "aTokenSymbol": "aAvaAAVE",
-      "aTokenUnderlyingBalance": "5273515846793058304898",
+      "aTokenUnderlyingBalance": "5317679706082860728399",
       "borrowCap": 0,
       "borrowingEnabled": false,
       "debtCeiling": 0,
@@ -286,7 +286,7 @@
       "oracle": "0x3CA13391E9fb38a75330fb28f8cc2eB3D9ceceED",
       "oracleDecimals": 8,
       "oracleDescription": "AAVE / USD",
-      "oracleLatestAnswer": "17194151247",
+      "oracleLatestAnswer": "16929288032",
       "reserveFactor": 0,
       "supplyCap": 5800,
       "symbol": "AAVE.e",
@@ -297,14 +297,14 @@
       "variableDebtTokenName": "Aave Avalanche Variable Debt AAVE",
       "variableDebtTokenSymbol": "variableDebtAvaAAVE",
       "virtualAccountingActive": true,
-      "virtualBalance": "5273515846793058304898"
+      "virtualBalance": "5317679706082860728399"
     },
     "0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7": {
       "aToken": "0x6ab707Aca953eDAeFBc4fD23bA73294241490620",
       "aTokenImpl": "0x1E81af09001aD208BDa68FF022544dB2102A752d",
       "aTokenName": "Aave Avalanche USDT",
       "aTokenSymbol": "aAvaUSDT",
-      "aTokenUnderlyingBalance": "5705125452467",
+      "aTokenUnderlyingBalance": "5559613254150",
       "borrowCap": 80000000,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -324,7 +324,7 @@
       "oracle": "0x39185f2236A6022b682e8BB93C040d125DA093CF",
       "oracleDecimals": 8,
       "oracleDescription": "Capped USDt/USD",
-      "oracleLatestAnswer": "100010001",
+      "oracleLatestAnswer": "99984609",
       "reserveFactor": 1000,
       "supplyCap": 100000000,
       "symbol": "USDt",
@@ -335,14 +335,14 @@
       "variableDebtTokenName": "Aave Avalanche Variable Debt USDT",
       "variableDebtTokenSymbol": "variableDebtAvaUSDT",
       "virtualAccountingActive": true,
-      "virtualBalance": "5705103638867"
+      "virtualBalance": "5559591440550"
     },
     "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7": {
       "aToken": "0x6d80113e533a2C0fe82EaBD35f1875DcEA89Ea97",
       "aTokenImpl": "0x1E81af09001aD208BDa68FF022544dB2102A752d",
       "aTokenName": "Aave Avalanche WAVAX",
       "aTokenSymbol": "aAvaWAVAX",
-      "aTokenUnderlyingBalance": "1817150949476897406346691",
+      "aTokenUnderlyingBalance": "1859997179081437459422970",
       "borrowCap": 3600000,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -362,7 +362,7 @@
       "oracle": "0x0A77230d17318075983913bC2145DB16C7366156",
       "oracleDecimals": 8,
       "oracleDescription": "AVAX / USD",
-      "oracleLatestAnswer": "2759190000",
+      "oracleLatestAnswer": "2747997784",
       "reserveFactor": 2000,
       "supplyCap": 5700000,
       "symbol": "WAVAX",
@@ -373,14 +373,14 @@
       "variableDebtTokenName": "Aave Avalanche Variable Debt WAVAX",
       "variableDebtTokenSymbol": "variableDebtAvaWAVAX",
       "virtualAccountingActive": true,
-      "virtualBalance": "1817150949476897406346691"
+      "virtualBalance": "1859997179081437459422970"
     },
     "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E": {
       "aToken": "0x625E7708f30cA75bfd92586e17077590C60eb4cD",
       "aTokenImpl": "0x1E81af09001aD208BDa68FF022544dB2102A752d",
       "aTokenName": "Aave Avalanche USDC",
       "aTokenSymbol": "aAvaUSDC",
-      "aTokenUnderlyingBalance": "11448774099449",
+      "aTokenUnderlyingBalance": "10477994397611",
       "borrowCap": 150000000,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -400,7 +400,7 @@
       "oracle": "0xD8277249e871BE9A402fa286C2C5ec16046dC512",
       "oracleDecimals": 8,
       "oracleDescription": "Capped USDC/USD",
-      "oracleLatestAnswer": "100012000",
+      "oracleLatestAnswer": "99999837",
       "reserveFactor": 1000,
       "supplyCap": 200000000,
       "symbol": "USDC",
@@ -411,7 +411,7 @@
       "variableDebtTokenName": "Aave Avalanche Variable Debt USDC",
       "variableDebtTokenSymbol": "variableDebtAvaUSDC",
       "virtualAccountingActive": true,
-      "virtualBalance": "11448757360092"
+      "virtualBalance": "10477977658254"
     },
     "0xD24C2Ad096400B6FBcd2ad8B24E7acBc21A1da64": {
       "aToken": "0xc45A479877e1e9Dfe9FcD4056c699575a1045dAA",
@@ -438,7 +438,7 @@
       "oracle": "0x6208576378D06ce69A27987b7A524A9B15d499a4",
       "oracleDecimals": 8,
       "oracleDescription": "Capped FRAX/USD",
-      "oracleLatestAnswer": "99724616",
+      "oracleLatestAnswer": "99876991",
       "reserveFactor": 2000,
       "supplyCap": 1500000,
       "symbol": "FRAX",
@@ -456,7 +456,7 @@
       "aTokenImpl": "0x1E81af09001aD208BDa68FF022544dB2102A752d",
       "aTokenName": "Aave Avalanche DAI",
       "aTokenSymbol": "aAvaDAI",
-      "aTokenUnderlyingBalance": "789972915670112320275476",
+      "aTokenUnderlyingBalance": "790833884194225829529593",
       "borrowCap": 17000000,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -476,7 +476,7 @@
       "oracle": "0xf82da795727633aFA9BB0f1B08A87c0F6A38723f",
       "oracleDecimals": 8,
       "oracleDescription": "Capped DAI.e/USD",
-      "oracleLatestAnswer": "100018401",
+      "oracleLatestAnswer": "100004264",
       "reserveFactor": 2500,
       "supplyCap": 17000000,
       "symbol": "DAI.e",
@@ -487,7 +487,7 @@
       "variableDebtTokenName": "Aave Avalanche Variable Debt DAI",
       "variableDebtTokenSymbol": "variableDebtAvaDAI",
       "virtualAccountingActive": true,
-      "virtualBalance": "789972915670112320275476"
+      "virtualBalance": "790833884194225829529593"
     }
   },
   "strategies": {

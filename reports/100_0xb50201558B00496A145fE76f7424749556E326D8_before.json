@@ -26,7 +26,7 @@
       "aTokenImpl": "0x589750BA8aF186cE5B55391B0b7148cAD43a1619",
       "aTokenName": "Aave Gnosis USDCe",
       "aTokenSymbol": "aGnoUSDCe",
-      "aTokenUnderlyingBalance": "782771986040",
+      "aTokenUnderlyingBalance": "780789883844",
       "borrowCap": 1400000,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -46,7 +46,7 @@
       "oracle": "0x0a2d05bc646C65A029e602c257DfA14adF8BfAd2",
       "oracleDecimals": 8,
       "oracleDescription": "Capped USDC/USD",
-      "oracleLatestAnswer": "100013375",
+      "oracleLatestAnswer": "99998071",
       "reserveFactor": 1000,
       "supplyCap": 3000000,
       "symbol": "USDC.e",
@@ -57,14 +57,14 @@
       "variableDebtTokenName": "Aave Gnosis Variable Debt USDCe",
       "variableDebtTokenSymbol": "variableDebtGnoUSDCe",
       "virtualAccountingActive": true,
-      "virtualBalance": "782771986040"
+      "virtualBalance": "780789883844"
     },
     "0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1": {
       "aToken": "0xa818F1B57c201E092C4A2017A91815034326Efd1",
       "aTokenImpl": "0x589750BA8aF186cE5B55391B0b7148cAD43a1619",
       "aTokenName": "Aave Gnosis WETH",
       "aTokenSymbol": "aGnoWETH",
-      "aTokenUnderlyingBalance": "1185586851774927819074",
+      "aTokenUnderlyingBalance": "1198483370398142283998",
       "borrowCap": 3500,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -84,7 +84,7 @@
       "oracle": "0xa767f745331D267c7751297D982b050c93985627",
       "oracleDecimals": 8,
       "oracleDescription": "ETH / USD",
-      "oracleLatestAnswer": "264409000000",
+      "oracleLatestAnswer": "265389532400",
       "reserveFactor": 1500,
       "supplyCap": 4000,
       "symbol": "WETH",
@@ -95,14 +95,14 @@
       "variableDebtTokenName": "Aave Gnosis Variable Debt WETH",
       "variableDebtTokenSymbol": "variableDebtGnoWETH",
       "virtualAccountingActive": true,
-      "virtualBalance": "1185586795511177769430"
+      "virtualBalance": "1198483314134392234354"
     },
     "0x6C76971f98945AE98dD7d4DFcA8711ebea946eA6": {
       "aToken": "0x23e4E76D01B2002BE436CE8d6044b0aA2f68B68a",
       "aTokenImpl": "0x589750BA8aF186cE5B55391B0b7148cAD43a1619",
       "aTokenName": "Aave Gnosis wstETH",
       "aTokenSymbol": "aGnowstETH",
-      "aTokenUnderlyingBalance": "4354854111317281130172",
+      "aTokenUnderlyingBalance": "4318217892355041576555",
       "borrowCap": 400,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -122,7 +122,7 @@
       "oracle": "0x8Ee42Ba520cA106294163fb8b1ffE9C6Fba35507",
       "oracleDecimals": 8,
       "oracleDescription": "Capped wstETH / stETH(ETH) / USD",
-      "oracleLatestAnswer": "311902005773",
+      "oracleLatestAnswer": "313086008299",
       "reserveFactor": 500,
       "supplyCap": 7500,
       "symbol": "wstETH",
@@ -133,14 +133,14 @@
       "variableDebtTokenName": "Aave Gnosis Variable Debt wstETH",
       "variableDebtTokenSymbol": "variableDebtGnowstETH",
       "virtualAccountingActive": true,
-      "virtualBalance": "4354854111048992713708"
+      "virtualBalance": "4318217892086753160091"
     },
     "0x9C58BAcC331c9aa871AFD802DB6379a98e80CEdb": {
       "aToken": "0xA1Fa064A85266E2Ca82DEe5C5CcEC84DF445760e",
       "aTokenImpl": "0x589750BA8aF186cE5B55391B0b7148cAD43a1619",
       "aTokenName": "Aave Gnosis GNO",
       "aTokenSymbol": "aGnoGNO",
-      "aTokenUnderlyingBalance": "35772851996502003664821",
+      "aTokenUnderlyingBalance": "32632149160302635560252",
       "borrowCap": 6500,
       "borrowingEnabled": true,
       "debtCeiling": 200000000,
@@ -160,7 +160,7 @@
       "oracle": "0x22441d81416430A54336aB28765abd31a792Ad37",
       "oracleDecimals": 8,
       "oracleDescription": "GNO / USD",
-      "oracleLatestAnswer": "16908188971",
+      "oracleLatestAnswer": "16672014800",
       "reserveFactor": 2000,
       "supplyCap": 60000,
       "symbol": "GNO",
@@ -171,14 +171,14 @@
       "variableDebtTokenName": "Aave Gnosis Variable Debt GNO",
       "variableDebtTokenSymbol": "variableDebtGnoGNO",
       "virtualAccountingActive": true,
-      "virtualBalance": "35772851977319332907453"
+      "virtualBalance": "32632149141119964802884"
     },
     "0xDDAfbb505ad214D7b80b1f830fcCc89B60fb7A83": {
       "aToken": "0xc6B7AcA6DE8a6044E0e32d0c841a89244A10D284",
       "aTokenImpl": "0x589750BA8aF186cE5B55391B0b7148cAD43a1619",
       "aTokenName": "Aave Gnosis USDC",
       "aTokenSymbol": "aGnoUSDC",
-      "aTokenUnderlyingBalance": "364455630417",
+      "aTokenUnderlyingBalance": "378349920109",
       "borrowCap": 11000000,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -198,7 +198,7 @@
       "oracle": "0x0a2d05bc646C65A029e602c257DfA14adF8BfAd2",
       "oracleDecimals": 8,
       "oracleDescription": "Capped USDC/USD",
-      "oracleLatestAnswer": "100013375",
+      "oracleLatestAnswer": "99998071",
       "reserveFactor": 1500,
       "supplyCap": 11000000,
       "symbol": "USDC",
@@ -209,14 +209,14 @@
       "variableDebtTokenName": "Aave Gnosis Variable Debt USDC",
       "variableDebtTokenSymbol": "variableDebtGnoUSDC",
       "virtualAccountingActive": true,
-      "virtualBalance": "364452607413"
+      "virtualBalance": "378346897105"
     },
     "0xaf204776c7245bF4147c2612BF6e5972Ee483701": {
       "aToken": "0x7a5c3860a77a8DC1b225BD46d0fb2ac1C6D191BC",
       "aTokenImpl": "0x589750BA8aF186cE5B55391B0b7148cAD43a1619",
       "aTokenName": "Aave Gnosis sDAI",
       "aTokenSymbol": "aGnosDAI",
-      "aTokenUnderlyingBalance": "21472825617097288197450420",
+      "aTokenUnderlyingBalance": "21414811130302942120806187",
       "borrowCap": 0,
       "borrowingEnabled": false,
       "debtCeiling": 0,
@@ -236,7 +236,7 @@
       "oracle": "0x1D0f881Ce1a646E2f27Dec3c57Fa056cB838BCC2",
       "oracleDecimals": 8,
       "oracleDescription": "sDAI/DAI/USD",
-      "oracleLatestAnswer": "111281915",
+      "oracleLatestAnswer": "111284909",
       "reserveFactor": 1000,
       "supplyCap": 48000000,
       "symbol": "sDAI",
@@ -247,14 +247,14 @@
       "variableDebtTokenName": "Aave Gnosis Variable Debt sDAI",
       "variableDebtTokenSymbol": "variableDebtGnosDAI",
       "virtualAccountingActive": true,
-      "virtualBalance": "21472825617097288197450420"
+      "virtualBalance": "21414811130302942120806187"
     },
     "0xcB444e90D8198415266c6a2724b7900fb12FC56E": {
       "aToken": "0xEdBC7449a9b594CA4E053D9737EC5Dc4CbCcBfb2",
       "aTokenImpl": "0x589750BA8aF186cE5B55391B0b7148cAD43a1619",
       "aTokenName": "Aave Gnosis EURe",
       "aTokenSymbol": "aGnoEURe",
-      "aTokenUnderlyingBalance": "1220715702319241398763818",
+      "aTokenUnderlyingBalance": "1222553093123159307701348",
       "borrowCap": 5600000,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -274,7 +274,7 @@
       "oracle": "0xab70BCB260073d036d1660201e9d5405F5829b7a",
       "oracleDecimals": 8,
       "oracleDescription": "EUR / USD",
-      "oracleLatestAnswer": "111189000",
+      "oracleLatestAnswer": "111310000",
       "reserveFactor": 2000,
       "supplyCap": 6000000,
       "symbol": "EURe",
@@ -285,14 +285,14 @@
       "variableDebtTokenName": "Aave Gnosis Variable Debt EURe",
       "variableDebtTokenSymbol": "variableDebtGnoEURe",
       "virtualAccountingActive": true,
-      "virtualBalance": "1220715378224114392641655"
+      "virtualBalance": "1222552769028032301579185"
     },
     "0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d": {
       "aToken": "0xd0Dd6cEF72143E22cCED4867eb0d5F2328715533",
       "aTokenImpl": "0x589750BA8aF186cE5B55391B0b7148cAD43a1619",
       "aTokenName": "Aave Gnosis WXDAI",
       "aTokenSymbol": "aGnoWXDAI",
-      "aTokenUnderlyingBalance": "1158537869873102641542243",
+      "aTokenUnderlyingBalance": "1364481024616285679196867",
       "borrowCap": 36000000,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -312,7 +312,7 @@
       "oracle": "0xE5269eF0CE04E509E8134624c7BF043b21e10897",
       "oracleDecimals": 8,
       "oracleDescription": "Capped wXDAI/USD",
-      "oracleLatestAnswer": "100009000",
+      "oracleLatestAnswer": "99990326",
       "reserveFactor": 2500,
       "supplyCap": 36000000,
       "symbol": "WXDAI",
@@ -323,7 +323,7 @@
       "variableDebtTokenName": "Aave Gnosis Variable Debt WXDAI",
       "variableDebtTokenSymbol": "variableDebtGnoWXDAI",
       "virtualAccountingActive": true,
-      "virtualBalance": "1158537159607095804457721"
+      "virtualBalance": "1364480314350278842112345"
     }
   },
   "strategies": {
