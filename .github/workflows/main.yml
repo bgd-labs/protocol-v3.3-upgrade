@@ -11,3 +11,10 @@ jobs:
   test:
     uses: bgd-labs/github-workflows/.github/workflows/foundry-test.yml@main
     secrets: inherit
+
+  test-sol-zksync:
+    uses: bgd-labs/github-workflows/.github/workflows/foundry-test.yml@main
+    secrets: inherit
+    with:
+      zksync: true
+      ROOT_DIR: "zksync"

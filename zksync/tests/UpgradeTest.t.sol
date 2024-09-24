@@ -16,9 +16,9 @@ abstract contract UpgradeTest is ProtocolV3TestBase {
   }
 
   function setUp() public override {
-    super.setUp();
     vm.createSelectFork(vm.rpcUrl(NETWORK), BLOCK_NUMBER);
     payload = UpgradePayload(_getPayload());
+    super.setUp();
   }
 
   function test_default() external {
