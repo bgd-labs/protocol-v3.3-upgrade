@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {GovV3Helpers} from 'aave-helpers/src/GovV3Helpers.sol';
 import {AaveProtocolDataProvider} from 'aave-v3-origin/contracts/helpers/AaveProtocolDataProvider.sol';
 import {PoolConfiguratorInstance} from 'aave-v3-origin/contracts/instances/PoolConfiguratorInstance.sol';
 import {IPoolAddressesProvider} from 'aave-address-book/AaveV3.sol';
@@ -17,27 +16,19 @@ library DeploymentLibrary {
     params.pool = AaveV3ZkSync.POOL;
     params.poolConfigurator = AaveV3ZkSync.POOL_CONFIGURATOR;
     params.poolAddressesProvider = AaveV3ZkSync.POOL_ADDRESSES_PROVIDER;
-    return _deployL2(params);
+    return _deployL2(vm, params);
   }
 
   function _deployL2(UpgradePayload.ConstructorParams memory params) internal returns (address) {
-    params.poolImpl = GovV3Helpers.deployDeterministicZkSync(
-      type(L2PoolInstance3_2).creationCode,
-      abi.encode(params.poolAddressesProvider)
-    );
-    return _deployPayload(params);
+    params.poolImpl = address(new L2PoolInstance3_2{salt: 'v1'}(params.poolAddressesProvider));
+    return _deployPayload(vm, params);
   }
 
   function _deployPayload(
     UpgradePayload.ConstructorParams memory params
   ) private returns (address) {
-    params.poolConfiguratorImpl = GovV3Helpers.deployDeterministicZkSync(
-      type(PoolConfiguratorInstance).creationCode
-    );
-    params.poolDataProvider = GovV3Helpers.deployDeterministicZkSync(
-      type(AaveProtocolDataProvider).creationCode,
-      abi.encode(params.poolAddressesProvider)
-    );
+    params.poolConfiguratorImpl = address(new PoolConfiguratorInstance{salt: 'v1'}());
+    params.poolDataProvider = address(new AaveProtocolDataProvider{salt: 'v1'}(params.poolAddressesProvider));
     return address(new UpgradePayload(params));
   }
 }
