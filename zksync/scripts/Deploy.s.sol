@@ -16,12 +16,12 @@ library DeploymentLibrary {
     params.pool = AaveV3ZkSync.POOL;
     params.poolConfigurator = AaveV3ZkSync.POOL_CONFIGURATOR;
     params.poolAddressesProvider = AaveV3ZkSync.POOL_ADDRESSES_PROVIDER;
-    return _deployL2(vm, params);
+    return _deployL2(params);
   }
 
   function _deployL2(UpgradePayload.ConstructorParams memory params) internal returns (address) {
     params.poolImpl = address(new L2PoolInstance3_2{salt: 'v1'}(params.poolAddressesProvider));
-    return _deployPayload(vm, params);
+    return _deployPayload(params);
   }
 
   function _deployPayload(
