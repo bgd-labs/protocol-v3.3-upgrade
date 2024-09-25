@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import {EthereumScript, PolygonScript, AvalancheScript, OptimismScript, ArbitrumScript, MetisScript, BaseScript, GnosisScript, ScrollScript, BNBScript} from 'solidity-utils/contracts/utils/ScriptUtils.sol';
 import {GovV3Helpers} from 'aave-helpers/src/GovV3Helpers.sol';
 import {AaveProtocolDataProvider} from 'aave-v3-origin/contracts/helpers/AaveProtocolDataProvider.sol';
 import {PoolConfiguratorInstance} from 'aave-v3-origin/contracts/instances/PoolConfiguratorInstance.sol';
@@ -148,5 +149,11 @@ library DeploymentLibrary {
       abi.encode(params.poolAddressesProvider)
     );
     return address(new UpgradePayload(params));
+  }
+}
+
+contract Deploypolygon is PolygonScript {
+  function run() external broadcast {
+    DeploymentLibrary._deployPolygon();
   }
 }
