@@ -29,5 +29,20 @@ abstract contract UpgradeTest is ProtocolV3TestBase {
     );
   }
 
+  function test_deployed() external {
+    UpgradePayload deployed = UpgradePayload(_getDeployedPayload());
+    require(address(deployed) != address(0), 'PAYLOAD_NOT_YET_DEPLOYED');
+    IPool pool = deployed.POOL();
+    defaultTest(
+      string(abi.encodePacked(vm.toString(block.chainid), '_', vm.toString(address(pool)))),
+      pool,
+      address(deployed)
+    );
+  }
+
   function _getPayload() internal virtual returns (address);
+
+  function _getDeployedPayload() internal virtual returns (address) {
+    return address(0);
+  }
 }
