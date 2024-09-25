@@ -22,11 +22,7 @@ abstract contract UpgradeTest is ProtocolV3TestBase {
 
   function test_default() external {
     IPool pool = payload.POOL();
-    defaultTest(
-      string(abi.encodePacked(vm.toString(block.chainid), '_', vm.toString(address(pool)))),
-      pool,
-      address(payload)
-    );
+    executePayload(vm, address(payload));
   }
 
   function test_deployed() external {

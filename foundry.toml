@@ -57,6 +57,6 @@ base = { key = "${ETHERSCAN_API_KEY_BASE}", chain = 8453 }
 gnosis = { key = "${ETHERSCAN_API_KEY_GNOSIS}", chain = 100 }
 scroll = { key = "${ETHERSCAN_API_KEY_SCROLL}", chain = 534352 }
 bnb = { key = "${ETHERSCAN_API_KEY_BNB}", chain = 56 }
-zksync = { key = "${ETHERSCAN_API_KEY_ZKSYNC", chain = 324 }
+zksync = { key = "${ETHERSCAN_API_KEY_ZKSYNC}", chain = 324 }
 
 # See more config options https://github.com/gakonst/foundry/tree/master/config

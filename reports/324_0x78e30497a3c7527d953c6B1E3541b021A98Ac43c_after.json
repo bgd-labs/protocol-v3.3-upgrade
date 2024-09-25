@@ -16,10 +16,10 @@
     "pool": "0x78e30497a3c7527d953c6B1E3541b021A98Ac43c",
     "poolAddressesProvider": "0x2A3948BB219D6B2Fa83D64100006391a96bE6cb7",
     "poolConfigurator": "0x0207d31b4377C74bEC37356aaD83E3dCc979F40E",
-    "poolConfiguratorImpl": "0x2083c9bF82Fe30Fd5bA0bfFd82834b2b3C66844e",
-    "poolImpl": "0x72A20119d4ac1c862A399968eDE6124245F0a4dE",
+    "poolConfiguratorImpl": "0xBc4c49630350F67D7Ec88785E5DF9A57c78a1b7d",
+    "poolImpl": "0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A",
     "priceOracleSentinel": "0x0000000000000000000000000000000000000000",
-    "protocolDataProvider": "0x7467F43FB9a28DEB8930f94474CBfA68E46D0980"
+    "protocolDataProvider": "0x5F2A704cE47B373c908fE8A29514249469b52b99"
   },
   "reserves": {
     "0x1d17CBcF0D6D143135aE902365D2E5e2A16538D4": {
@@ -27,7 +27,7 @@
       "aTokenImpl": "0x34be365Fd01ac224F21490aaC6dFd65D25434bbB",
       "aTokenName": "Aave ZkSync USDC",
       "aTokenSymbol": "aZksUSDC",
-      "aTokenUnderlyingBalance": "68525974418",
+      "aTokenUnderlyingBalance": "33711085466",
       "borrowCap": 900000,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -47,7 +47,7 @@
       "oracle": "0x22A46593A7f93Aaec788bE3e27C1838E15781222",
       "oracleDecimals": 8,
       "oracleDescription": "Capped USDC/USD",
-      "oracleLatestAnswer": "99994175",
+      "oracleLatestAnswer": "99995307",
       "reserveFactor": 1000,
       "supplyCap": 1000000,
       "symbol": "USDC",
@@ -58,14 +58,14 @@
       "variableDebtTokenName": "Aave ZkSync Variable Debt USDC",
       "variableDebtTokenSymbol": "variableDebtZksUSDC",
       "virtualAccountingActive": true,
-      "virtualBalance": "68525974418"
+      "virtualBalance": "33711085466"
     },
     "0x493257fD37EDB34451f62EDf8D2a0C418852bA4C": {
       "aToken": "0xC48574bc5358c967d9447e7Df70230Fdb469e4E7",
       "aTokenImpl": "0x34be365Fd01ac224F21490aaC6dFd65D25434bbB",
       "aTokenName": "Aave ZkSync USDT",
       "aTokenSymbol": "aZksUSDT",
-      "aTokenUnderlyingBalance": "8613840330",
+      "aTokenUnderlyingBalance": "6638021480",
       "borrowCap": 2700000,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -85,7 +85,7 @@
       "oracle": "0xE8D6d2dffCFfFc6b1f3606b7552e80319D01A8E9",
       "oracleDecimals": 8,
       "oracleDescription": "Capped USDT/USD",
-      "oracleLatestAnswer": "99989105",
+      "oracleLatestAnswer": "99995252",
       "reserveFactor": 1000,
       "supplyCap": 3000000,
       "symbol": "USDT",
@@ -96,14 +96,14 @@
       "variableDebtTokenName": "Aave ZkSync Variable Debt USDT",
       "variableDebtTokenSymbol": "variableDebtZksUSDT",
       "virtualAccountingActive": true,
-      "virtualBalance": "8613840330"
+      "virtualBalance": "6638021480"
     },
     "0x5A7d6b2F92C77FAD6CCaBd7EE0624E64907Eaf3E": {
       "aToken": "0xd6cD2c0fC55936498726CacC497832052A9B2D1B",
       "aTokenImpl": "0x34be365Fd01ac224F21490aaC6dFd65D25434bbB",
       "aTokenName": "Aave ZkSync ZK",
       "aTokenSymbol": "aZksZK",
-      "aTokenUnderlyingBalance": "17930038701686365657408796",
+      "aTokenUnderlyingBalance": "17991881081296116089099737",
       "borrowCap": 10000000,
       "borrowingEnabled": true,
       "debtCeiling": 80000000,
@@ -123,7 +123,7 @@
       "oracle": "0xD1ce60dc8AE060DDD17cA8716C96f193bC88DD13",
       "oracleDecimals": 8,
       "oracleDescription": "ZK / USD",
-      "oracleLatestAnswer": "12289677",
+      "oracleLatestAnswer": "13422898",
       "reserveFactor": 2000,
       "supplyCap": 18000000,
       "symbol": "ZK",
@@ -134,14 +134,14 @@
       "variableDebtTokenName": "Aave ZkSync Variable Debt ZK",
       "variableDebtTokenSymbol": "variableDebtZksZK",
       "virtualAccountingActive": true,
-      "virtualBalance": "17930038701686365657408796"
+      "virtualBalance": "17991881081296116089099737"
     },
     "0x5AEa5775959fBC2557Cc8789bC1bf90A239D9a91": {
       "aToken": "0xb7b93bCf82519bB757Fd18b23A389245Dbd8ca64",
       "aTokenImpl": "0x34be365Fd01ac224F21490aaC6dFd65D25434bbB",
       "aTokenName": "Aave ZkSync WETH",
       "aTokenSymbol": "aZksWETH",
-      "aTokenUnderlyingBalance": "17108756398500408074",
+      "aTokenUnderlyingBalance": "28494424543801295057",
       "borrowCap": 900,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -161,7 +161,7 @@
       "oracle": "0x6D41d1dc818112880b40e26BD6FD347E41008eDA",
       "oracleDecimals": 8,
       "oracleDescription": "ETH / USD",
-      "oracleLatestAnswer": "260381970000",
+      "oracleLatestAnswer": "257522106378",
       "reserveFactor": 1500,
       "supplyCap": 1000,
       "symbol": "WETH",
@@ -172,14 +172,14 @@
       "variableDebtTokenName": "Aave ZkSync Variable Debt WETH",
       "variableDebtTokenSymbol": "variableDebtZksWETH",
       "virtualAccountingActive": true,
-      "virtualBalance": "17108756398500408074"
+      "virtualBalance": "28494424543801295057"
     },
     "0x703b52F2b28fEbcB60E1372858AF5b18849FE867": {
       "aToken": "0xd4e607633F3d984633E946aEA4eb71f92564c1c9",
       "aTokenImpl": "0x34be365Fd01ac224F21490aaC6dFd65D25434bbB",
       "aTokenName": "Aave ZkSync wstETH",
       "aTokenSymbol": "aZkswstETH",
-      "aTokenUnderlyingBalance": "5491446173576027577",
+      "aTokenUnderlyingBalance": "18763411890599275873",
       "borrowCap": 30,
       "borrowingEnabled": true,
       "debtCeiling": 0,
@@ -199,7 +199,7 @@
       "oracle": "0xdea7DE07B8275564Af6135F7E9340411246EB7A2",
       "oracleDecimals": 8,
       "oracleDescription": "Capped wstETH / stETH(ETH) / USD",
-      "oracleLatestAnswer": "307205470751",
+      "oracleLatestAnswer": "303857709758",
       "reserveFactor": 500,
       "supplyCap": 300,
       "symbol": "wstETH",
@@ -210,7 +210,7 @@
       "variableDebtTokenName": "Aave ZkSync Variable Debt wstETH",
       "variableDebtTokenSymbol": "variableDebtZkswstETH",
       "virtualAccountingActive": true,
-      "virtualBalance": "5491446173576027577"
+      "virtualBalance": "18763411890599275873"
     }
   },
   "strategies": {
