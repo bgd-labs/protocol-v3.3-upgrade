@@ -157,3 +157,59 @@ contract Deploypolygon is PolygonScript {
     DeploymentLibrary._deployPolygon();
   }
 }
+
+contract Deploygnosis is GnosisScript {
+  function run() external broadcast {
+    DeploymentLibrary._deployGnosis();
+  }
+}
+
+contract Deployoptimism is OptimismScript {
+  function run() external broadcast {
+    DeploymentLibrary._deployOptimism();
+  }
+}
+
+contract Deployarbitrum is ArbitrumScript {
+  function run() external broadcast {
+    DeploymentLibrary._deployArbitrum();
+  }
+}
+
+contract Deployavalanche is AvalancheScript {
+  function run() external broadcast {
+    DeploymentLibrary._deployAvalanche();
+  }
+}
+
+contract Deploybase is BaseScript {
+  function run() external broadcast {
+    DeploymentLibrary._deployBase();
+  }
+}
+
+contract Deployscroll is ScrollScript {
+  function run() external broadcast {
+    DeploymentLibrary._deployScroll();
+  }
+}
+
+contract Deploybnb is BNBScript {
+  function run() external broadcast {
+    DeploymentLibrary._deployBNB();
+  }
+}
+
+// metis is broken
+contract Deploymetis is MetisScript {
+  function run() external broadcast {
+    DeploymentLibrary._deployMetis();
+  }
+}
+
+// out of gas
+contract Deploymainnet is EthereumScript {
+  function run() external broadcast {
+    DeploymentLibrary._deployMainnet();
+  }
+}

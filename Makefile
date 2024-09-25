@@ -22,7 +22,7 @@ git-diff :
 		} \
 		/similarity index 100%/ { skip_block = 1 } \
 		{ if (in_diff_block && !/^diff --git/) { buffer = buffer $$0 "\n" } } \
-		END { if (in_diff_block && skip_block == 0) { printf "%s", buffer } }' > diffs/${out}.md
+		END { if (in_diff_block && skip_block == 0) { printf "%s", buffer } }' > diffs/${out}.diff
 
 deploy :
 	forge script scripts/Deploy.s.sol:Deploy${chain} --rpc-url ${chain} --ledger --mnemonic-indexes ${MNEMONIC_INDEX} --sender ${LEDGER_SENDER} --verify --slow --broadcast
