@@ -1,10 +1,10 @@
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/instances/PoolConfiguratorInstance.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/instances/PoolConfiguratorInstance.sol
+diff --git a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/instances/PoolConfiguratorInstance.sol b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/instances/PoolConfiguratorInstance.sol
 similarity index 79%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/instances/PoolConfiguratorInstance.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/instances/PoolConfiguratorInstance.sol
+rename from /tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/instances/PoolConfiguratorInstance.sol
+rename to /tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/instances/PoolConfiguratorInstance.sol
 index 03ae610..7f7294f 100644
---- a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/instances/PoolConfiguratorInstance.sol
-+++ b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/instances/PoolConfiguratorInstance.sol
+--- a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/instances/PoolConfiguratorInstance.sol
++++ b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/instances/PoolConfiguratorInstance.sol
 @@ -1,10 +1,10 @@
  // SPDX-License-Identifier: MIT
  pragma solidity ^0.8.0;
@@ -18,13 +18,13 @@ index 03ae610..7f7294f 100644
  
    /// @inheritdoc VersionedInitializable
    function getRevision() internal pure virtual override returns (uint256) {
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IDefaultInterestRateStrategyV2.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IDefaultInterestRateStrategyV2.sol
+diff --git a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IDefaultInterestRateStrategyV2.sol b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IDefaultInterestRateStrategyV2.sol
 similarity index 95%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IDefaultInterestRateStrategyV2.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IDefaultInterestRateStrategyV2.sol
+rename from /tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IDefaultInterestRateStrategyV2.sol
+rename to /tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IDefaultInterestRateStrategyV2.sol
 index 5b8b014..938e2d8 100644
---- a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IDefaultInterestRateStrategyV2.sol
-+++ b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IDefaultInterestRateStrategyV2.sol
+--- a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IDefaultInterestRateStrategyV2.sol
++++ b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IDefaultInterestRateStrategyV2.sol
 @@ -10,16 +10,6 @@ import {IPoolAddressesProvider} from './IPoolAddressesProvider.sol';
   * @notice Interface of the default interest rate strategy used by the Aave protocol
   */
@@ -42,13 +42,13 @@ index 5b8b014..938e2d8 100644
    /**
     * @notice Holds the interest rate data for a given reserve
     *
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPool.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPool.sol
+diff --git a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPool.sol b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPool.sol
 similarity index 88%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPool.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPool.sol
+rename from /tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPool.sol
+rename to /tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPool.sol
 index 4e49aa4..01e1bca 100644
---- a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPool.sol
-+++ b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPool.sol
+--- a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPool.sol
++++ b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPool.sol
 @@ -67,7 +67,7 @@ interface IPool {
     * initiator of the transaction on flashLoan()
     * @param onBehalfOf The address that will be getting the debt
@@ -363,13 +363,13 @@ index 4e49aa4..01e1bca 100644
 -  function getSupplyLogic() external returns (address);
 +  function getSupplyLogic() external view returns (address);
  }
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPoolConfigurator.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPoolConfigurator.sol
+diff --git a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPoolConfigurator.sol b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPoolConfigurator.sol
 similarity index 88%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPoolConfigurator.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPoolConfigurator.sol
+rename from /tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPoolConfigurator.sol
+rename to /tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPoolConfigurator.sol
 index 4c39d44..977d316 100644
---- a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPoolConfigurator.sol
-+++ b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPoolConfigurator.sol
+--- a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPoolConfigurator.sol
++++ b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPoolConfigurator.sol
 @@ -14,7 +14,7 @@ interface IPoolConfigurator {
     * @dev Emitted when a reserve is initialized.
     * @param asset The address of the underlying asset of the reserve
@@ -399,25 +399,25 @@ index 4c39d44..977d316 100644
    /**
 -   * @dev Emitted when the category of an asset in eMode is changed.
 +   * @dev Emitted when an collateral configuration of an asset in an eMode is changed.
++   * @param asset The address of the underlying asset of the reserve
++   * @param categoryId The eMode category
++   * @param collateral True if the asset is enabled as collateral in the eMode, false otherwise.
++   */
++  event AssetCollateralInEModeChanged(address indexed asset, uint8 categoryId, bool collateral);
++
++  /**
++   * @dev Emitted when the borrowable configuration of an asset in an eMode changed.
     * @param asset The address of the underlying asset of the reserve
 -   * @param oldCategoryId The old eMode asset category
 -   * @param newCategoryId The new eMode asset category
 +   * @param categoryId The eMode category
-+   * @param collateral True if the asset is enabled as collateral in the eMode, false otherwise.
++   * @param borrowable True if the asset is enabled as borrowable in the eMode, false otherwise.
     */
 -  event EModeAssetCategoryChanged(address indexed asset, uint8 oldCategoryId, uint8 newCategoryId);
-+  event AssetCollateralInEModeChanged(address indexed asset, uint8 categoryId, bool collateral);
++  event AssetBorrowableInEModeChanged(address indexed asset, uint8 categoryId, bool borrowable);
  
    /**
 -   * @dev Emitted when a new eMode category is added.
-+   * @dev Emitted when the borrowable configuration of an asset in an eMode changed.
-+   * @param asset The address of the underlying asset of the reserve
-+   * @param categoryId The eMode category
-+   * @param borrowable True if the asset is enabled as borrowable in the eMode, false otherwise.
-+   */
-+  event AssetBorrowableInEModeChanged(address indexed asset, uint8 categoryId, bool borrowable);
-+
-+  /**
 +   * @dev Emitted when a new eMode category is added or an existing category is altered.
     * @param categoryId The new eMode category id
     * @param ltv The ltv for the asset category in eMode
@@ -550,13 +550,13 @@ index 4c39d44..977d316 100644
 -  function MAX_GRACE_PERIOD() external returns (uint40);
 +  function MAX_GRACE_PERIOD() external view returns (uint40);
  }
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPoolDataProvider.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPoolDataProvider.sol
+diff --git a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPoolDataProvider.sol b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPoolDataProvider.sol
 similarity index 96%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPoolDataProvider.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPoolDataProvider.sol
+rename from /tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPoolDataProvider.sol
+rename to /tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPoolDataProvider.sol
 index 2ec458b..a9df890 100644
---- a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPoolDataProvider.sol
-+++ b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPoolDataProvider.sol
+--- a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPoolDataProvider.sol
++++ b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPoolDataProvider.sol
 @@ -66,13 +66,6 @@ interface IPoolDataProvider {
        bool isFrozen
      );
@@ -580,13 +580,13 @@ index 2ec458b..a9df890 100644
     * @return variableDebtTokenAddress The VariableDebtToken address of the reserve
     */
    function getReserveTokensAddresses(
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IReserveInterestRateStrategy.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IReserveInterestRateStrategy.sol
+diff --git a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IReserveInterestRateStrategy.sol b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IReserveInterestRateStrategy.sol
 similarity index 89%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IReserveInterestRateStrategy.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IReserveInterestRateStrategy.sol
+rename from /tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IReserveInterestRateStrategy.sol
+rename to /tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IReserveInterestRateStrategy.sol
 index cdd8156..e953cce 100644
---- a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IReserveInterestRateStrategy.sol
-+++ b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IReserveInterestRateStrategy.sol
+--- a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IReserveInterestRateStrategy.sol
++++ b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IReserveInterestRateStrategy.sol
 @@ -21,10 +21,9 @@ interface IReserveInterestRateStrategy {
     * @notice Calculates the interest rates depending on the reserve's state and configurations
     * @param params The parameters needed to calculate interest rates
@@ -599,13 +599,13 @@ index cdd8156..e953cce 100644
 -  ) external view returns (uint256, uint256, uint256);
 +  ) external view returns (uint256, uint256);
  }
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/aave-upgradeability/BaseImmutableAdminUpgradeabilityProxy.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/misc/aave-upgradeability/BaseImmutableAdminUpgradeabilityProxy.sol
+diff --git a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/aave-upgradeability/BaseImmutableAdminUpgradeabilityProxy.sol b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/misc/aave-upgradeability/BaseImmutableAdminUpgradeabilityProxy.sol
 similarity index 95%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/aave-upgradeability/BaseImmutableAdminUpgradeabilityProxy.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/misc/aave-upgradeability/BaseImmutableAdminUpgradeabilityProxy.sol
+rename from /tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/aave-upgradeability/BaseImmutableAdminUpgradeabilityProxy.sol
+rename to /tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/misc/aave-upgradeability/BaseImmutableAdminUpgradeabilityProxy.sol
 index 06d2f82..252b4a4 100644
---- a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/aave-upgradeability/BaseImmutableAdminUpgradeabilityProxy.sol
-+++ b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/misc/aave-upgradeability/BaseImmutableAdminUpgradeabilityProxy.sol
+--- a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/aave-upgradeability/BaseImmutableAdminUpgradeabilityProxy.sol
++++ b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/misc/aave-upgradeability/BaseImmutableAdminUpgradeabilityProxy.sol
 @@ -1,7 +1,7 @@
  // SPDX-License-Identifier: MIT
  pragma solidity ^0.8.10;
@@ -615,13 +615,13 @@ index 06d2f82..252b4a4 100644
  
  /**
   * @title BaseImmutableAdminUpgradeabilityProxy
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/aave-upgradeability/InitializableImmutableAdminUpgradeabilityProxy.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/misc/aave-upgradeability/InitializableImmutableAdminUpgradeabilityProxy.sol
+diff --git a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/aave-upgradeability/InitializableImmutableAdminUpgradeabilityProxy.sol b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/misc/aave-upgradeability/InitializableImmutableAdminUpgradeabilityProxy.sol
 similarity index 79%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/aave-upgradeability/InitializableImmutableAdminUpgradeabilityProxy.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/misc/aave-upgradeability/InitializableImmutableAdminUpgradeabilityProxy.sol
+rename from /tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/aave-upgradeability/InitializableImmutableAdminUpgradeabilityProxy.sol
+rename to /tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/misc/aave-upgradeability/InitializableImmutableAdminUpgradeabilityProxy.sol
 index 0deceb5..6913a19 100644
---- a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/aave-upgradeability/InitializableImmutableAdminUpgradeabilityProxy.sol
-+++ b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/misc/aave-upgradeability/InitializableImmutableAdminUpgradeabilityProxy.sol
+--- a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/aave-upgradeability/InitializableImmutableAdminUpgradeabilityProxy.sol
++++ b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/misc/aave-upgradeability/InitializableImmutableAdminUpgradeabilityProxy.sol
 @@ -1,8 +1,8 @@
  // SPDX-License-Identifier: MIT
  pragma solidity ^0.8.10;
@@ -633,11 +633,11 @@ index 0deceb5..6913a19 100644
  import {BaseImmutableAdminUpgradeabilityProxy} from './BaseImmutableAdminUpgradeabilityProxy.sol';
  
  /**
-diff --git a/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/configuration/EModeConfiguration.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/configuration/EModeConfiguration.sol
+diff --git a/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/configuration/EModeConfiguration.sol b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/configuration/EModeConfiguration.sol
 new file mode 100644
 index 0000000..3bb69ef
 --- /dev/null
-+++ b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/configuration/EModeConfiguration.sol
++++ b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/configuration/EModeConfiguration.sol
 @@ -0,0 +1,53 @@
 +// SPDX-License-Identifier: MIT
 +pragma solidity ^0.8.0;
@@ -692,13 +692,13 @@ index 0000000..3bb69ef
 +    }
 +  }
 +}
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/configuration/ReserveConfiguration.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/configuration/ReserveConfiguration.sol
+diff --git a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/configuration/ReserveConfiguration.sol b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/configuration/ReserveConfiguration.sol
 similarity index 89%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/configuration/ReserveConfiguration.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/configuration/ReserveConfiguration.sol
+rename from /tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/configuration/ReserveConfiguration.sol
+rename to /tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/configuration/ReserveConfiguration.sol
 index 0408f3c..43987f4 100644
---- a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/configuration/ReserveConfiguration.sol
-+++ b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/configuration/ReserveConfiguration.sol
+--- a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/configuration/ReserveConfiguration.sol
++++ b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/configuration/ReserveConfiguration.sol
 @@ -17,7 +17,6 @@ library ReserveConfiguration {
    uint256 internal constant ACTIVE_MASK =                    0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFF; // prettier-ignore
    uint256 internal constant FROZEN_MASK =                    0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDFFFFFFFFFFFFFF; // prettier-ignore
@@ -849,13 +849,13 @@ index 0408f3c..43987f4 100644
      );
    }
  
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/helpers/Errors.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/helpers/Errors.sol
+diff --git a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/helpers/Errors.sol b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/helpers/Errors.sol
 similarity index 93%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/helpers/Errors.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/helpers/Errors.sol
+rename from /tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/helpers/Errors.sol
+rename to /tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/helpers/Errors.sol
 index 36b7530..d3f564c 100644
---- a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/helpers/Errors.sol
-+++ b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/helpers/Errors.sol
+--- a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/helpers/Errors.sol
++++ b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/helpers/Errors.sol
 @@ -37,17 +37,14 @@ library Errors {
    string public constant RESERVE_FROZEN = '28'; // 'Action cannot be performed because the reserve is frozen'
    string public constant RESERVE_PAUSED = '29'; // 'Action cannot be performed because the reserve is paused'
@@ -900,13 +900,13 @@ index 36b7530..d3f564c 100644
    string public constant INVALID_FREEZE_STATE = '99'; // Reserve is already in the passed freeze state
 +  string public constant NOT_BORROWABLE_IN_EMODE = '100'; // Asset not borrowable in eMode
  }
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/logic/ConfiguratorLogic.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/logic/ConfiguratorLogic.sol
+diff --git a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/logic/ConfiguratorLogic.sol b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/logic/ConfiguratorLogic.sol
 similarity index 77%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/logic/ConfiguratorLogic.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/logic/ConfiguratorLogic.sol
+rename from /tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/logic/ConfiguratorLogic.sol
+rename to /tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/logic/ConfiguratorLogic.sol
 index 01580d9..c6b08dc 100644
---- a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/logic/ConfiguratorLogic.sol
-+++ b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/logic/ConfiguratorLogic.sol
+--- a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/logic/ConfiguratorLogic.sol
++++ b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/logic/ConfiguratorLogic.sol
 @@ -4,7 +4,7 @@ pragma solidity ^0.8.10;
  import {IPool} from '../../../interfaces/IPool.sol';
  import {IInitializableAToken} from '../../../interfaces/IInitializableAToken.sol';
@@ -1038,13 +1038,13 @@ index 01580d9..c6b08dc 100644
  
      bytes memory encodedCall = abi.encodeWithSelector(
        IInitializableDebtToken.initialize.selector,
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/types/ConfiguratorInputTypes.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/types/ConfiguratorInputTypes.sol
+diff --git a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/types/ConfiguratorInputTypes.sol b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/types/ConfiguratorInputTypes.sol
 similarity index 89%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/types/ConfiguratorInputTypes.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/types/ConfiguratorInputTypes.sol
+rename from /tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/types/ConfiguratorInputTypes.sol
+rename to /tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/types/ConfiguratorInputTypes.sol
 index 7a80594..7894871 100644
---- a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/types/ConfiguratorInputTypes.sol
-+++ b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/types/ConfiguratorInputTypes.sol
+--- a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/types/ConfiguratorInputTypes.sol
++++ b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/types/ConfiguratorInputTypes.sol
 @@ -4,7 +4,6 @@ pragma solidity ^0.8.0;
  library ConfiguratorInputTypes {
    struct InitReserveInput {
@@ -1062,13 +1062,13 @@ index 7a80594..7894871 100644
      bytes params;
      bytes interestRateData;
    }
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/types/DataTypes.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/types/DataTypes.sol
+diff --git a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/types/DataTypes.sol b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/types/DataTypes.sol
 similarity index 89%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/types/DataTypes.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/types/DataTypes.sol
+rename from /tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/types/DataTypes.sol
+rename to /tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/types/DataTypes.sol
 index 64f3e89..13c12c9 100644
---- a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/types/DataTypes.sol
-+++ b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/types/DataTypes.sol
+--- a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/types/DataTypes.sol
++++ b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/types/DataTypes.sol
 @@ -17,7 +17,7 @@ library DataTypes {
      uint128 variableBorrowIndex;
      //the current variable borrow rate. Expressed in ray
@@ -1239,13 +1239,13 @@ index 64f3e89..13c12c9 100644
      address variableDebtAddress;
      address interestRateStrategyAddress;
      uint16 reservesCount;
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/pool/PoolConfigurator.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/pool/PoolConfigurator.sol
+diff --git a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/pool/PoolConfigurator.sol b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/pool/PoolConfigurator.sol
 similarity index 89%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/pool/PoolConfigurator.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/pool/PoolConfigurator.sol
+rename from /tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/pool/PoolConfigurator.sol
+rename to /tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/pool/PoolConfigurator.sol
 index 9a6ced2..778ee79 100644
---- a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/pool/PoolConfigurator.sol
-+++ b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/pool/PoolConfigurator.sol
+--- a/tmp/137_0x419226e0Ad27f3B2019123f7246a364622b018e5/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/pool/PoolConfigurator.sol
++++ b/tmp/137_0x4816b2C2895f97fB918f1aE7Da403750a0eE372e/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/pool/PoolConfigurator.sol
 @@ -1,8 +1,9 @@
  // SPDX-License-Identifier: BUSL-1.1
  pragma solidity ^0.8.10;
@@ -1322,19 +1322,19 @@ index 9a6ced2..778ee79 100644
 -          ? _pendingLtv[reserves[i]]
 -          : currentConfig.getLtv();
 -        require(ltv > currentLtv, Errors.INVALID_EMODE_CATEGORY_PARAMS);
-+    DataTypes.EModeCategoryBaseConfiguration memory categoryData;
-+    categoryData.ltv = ltv;
-+    categoryData.liquidationThreshold = liquidationThreshold;
-+    categoryData.liquidationBonus = liquidationBonus;
-+    categoryData.label = label;
- 
+-
 -        require(
 -          liquidationThreshold > currentConfig.getLiquidationThreshold(),
 -          Errors.INVALID_EMODE_CATEGORY_PARAMS
 -        );
 -      }
 -    }
--
++    DataTypes.EModeCategoryBaseConfiguration memory categoryData;
++    categoryData.ltv = ltv;
++    categoryData.liquidationThreshold = liquidationThreshold;
++    categoryData.liquidationBonus = liquidationBonus;
++    categoryData.label = label;
+ 
 -    _pool.configureEModeCategory(
 +    _pool.configureEModeCategory(categoryId, categoryData);
 +    emit EModeCategoryAdded(

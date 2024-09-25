@@ -11,5 +11,6 @@ library Payloads {
   address internal constant SCROLL = 0x89654c66A6abd7174b525D05C2f4c442a615cee8;
   address internal constant BNB = 0xe88fb4EAf67Ea87BB458e24C94BEf0EB02b5F449;
   address internal constant PROTO = 0xb08c48659d6035698B0f1a61deA9C14a59f89622;
-  address internal constant ZKSYNC = 0xb08c48659d6035698B0f1a61deA9C14a59f89622;
+  address internal constant ZKSYNC = address(0);
+  address internal constant METIS = address(0);
 }
