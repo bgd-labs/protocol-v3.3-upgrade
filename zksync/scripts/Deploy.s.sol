@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import {ZkSyncScript} from 'solidity-utils/contracts/utils/ScriptUtils.sol';
 import {AaveProtocolDataProvider} from 'aave-v3-origin/contracts/helpers/AaveProtocolDataProvider.sol';
 import {PoolConfiguratorInstance} from 'aave-v3-origin/contracts/instances/PoolConfiguratorInstance.sol';
 import {IPoolAddressesProvider} from 'aave-address-book/AaveV3.sol';
@@ -28,7 +29,15 @@ library DeploymentLibrary {
     UpgradePayload.ConstructorParams memory params
   ) private returns (address) {
     params.poolConfiguratorImpl = address(new PoolConfiguratorInstance{salt: 'v1'}());
-    params.poolDataProvider = address(new AaveProtocolDataProvider{salt: 'v1'}(params.poolAddressesProvider));
+    params.poolDataProvider = address(
+      new AaveProtocolDataProvider{salt: 'v1'}(params.poolAddressesProvider)
+    );
     return address(new UpgradePayload(params));
+  }
+}
+
+contract Deployzksync is ZkSyncScript {
+  function run() external broadcast {
+    DeploymentLibrary._deployZKSync();
   }
 }
