@@ -17,10 +17,10 @@
   resolved "https://registry.yarnpkg.com/@bgd-labs/aave-address-book/-/aave-address-book-3.4.0.tgz#e139ffbb01eea7b51ea5b162e45a9b28e41d74bc"
   integrity sha512-0msSmy6tF///f062FheaafONO2niOeWvD0nychrxMVXojcX+obM7g8Ad0+JjSfxmKoGxAYKGER7zF7WbBEz6nw==
 
-"@bgd-labs/aave-cli@1.0.2-4bb9e17ce6a7cae16c96400a6bb630c4b356c51a.0":
-  version "1.0.2-4bb9e17ce6a7cae16c96400a6bb630c4b356c51a.0"
-  resolved "https://registry.yarnpkg.com/@bgd-labs/aave-cli/-/aave-cli-1.0.2-4bb9e17ce6a7cae16c96400a6bb630c4b356c51a.0.tgz#990176a66d2c2966a3f7552c02628933c2ecc48f"
-  integrity sha512-SvfRryC/x3vJbc30bfG6v61SfBoGS2qNzAs7w1nSNrGP55w1rXp+HrEt2rwgdIg4/n0qVWt8okyCtYL4m0vUsA==
+"@bgd-labs/aave-cli@1.0.2-c8aaa200fe4269dda300f542720c39fc143311ba.0":
+  version "1.0.2-c8aaa200fe4269dda300f542720c39fc143311ba.0"
+  resolved "https://registry.yarnpkg.com/@bgd-labs/aave-cli/-/aave-cli-1.0.2-c8aaa200fe4269dda300f542720c39fc143311ba.0.tgz#e30d32ed24c9504502d0d63b1e704e1f43abbbfe"
+  integrity sha512-lO/4xse/qjUABFhxI/7HPZV4S3GCscyU+cKsJDphYpSf1YhbHq8WsJYfQttBYAFGg/KjkV+H/9EUVwR9SaANxw==
   dependencies:
     "@bgd-labs/aave-address-book" "^3.0.0"
     "@bgd-labs/aave-v3-governance-cache" "^1.0.6"
