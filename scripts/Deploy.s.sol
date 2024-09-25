@@ -207,9 +207,20 @@ contract Deploymetis is MetisScript {
   }
 }
 
-// out of gas
 contract Deploymainnet is EthereumScript {
   function run() external broadcast {
     DeploymentLibrary._deployMainnet();
+  }
+}
+
+contract Deploylido is EthereumScript {
+  function run() external broadcast {
+    DeploymentLibrary._deployMainnetLido();
+  }
+}
+
+contract Deployetherfi is EthereumScript {
+  function run() external broadcast {
+    DeploymentLibrary._deployMainnetEtherfi();
   }
 }

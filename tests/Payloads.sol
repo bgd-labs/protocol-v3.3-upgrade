@@ -13,4 +13,6 @@ library Payloads {
   address internal constant PROTO = 0xb08c48659d6035698B0f1a61deA9C14a59f89622;
   address internal constant ZKSYNC = 0x2d32D84459344D2977928563c7c1F13E1bC69658;
   address internal constant METIS = address(0);
+  address internal constant LIDO = 0xf519083f06D2cD0Aa6dd780f0D06b2987a77F290;
+  address internal constant ETHERFI = 0x4E48C38a08388c29d9b71c657367e0D0cEf3A790;
 }
