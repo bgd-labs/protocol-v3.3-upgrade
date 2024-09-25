@@ -1,12 +1,3 @@
-```diff
-diff --git a/reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/dependencies/openzeppelin/contracts/IERC20.sol b/reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/dependencies/openzeppelin/contracts/IERC20.sol
-similarity index 100%
-rename from reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/dependencies/openzeppelin/contracts/IERC20.sol
-rename to reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/dependencies/openzeppelin/contracts/IERC20.sol
-diff --git a/reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/dependencies/openzeppelin/contracts/IERC20Detailed.sol b/reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/dependencies/openzeppelin/contracts/IERC20Detailed.sol
-similarity index 100%
-rename from reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/dependencies/openzeppelin/contracts/IERC20Detailed.sol
-rename to reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/dependencies/openzeppelin/contracts/IERC20Detailed.sol
 diff --git a/reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/misc/AaveProtocolDataProvider.sol b/reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/helpers/AaveProtocolDataProvider.sol
 similarity index 86%
 rename from reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/misc/AaveProtocolDataProvider.sol
@@ -123,14 +114,6 @@ index 4db9441..671b658 100644
    }
  
    /// @inheritdoc IPoolDataProvider
-diff --git a/reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/interfaces/IAaveIncentivesController.sol b/reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IAaveIncentivesController.sol
-similarity index 100%
-rename from reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/interfaces/IAaveIncentivesController.sol
-rename to reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IAaveIncentivesController.sol
-diff --git a/reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/interfaces/IInitializableDebtToken.sol b/reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IInitializableDebtToken.sol
-similarity index 100%
-rename from reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/interfaces/IInitializableDebtToken.sol
-rename to reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IInitializableDebtToken.sol
 diff --git a/reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/interfaces/IPool.sol b/reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPool.sol
 similarity index 88%
 rename from reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/interfaces/IPool.sol
@@ -452,10 +435,6 @@ index 4e49aa4..01e1bca 100644
 -  function getSupplyLogic() external returns (address);
 +  function getSupplyLogic() external view returns (address);
  }
-diff --git a/reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/interfaces/IPoolAddressesProvider.sol b/reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPoolAddressesProvider.sol
-similarity index 100%
-rename from reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/interfaces/IPoolAddressesProvider.sol
-rename to reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPoolAddressesProvider.sol
 diff --git a/reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/interfaces/IPoolDataProvider.sol b/reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPoolDataProvider.sol
 similarity index 96%
 rename from reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/interfaces/IPoolDataProvider.sol
@@ -486,14 +465,6 @@ index 2ec458b..a9df890 100644
     * @return variableDebtTokenAddress The VariableDebtToken address of the reserve
     */
    function getReserveTokensAddresses(
-diff --git a/reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/interfaces/IScaledBalanceToken.sol b/reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IScaledBalanceToken.sol
-similarity index 100%
-rename from reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/interfaces/IScaledBalanceToken.sol
-rename to reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IScaledBalanceToken.sol
-diff --git a/reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/interfaces/IVariableDebtToken.sol b/reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IVariableDebtToken.sol
-similarity index 100%
-rename from reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/interfaces/IVariableDebtToken.sol
-rename to reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IVariableDebtToken.sol
 diff --git a/reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/protocol/libraries/configuration/ReserveConfiguration.sol b/reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/configuration/ReserveConfiguration.sol
 similarity index 89%
 rename from reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/protocol/libraries/configuration/ReserveConfiguration.sol
@@ -651,10 +622,6 @@ index 0408f3c..43987f4 100644
      );
    }
  
-diff --git a/reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/protocol/libraries/configuration/UserConfiguration.sol b/reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/configuration/UserConfiguration.sol
-similarity index 100%
-rename from reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/protocol/libraries/configuration/UserConfiguration.sol
-rename to reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/configuration/UserConfiguration.sol
 diff --git a/reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/protocol/libraries/helpers/Errors.sol b/reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/helpers/Errors.sol
 similarity index 93%
 rename from reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/protocol/libraries/helpers/Errors.sol
@@ -706,10 +673,6 @@ index 36b7530..d3f564c 100644
    string public constant INVALID_FREEZE_STATE = '99'; // Reserve is already in the passed freeze state
 +  string public constant NOT_BORROWABLE_IN_EMODE = '100'; // Asset not borrowable in eMode
  }
-diff --git a/reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/protocol/libraries/math/WadRayMath.sol b/reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/math/WadRayMath.sol
-similarity index 100%
-rename from reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/protocol/libraries/math/WadRayMath.sol
-rename to reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/math/WadRayMath.sol
 diff --git a/reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/protocol/libraries/types/DataTypes.sol b/reports/137_protocolDataProvider_after/AaveProtocolDataProvider/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/types/DataTypes.sol
 similarity index 89%
 rename from reports/137_protocolDataProvider_before/AaveProtocolDataProvider/lib/aave-v3-origin/src/core/contracts/protocol/libraries/types/DataTypes.sol
@@ -1032,4 +995,3 @@ index fa97667..0000000
 -   */
 -  function UNDERLYING_ASSET_ADDRESS() external view returns (address);
 -}
-```

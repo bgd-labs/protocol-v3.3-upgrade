@@ -14,7 +14,15 @@ download :; cast etherscan-source --chain ${chain} -d src/etherscan/${chain}_${a
 git-diff :
 	@mkdir -p diffs
 	@npx prettier ${before} ${after} --write
-	@printf '%s\n%s\n%s\n' "\`\`\`diff" "$$(git diff --no-index --diff-algorithm=patience --ignore-space-at-eol ${before} ${after})" "\`\`\`" > diffs/${out}.md
+	@git diff --no-index --diff-algorithm=patience --ignore-space-at-eol ${before} ${after} | \
+	awk 'BEGIN { in_diff_block = 0; skip_block = 0; buffer = "" } \
+		/^diff --git/ { \
+			if (in_diff_block && skip_block == 0) { printf "%s", buffer } \
+			in_diff_block = 1; skip_block = 0; buffer = $$0 "\n" \
+		} \
+		/similarity index 100%/ { skip_block = 1 } \
+		{ if (in_diff_block && !/^diff --git/) { buffer = buffer $$0 "\n" } } \
+		END { if (in_diff_block && skip_block == 0) { printf "%s", buffer } }' > diffs/${out}.md
 
 deploy :
 	forge script scripts/Deploy.s.sol:Deploy${chain} --rpc-url ${chain} --ledger --mnemonic-indexes ${MNEMONIC_INDEX} --sender ${LEDGER_SENDER} --verify --slow --broadcast

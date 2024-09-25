@@ -1,28 +1,3 @@
-```diff
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/dependencies/openzeppelin/contracts/Address.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/dependencies/openzeppelin/contracts/Address.sol
-similarity index 100%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/dependencies/openzeppelin/contracts/Address.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/dependencies/openzeppelin/contracts/Address.sol
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/dependencies/openzeppelin/contracts/IERC20.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/dependencies/openzeppelin/contracts/IERC20.sol
-similarity index 100%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/dependencies/openzeppelin/contracts/IERC20.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/dependencies/openzeppelin/contracts/IERC20.sol
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/dependencies/openzeppelin/contracts/IERC20Detailed.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/dependencies/openzeppelin/contracts/IERC20Detailed.sol
-similarity index 100%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/dependencies/openzeppelin/contracts/IERC20Detailed.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/dependencies/openzeppelin/contracts/IERC20Detailed.sol
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/dependencies/openzeppelin/upgradeability/BaseUpgradeabilityProxy.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/dependencies/openzeppelin/upgradeability/BaseUpgradeabilityProxy.sol
-similarity index 100%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/dependencies/openzeppelin/upgradeability/BaseUpgradeabilityProxy.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/dependencies/openzeppelin/upgradeability/BaseUpgradeabilityProxy.sol
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/dependencies/openzeppelin/upgradeability/InitializableUpgradeabilityProxy.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/dependencies/openzeppelin/upgradeability/InitializableUpgradeabilityProxy.sol
-similarity index 100%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/dependencies/openzeppelin/upgradeability/InitializableUpgradeabilityProxy.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/dependencies/openzeppelin/upgradeability/InitializableUpgradeabilityProxy.sol
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/dependencies/openzeppelin/upgradeability/Proxy.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/dependencies/openzeppelin/upgradeability/Proxy.sol
-similarity index 100%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/dependencies/openzeppelin/upgradeability/Proxy.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/dependencies/openzeppelin/upgradeability/Proxy.sol
 diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/instances/PoolConfiguratorInstance.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/instances/PoolConfiguratorInstance.sol
 similarity index 79%
 rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/instances/PoolConfiguratorInstance.sol
@@ -43,14 +18,6 @@ index 03ae610..7f7294f 100644
  
    /// @inheritdoc VersionedInitializable
    function getRevision() internal pure virtual override returns (uint256) {
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IACLManager.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IACLManager.sol
-similarity index 100%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IACLManager.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IACLManager.sol
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IAaveIncentivesController.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IAaveIncentivesController.sol
-similarity index 100%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IAaveIncentivesController.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IAaveIncentivesController.sol
 diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IDefaultInterestRateStrategyV2.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IDefaultInterestRateStrategyV2.sol
 similarity index 95%
 rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IDefaultInterestRateStrategyV2.sol
@@ -75,14 +42,6 @@ index 5b8b014..938e2d8 100644
    /**
     * @notice Holds the interest rate data for a given reserve
     *
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IInitializableAToken.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IInitializableAToken.sol
-similarity index 100%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IInitializableAToken.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IInitializableAToken.sol
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IInitializableDebtToken.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IInitializableDebtToken.sol
-similarity index 100%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IInitializableDebtToken.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IInitializableDebtToken.sol
 diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPool.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPool.sol
 similarity index 88%
 rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPool.sol
@@ -404,10 +363,6 @@ index 4e49aa4..01e1bca 100644
 -  function getSupplyLogic() external returns (address);
 +  function getSupplyLogic() external view returns (address);
  }
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPoolAddressesProvider.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPoolAddressesProvider.sol
-similarity index 100%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPoolAddressesProvider.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPoolAddressesProvider.sol
 diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPoolConfigurator.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPoolConfigurator.sol
 similarity index 88%
 rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/interfaces/IPoolConfigurator.sol
@@ -678,10 +633,6 @@ index 0deceb5..6913a19 100644
  import {BaseImmutableAdminUpgradeabilityProxy} from './BaseImmutableAdminUpgradeabilityProxy.sol';
  
  /**
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/aave-upgradeability/VersionedInitializable.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/misc/aave-upgradeability/VersionedInitializable.sol
-similarity index 100%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/aave-upgradeability/VersionedInitializable.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/misc/aave-upgradeability/VersionedInitializable.sol
 diff --git a/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/configuration/EModeConfiguration.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/configuration/EModeConfiguration.sol
 new file mode 100644
 index 0000000..3bb69ef
@@ -1087,10 +1038,6 @@ index 01580d9..c6b08dc 100644
  
      bytes memory encodedCall = abi.encodeWithSelector(
        IInitializableDebtToken.initialize.selector,
-diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/math/PercentageMath.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/math/PercentageMath.sol
-similarity index 100%
-rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/math/PercentageMath.sol
-rename to reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/math/PercentageMath.sol
 diff --git a/reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/types/ConfiguratorInputTypes.sol b/reports/137_poolConfiguratorImpl_after/PoolConfiguratorInstance/lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/types/ConfiguratorInputTypes.sol
 similarity index 89%
 rename from reports/137_poolConfiguratorImpl_before/PoolConfiguratorInstance/lib/aave-v3-origin/src/core/contracts/protocol/libraries/types/ConfiguratorInputTypes.sol
@@ -1459,4 +1406,3 @@ index 9a6ced2..778ee79 100644
    }
  
    /// @inheritdoc IPoolConfigurator
-```
