@@ -10,4 +10,5 @@ library Payloads {
   address internal constant BASE = 0x84B08568906ee891de1c23175E5B92d7Df7DDCc4;
   address internal constant SCROLL = 0x89654c66A6abd7174b525D05C2f4c442a615cee8;
   address internal constant BNB = 0xe88fb4EAf67Ea87BB458e24C94BEf0EB02b5F449;
+  address internal constant PROTO = 0xb08c48659d6035698B0f1a61deA9C14a59f89622;
 }
