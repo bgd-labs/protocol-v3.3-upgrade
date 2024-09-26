@@ -62,7 +62,10 @@ library DeploymentLibrary {
     params.pool = AaveV3Metis.POOL;
     params.poolConfigurator = AaveV3Metis.POOL_CONFIGURATOR;
     params.poolAddressesProvider = AaveV3Metis.POOL_ADDRESSES_PROVIDER;
-    return _deployL2(params);
+    params.poolImpl = 0xC89fBD2a15e88A72A76428DA00dDBBE47cb4EBB0;
+    params.poolConfiguratorImpl = 0x4816b2C2895f97fB918f1aE7Da403750a0eE372e;
+    params.poolDataProvider = 0xC01372469A17b6716A38F00c277533917B6859c0;
+    return address(new UpgradePayload(params));
   }
 
   // L1s
