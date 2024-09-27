@@ -1,7 +1,7 @@
-diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/BorrowLogic.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/BorrowLogic.sol
+diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/BorrowLogic.sol b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/BorrowLogic.sol
 index e7efddd..1b1a18b 100644
 --- a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/BorrowLogic.sol
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/BorrowLogic.sol
++++ b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/BorrowLogic.sol
 @@ -4,12 +4,10 @@ pragma solidity ^0.8.10;
  import {GPv2SafeERC20} from "../../../dependencies/gnosis/contracts/GPv2SafeERC20.sol";
  import {SafeCast} from "../../../dependencies/openzeppelin/contracts/SafeCast.sol";
@@ -285,258 +285,11 @@ index e7efddd..1b1a18b 100644
 -        emit SwapBorrowRateMode(asset, user, interestRateMode);
 -    }
  }
-diff --git a/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/CalldataLogic.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/CalldataLogic.sol
-new file mode 100644
-index 0000000..701ac11
---- /dev/null
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/CalldataLogic.sol
-@@ -0,0 +1,241 @@
-+// SPDX-License-Identifier: MIT
-+pragma solidity ^0.8.10;
-+
-+/**
-+ * @title CalldataLogic library
-+ * @author Aave
-+ * @notice Library to decode calldata, used to optimize calldata size in L2Pool for transaction cost reduction
-+ */
-+library CalldataLogic {
-+    /**
-+     * @notice Decodes compressed supply params to standard params
-+     * @param reservesList The addresses of all the active reserves
-+     * @param args The packed supply params
-+     * @return The address of the underlying reserve
-+     * @return The amount to supply
-+     * @return The referralCode
-+     */
-+    function decodeSupplyParams(
-+        mapping(uint256 => address) storage reservesList,
-+        bytes32 args
-+    ) internal view returns (address, uint256, uint16) {
-+        uint16 assetId;
-+        uint256 amount;
-+        uint16 referralCode;
-+
-+        assembly {
-+            assetId := and(args, 0xFFFF)
-+            amount := and(shr(16, args), 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF)
-+            referralCode := and(shr(144, args), 0xFFFF)
-+        }
-+        return (reservesList[assetId], amount, referralCode);
-+    }
-+
-+    /**
-+     * @notice Decodes compressed supply params to standard params along with permit params
-+     * @param reservesList The addresses of all the active reserves
-+     * @param args The packed supply with permit params
-+     * @return The address of the underlying reserve
-+     * @return The amount to supply
-+     * @return The referralCode
-+     * @return The deadline of the permit
-+     * @return The V value of the permit signature
-+     */
-+    function decodeSupplyWithPermitParams(
-+        mapping(uint256 => address) storage reservesList,
-+        bytes32 args
-+    ) internal view returns (address, uint256, uint16, uint256, uint8) {
-+        uint256 deadline;
-+        uint8 permitV;
-+
-+        assembly {
-+            deadline := and(shr(160, args), 0xFFFFFFFF)
-+            permitV := and(shr(192, args), 0xFF)
-+        }
-+        (
-+            address asset,
-+            uint256 amount,
-+            uint16 referralCode
-+        ) = decodeSupplyParams(reservesList, args);
-+
-+        return (asset, amount, referralCode, deadline, permitV);
-+    }
-+
-+    /**
-+     * @notice Decodes compressed withdraw params to standard params
-+     * @param reservesList The addresses of all the active reserves
-+     * @param args The packed withdraw params
-+     * @return The address of the underlying reserve
-+     * @return The amount to withdraw
-+     */
-+    function decodeWithdrawParams(
-+        mapping(uint256 => address) storage reservesList,
-+        bytes32 args
-+    ) internal view returns (address, uint256) {
-+        uint16 assetId;
-+        uint256 amount;
-+        assembly {
-+            assetId := and(args, 0xFFFF)
-+            amount := and(shr(16, args), 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF)
-+        }
-+        if (amount == type(uint128).max) {
-+            amount = type(uint256).max;
-+        }
-+        return (reservesList[assetId], amount);
-+    }
-+
-+    /**
-+     * @notice Decodes compressed borrow params to standard params
-+     * @param reservesList The addresses of all the active reserves
-+     * @param args The packed borrow params
-+     * @return The address of the underlying reserve
-+     * @return The amount to borrow
-+     * @return The interestRateMode, 2 for variable debt, 1 is deprecated (changed on v3.2.0)
-+     * @return The referralCode
-+     */
-+    function decodeBorrowParams(
-+        mapping(uint256 => address) storage reservesList,
-+        bytes32 args
-+    ) internal view returns (address, uint256, uint256, uint16) {
-+        uint16 assetId;
-+        uint256 amount;
-+        uint256 interestRateMode;
-+        uint16 referralCode;
-+
-+        assembly {
-+            assetId := and(args, 0xFFFF)
-+            amount := and(shr(16, args), 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF)
-+            interestRateMode := and(shr(144, args), 0xFF)
-+            referralCode := and(shr(152, args), 0xFFFF)
-+        }
-+
-+        return (reservesList[assetId], amount, interestRateMode, referralCode);
-+    }
-+
-+    /**
-+     * @notice Decodes compressed repay params to standard params
-+     * @param reservesList The addresses of all the active reserves
-+     * @param args The packed repay params
-+     * @return The address of the underlying reserve
-+     * @return The amount to repay
-+     * @return The interestRateMode, 2 for variable debt, 1 is deprecated (changed on v3.2.0)
-+     */
-+    function decodeRepayParams(
-+        mapping(uint256 => address) storage reservesList,
-+        bytes32 args
-+    ) internal view returns (address, uint256, uint256) {
-+        uint16 assetId;
-+        uint256 amount;
-+        uint256 interestRateMode;
-+
-+        assembly {
-+            assetId := and(args, 0xFFFF)
-+            amount := and(shr(16, args), 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF)
-+            interestRateMode := and(shr(144, args), 0xFF)
-+        }
-+
-+        if (amount == type(uint128).max) {
-+            amount = type(uint256).max;
-+        }
-+
-+        return (reservesList[assetId], amount, interestRateMode);
-+    }
-+
-+    /**
-+     * @notice Decodes compressed repay params to standard params along with permit params
-+     * @param reservesList The addresses of all the active reserves
-+     * @param args The packed repay with permit params
-+     * @return The address of the underlying reserve
-+     * @return The amount to repay
-+     * @return The interestRateMode, 2 for variable debt, 1 is deprecated (changed on v3.2.0)
-+     * @return The deadline of the permit
-+     * @return The V value of the permit signature
-+     */
-+    function decodeRepayWithPermitParams(
-+        mapping(uint256 => address) storage reservesList,
-+        bytes32 args
-+    ) internal view returns (address, uint256, uint256, uint256, uint8) {
-+        uint256 deadline;
-+        uint8 permitV;
-+
-+        (
-+            address asset,
-+            uint256 amount,
-+            uint256 interestRateMode
-+        ) = decodeRepayParams(reservesList, args);
-+
-+        assembly {
-+            deadline := and(shr(152, args), 0xFFFFFFFF)
-+            permitV := and(shr(184, args), 0xFF)
-+        }
-+
-+        return (asset, amount, interestRateMode, deadline, permitV);
-+    }
-+
-+    /**
-+     * @notice Decodes compressed set user use reserve as collateral params to standard params
-+     * @param reservesList The addresses of all the active reserves
-+     * @param args The packed set user use reserve as collateral params
-+     * @return The address of the underlying reserve
-+     * @return True if to set using as collateral, false otherwise
-+     */
-+    function decodeSetUserUseReserveAsCollateralParams(
-+        mapping(uint256 => address) storage reservesList,
-+        bytes32 args
-+    ) internal view returns (address, bool) {
-+        uint16 assetId;
-+        bool useAsCollateral;
-+        assembly {
-+            assetId := and(args, 0xFFFF)
-+            useAsCollateral := and(shr(16, args), 0x1)
-+        }
-+        return (reservesList[assetId], useAsCollateral);
-+    }
-+
-+    /**
-+     * @notice Decodes compressed liquidation call params to standard params
-+     * @param reservesList The addresses of all the active reserves
-+     * @param args1 The first half of packed liquidation call params
-+     * @param args2 The second half of the packed liquidation call params
-+     * @return The address of the underlying collateral asset
-+     * @return The address of the underlying debt asset
-+     * @return The address of the user to liquidate
-+     * @return The amount of debt to cover
-+     * @return True if receiving aTokens, false otherwise
-+     */
-+    function decodeLiquidationCallParams(
-+        mapping(uint256 => address) storage reservesList,
-+        bytes32 args1,
-+        bytes32 args2
-+    ) internal view returns (address, address, address, uint256, bool) {
-+        uint16 collateralAssetId;
-+        uint16 debtAssetId;
-+        address user;
-+        uint256 debtToCover;
-+        bool receiveAToken;
-+
-+        assembly {
-+            collateralAssetId := and(args1, 0xFFFF)
-+            debtAssetId := and(shr(16, args1), 0xFFFF)
-+            user := and(
-+                shr(32, args1),
-+                0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-+            )
-+
-+            debtToCover := and(args2, 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF)
-+            receiveAToken := and(shr(128, args2), 0x1)
-+        }
-+
-+        if (debtToCover == type(uint128).max) {
-+            debtToCover = type(uint256).max;
-+        }
-+
-+        return (
-+            reservesList[collateralAssetId],
-+            reservesList[debtAssetId],
-+            user,
-+            debtToCover,
-+            receiveAToken
-+        );
-+    }
-+}
-diff --git a/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/CustomInitialize.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/CustomInitialize.sol
+diff --git a/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/CustomInitialize.sol b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/CustomInitialize.sol
 new file mode 100644
 index 0000000..8b16d14
 --- /dev/null
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/CustomInitialize.sol
++++ b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/CustomInitialize.sol
 @@ -0,0 +1,31 @@
 +// SPDX-License-Identifier: MIT
 +pragma solidity ^0.8.0;
@@ -569,10 +322,10 @@ index 0000000..8b16d14
 +        }
 +    }
 +}
-diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/DataTypes.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/DataTypes.sol
+diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/DataTypes.sol b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/DataTypes.sol
 index 8112a41..3eb4af3 100644
 --- a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/DataTypes.sol
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/DataTypes.sol
++++ b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/DataTypes.sol
 @@ -17,7 +17,7 @@ library DataTypes {
          uint128 variableBorrowIndex;
          //the current variable borrow rate. Expressed in ray
@@ -743,11 +496,11 @@ index 8112a41..3eb4af3 100644
          address variableDebtAddress;
          address interestRateStrategyAddress;
          uint16 reservesCount;
-diff --git a/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/EModeConfiguration.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/EModeConfiguration.sol
+diff --git a/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/EModeConfiguration.sol b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/EModeConfiguration.sol
 new file mode 100644
 index 0000000..2b0489a
 --- /dev/null
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/EModeConfiguration.sol
++++ b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/EModeConfiguration.sol
 @@ -0,0 +1,59 @@
 +// SPDX-License-Identifier: MIT
 +pragma solidity ^0.8.0;
@@ -808,10 +561,10 @@ index 0000000..2b0489a
 +        }
 +    }
 +}
-diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/EModeLogic.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/EModeLogic.sol
+diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/EModeLogic.sol b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/EModeLogic.sol
 index 3d098ba..4458909 100644
 --- a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/EModeLogic.sol
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/EModeLogic.sol
++++ b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/EModeLogic.sol
 @@ -46,67 +46,27 @@ library EModeLogic {
          DataTypes.UserConfigurationMap storage userConfig,
          DataTypes.ExecuteSetUserEModeParams memory params
@@ -892,10 +645,10 @@ index 3d098ba..4458909 100644
 -            eModeAssetCategory == eModeUserCategory);
 -    }
  }
-diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/Errors.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/Errors.sol
+diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/Errors.sol b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/Errors.sol
 index 9da633f..d2a0c13 100644
 --- a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/Errors.sol
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/Errors.sol
++++ b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/Errors.sol
 @@ -37,7 +37,6 @@ library Errors {
      string public constant RESERVE_FROZEN = "28"; // 'Action cannot be performed because the reserve is frozen'
      string public constant RESERVE_PAUSED = "29"; // 'Action cannot be performed because the reserve is paused'
@@ -941,10 +694,10 @@ index 9da633f..d2a0c13 100644
      string public constant INVALID_FREEZE_STATE = "99"; // Reserve is already in the passed freeze state
 +    string public constant NOT_BORROWABLE_IN_EMODE = "100"; // Asset not borrowable in eMode
  }
-diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/FlashLoanLogic.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/FlashLoanLogic.sol
+diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/FlashLoanLogic.sol b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/FlashLoanLogic.sol
 index 5b7c1cf..7cd5e95 100644
 --- a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/FlashLoanLogic.sol
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/FlashLoanLogic.sol
++++ b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/FlashLoanLogic.sol
 @@ -6,8 +6,8 @@ import {SafeCast} from "../../../dependencies/openzeppelin/contracts/SafeCast.so
  import {IERC20} from "../../../dependencies/openzeppelin/contracts/IERC20.sol";
  import {IAToken} from "../../../interfaces/IAToken.sol";
@@ -1058,10 +811,10 @@ index 5b7c1cf..7cd5e95 100644
              params.totalPremium,
              params.referralCode
          );
-diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/GenericLogic.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/GenericLogic.sol
+diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/GenericLogic.sol b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/GenericLogic.sol
 index b61d73d..a3efd9a 100644
 --- a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/GenericLogic.sol
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/GenericLogic.sol
++++ b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/GenericLogic.sol
 @@ -6,6 +6,7 @@ import {IScaledBalanceToken} from "../../../interfaces/IScaledBalanceToken.sol";
  import {IPriceOracleGetter} from "../../../interfaces/IPriceOracleGetter.sol";
  import {ReserveConfiguration} from "../configuration/ReserveConfiguration.sol";
@@ -1215,10 +968,10 @@ index bf1903f..0000000
 -        );
 -    }
 -}
-diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/IFlashLoanReceiver.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/IFlashLoanReceiver.sol
+diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/IFlashLoanReceiver.sol b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/IFlashLoanReceiver.sol
 index a034f31..28fd959 100644
 --- a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/IFlashLoanReceiver.sol
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/IFlashLoanReceiver.sol
++++ b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/IFlashLoanReceiver.sol
 @@ -1,8 +1,8 @@
  // SPDX-License-Identifier: MIT
  pragma solidity ^0.8.0;
@@ -1230,10 +983,10 @@ index a034f31..28fd959 100644
  
  /**
   * @title IFlashLoanReceiver
-diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/IFlashLoanSimpleReceiver.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/IFlashLoanSimpleReceiver.sol
+diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/IFlashLoanSimpleReceiver.sol b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/IFlashLoanSimpleReceiver.sol
 index 8e5eda8..3e139f0 100644
 --- a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/IFlashLoanSimpleReceiver.sol
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/IFlashLoanSimpleReceiver.sol
++++ b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/IFlashLoanSimpleReceiver.sol
 @@ -1,8 +1,8 @@
  // SPDX-License-Identifier: MIT
  pragma solidity ^0.8.0;
@@ -1245,136 +998,10 @@ index 8e5eda8..3e139f0 100644
  
  /**
   * @title IFlashLoanSimpleReceiver
-diff --git a/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/IL2Pool.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/IL2Pool.sol
-new file mode 100644
-index 0000000..9e21537
---- /dev/null
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/IL2Pool.sol
-@@ -0,0 +1,120 @@
-+// SPDX-License-Identifier: MIT
-+pragma solidity ^0.8.0;
-+
-+/**
-+ * @title IL2Pool
-+ * @author Aave
-+ * @notice Defines the basic extension interface for an L2 Aave Pool.
-+ */
-+interface IL2Pool {
-+    /**
-+     * @notice Calldata efficient wrapper of the supply function on behalf of the caller
-+     * @param args Arguments for the supply function packed in one bytes32
-+     *    96 bits       16 bits         128 bits      16 bits
-+     * | 0-padding | referralCode | shortenedAmount | assetId |
-+     * @dev the shortenedAmount is cast to 256 bits at decode time, if type(uint128).max the value will be expanded to
-+     * type(uint256).max
-+     * @dev assetId is the index of the asset in the reservesList.
-+     */
-+    function supply(bytes32 args) external;
-+
-+    /**
-+     * @notice Calldata efficient wrapper of the supplyWithPermit function on behalf of the caller
-+     * @param args Arguments for the supply function packed in one bytes32
-+     *    56 bits    8 bits         32 bits           16 bits         128 bits      16 bits
-+     * | 0-padding | permitV | shortenedDeadline | referralCode | shortenedAmount | assetId |
-+     * @dev the shortenedAmount is cast to 256 bits at decode time, if type(uint128).max the value will be expanded to
-+     * type(uint256).max
-+     * @dev assetId is the index of the asset in the reservesList.
-+     * @param r The R parameter of ERC712 permit sig
-+     * @param s The S parameter of ERC712 permit sig
-+     */
-+    function supplyWithPermit(bytes32 args, bytes32 r, bytes32 s) external;
-+
-+    /**
-+     * @notice Calldata efficient wrapper of the withdraw function, withdrawing to the caller
-+     * @param args Arguments for the withdraw function packed in one bytes32
-+     *    112 bits       128 bits      16 bits
-+     * | 0-padding | shortenedAmount | assetId |
-+     * @dev the shortenedAmount is cast to 256 bits at decode time, if type(uint128).max the value will be expanded to
-+     * type(uint256).max
-+     * @dev assetId is the index of the asset in the reservesList.
-+     * @return The final amount withdrawn
-+     */
-+    function withdraw(bytes32 args) external returns (uint256);
-+
-+    /**
-+     * @notice Calldata efficient wrapper of the borrow function, borrowing on behalf of the caller
-+     * @param args Arguments for the borrow function packed in one bytes32
-+     *    88 bits       16 bits             8 bits                 128 bits       16 bits
-+     * | 0-padding | referralCode | shortenedInterestRateMode | shortenedAmount | assetId |
-+     * @dev the shortenedAmount is cast to 256 bits at decode time, if type(uint128).max the value will be expanded to
-+     * type(uint256).max
-+     * @dev assetId is the index of the asset in the reservesList.
-+     */
-+    function borrow(bytes32 args) external;
-+
-+    /**
-+     * @notice Calldata efficient wrapper of the repay function, repaying on behalf of the caller
-+     * @param args Arguments for the repay function packed in one bytes32
-+     *    104 bits             8 bits               128 bits       16 bits
-+     * | 0-padding | shortenedInterestRateMode | shortenedAmount | assetId |
-+     * @dev the shortenedAmount is cast to 256 bits at decode time, if type(uint128).max the value will be expanded to
-+     * type(uint256).max
-+     * @dev assetId is the index of the asset in the reservesList.
-+     * @return The final amount repaid
-+     */
-+    function repay(bytes32 args) external returns (uint256);
-+
-+    /**
-+     * @notice Calldata efficient wrapper of the repayWithPermit function, repaying on behalf of the caller
-+     * @param args Arguments for the repayWithPermit function packed in one bytes32
-+     *    64 bits    8 bits        32 bits                   8 bits               128 bits       16 bits
-+     * | 0-padding | permitV | shortenedDeadline | shortenedInterestRateMode | shortenedAmount | assetId |
-+     * @dev the shortenedAmount is cast to 256 bits at decode time, if type(uint128).max the value will be expanded to
-+     * type(uint256).max
-+     * @dev assetId is the index of the asset in the reservesList.
-+     * @param r The R parameter of ERC712 permit sig
-+     * @param s The S parameter of ERC712 permit sig
-+     * @return The final amount repaid
-+     */
-+    function repayWithPermit(
-+        bytes32 args,
-+        bytes32 r,
-+        bytes32 s
-+    ) external returns (uint256);
-+
-+    /**
-+     * @notice Calldata efficient wrapper of the repayWithATokens function
-+     * @param args Arguments for the repayWithATokens function packed in one bytes32
-+     *    104 bits             8 bits               128 bits       16 bits
-+     * | 0-padding | shortenedInterestRateMode | shortenedAmount | assetId |
-+     * @dev the shortenedAmount is cast to 256 bits at decode time, if type(uint128).max the value will be expanded to
-+     * type(uint256).max
-+     * @dev assetId is the index of the asset in the reservesList.
-+     * @return The final amount repaid
-+     */
-+    function repayWithATokens(bytes32 args) external returns (uint256);
-+
-+    /**
-+     * @notice Calldata efficient wrapper of the setUserUseReserveAsCollateral function
-+     * @param args Arguments for the setUserUseReserveAsCollateral function packed in one bytes32
-+     *    239 bits         1 bit       16 bits
-+     * | 0-padding | useAsCollateral | assetId |
-+     * @dev assetId is the index of the asset in the reservesList.
-+     */
-+    function setUserUseReserveAsCollateral(bytes32 args) external;
-+
-+    /**
-+     * @notice Calldata efficient wrapper of the liquidationCall function
-+     * @param args1 part of the arguments for the liquidationCall function packed in one bytes32
-+     *    64 bits      160 bits       16 bits         16 bits
-+     * | 0-padding | user address | debtAssetId | collateralAssetId |
-+     * @param args2 part of the arguments for the liquidationCall function packed in one bytes32
-+     *    127 bits       1 bit             128 bits
-+     * | 0-padding | receiveAToken | shortenedDebtToCover |
-+     * @dev the shortenedDebtToCover is cast to 256 bits at decode time,
-+     * if type(uint128).max the value will be expanded to type(uint256).max
-+     */
-+    function liquidationCall(bytes32 args1, bytes32 args2) external;
-+}
-diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/IPool.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/IPool.sol
+diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/IPool.sol b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/IPool.sol
 index 6db17fc..3561fff 100644
 --- a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/IPool.sol
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/IPool.sol
++++ b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/IPool.sol
 @@ -77,7 +77,7 @@ interface IPool {
       * initiator of the transaction on flashLoan()
       * @param onBehalfOf The address that will be getting the debt
@@ -1667,10 +1294,10 @@ index 6db17fc..3561fff 100644
      /**
       * @notice Returns the total fee on flash loans
       * @return The total fee on flashloans
-diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/IReserveInterestRateStrategy.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/IReserveInterestRateStrategy.sol
+diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/IReserveInterestRateStrategy.sol b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/IReserveInterestRateStrategy.sol
 index 23ecb45..338d93a 100644
 --- a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/IReserveInterestRateStrategy.sol
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/IReserveInterestRateStrategy.sol
++++ b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/IReserveInterestRateStrategy.sol
 @@ -24,10 +24,9 @@ interface IReserveInterestRateStrategy {
       * @notice Calculates the interest rates depending on the reserve's state and configurations
       * @param params The parameters needed to calculate interest rates
@@ -1837,10 +1464,10 @@ index 7e4b84e..0000000
 -     */
 -    function UNDERLYING_ASSET_ADDRESS() external view returns (address);
 -}
-diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/IncentivizedERC20.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/IncentivizedERC20.sol
+diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/IncentivizedERC20.sol b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/IncentivizedERC20.sol
 index 457a5af..d1d7619 100644
 --- a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/IncentivizedERC20.sol
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/IncentivizedERC20.sol
++++ b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/IncentivizedERC20.sol
 @@ -46,8 +46,7 @@ abstract contract IncentivizedERC20 is Context, IERC20Detailed {
      /**
       * @dev UserState - additionalData is a flexible field.
@@ -1851,184 +1478,10 @@ index 457a5af..d1d7619 100644
       */
      struct UserState {
          uint128 balance;
-diff --git a/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/L2Pool.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/L2Pool.sol
-new file mode 100644
-index 0000000..3979660
---- /dev/null
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/L2Pool.sol
-@@ -0,0 +1,151 @@
-+// SPDX-License-Identifier: BUSL-1.1
-+pragma solidity ^0.8.10;
-+
-+import {Pool} from "./Pool.sol";
-+import {IPoolAddressesProvider} from "../../interfaces/IPoolAddressesProvider.sol";
-+import {IL2Pool} from "../../interfaces/IL2Pool.sol";
-+import {CalldataLogic} from "../libraries/logic/CalldataLogic.sol";
-+
-+/**
-+ * @title L2Pool
-+ * @author Aave
-+ * @notice Calldata optimized extension of the Pool contract allowing users to pass compact calldata representation
-+ * to reduce transaction costs on rollups.
-+ */
-+abstract contract L2Pool is Pool, IL2Pool {
-+    /// @inheritdoc IL2Pool
-+    function supply(bytes32 args) external override {
-+        (address asset, uint256 amount, uint16 referralCode) = CalldataLogic
-+            .decodeSupplyParams(_reservesList, args);
-+
-+        supply(asset, amount, msg.sender, referralCode);
-+    }
-+
-+    /// @inheritdoc IL2Pool
-+    function supplyWithPermit(
-+        bytes32 args,
-+        bytes32 r,
-+        bytes32 s
-+    ) external override {
-+        (
-+            address asset,
-+            uint256 amount,
-+            uint16 referralCode,
-+            uint256 deadline,
-+            uint8 v
-+        ) = CalldataLogic.decodeSupplyWithPermitParams(_reservesList, args);
-+
-+        supplyWithPermit(
-+            asset,
-+            amount,
-+            msg.sender,
-+            referralCode,
-+            deadline,
-+            v,
-+            r,
-+            s
-+        );
-+    }
-+
-+    /// @inheritdoc IL2Pool
-+    function withdraw(bytes32 args) external override returns (uint256) {
-+        (address asset, uint256 amount) = CalldataLogic.decodeWithdrawParams(
-+            _reservesList,
-+            args
-+        );
-+
-+        return withdraw(asset, amount, msg.sender);
-+    }
-+
-+    /// @inheritdoc IL2Pool
-+    function borrow(bytes32 args) external override {
-+        (
-+            address asset,
-+            uint256 amount,
-+            uint256 interestRateMode,
-+            uint16 referralCode
-+        ) = CalldataLogic.decodeBorrowParams(_reservesList, args);
-+
-+        borrow(asset, amount, interestRateMode, referralCode, msg.sender);
-+    }
-+
-+    /// @inheritdoc IL2Pool
-+    function repay(bytes32 args) external override returns (uint256) {
-+        (
-+            address asset,
-+            uint256 amount,
-+            uint256 interestRateMode
-+        ) = CalldataLogic.decodeRepayParams(_reservesList, args);
-+
-+        return repay(asset, amount, interestRateMode, msg.sender);
-+    }
-+
-+    /// @inheritdoc IL2Pool
-+    function repayWithPermit(
-+        bytes32 args,
-+        bytes32 r,
-+        bytes32 s
-+    ) external override returns (uint256) {
-+        (
-+            address asset,
-+            uint256 amount,
-+            uint256 interestRateMode,
-+            uint256 deadline,
-+            uint8 v
-+        ) = CalldataLogic.decodeRepayWithPermitParams(_reservesList, args);
-+
-+        return
-+            repayWithPermit(
-+                asset,
-+                amount,
-+                interestRateMode,
-+                msg.sender,
-+                deadline,
-+                v,
-+                r,
-+                s
-+            );
-+    }
-+
-+    /// @inheritdoc IL2Pool
-+    function repayWithATokens(
-+        bytes32 args
-+    ) external override returns (uint256) {
-+        (
-+            address asset,
-+            uint256 amount,
-+            uint256 interestRateMode
-+        ) = CalldataLogic.decodeRepayParams(_reservesList, args);
-+
-+        return repayWithATokens(asset, amount, interestRateMode);
-+    }
-+
-+    /// @inheritdoc IL2Pool
-+    function setUserUseReserveAsCollateral(bytes32 args) external override {
-+        (address asset, bool useAsCollateral) = CalldataLogic
-+            .decodeSetUserUseReserveAsCollateralParams(_reservesList, args);
-+        setUserUseReserveAsCollateral(asset, useAsCollateral);
-+    }
-+
-+    /// @inheritdoc IL2Pool
-+    function liquidationCall(bytes32 args1, bytes32 args2) external override {
-+        (
-+            address collateralAsset,
-+            address debtAsset,
-+            address user,
-+            uint256 debtToCover,
-+            bool receiveAToken
-+        ) = CalldataLogic.decodeLiquidationCallParams(
-+                _reservesList,
-+                args1,
-+                args2
-+            );
-+        liquidationCall(
-+            collateralAsset,
-+            debtAsset,
-+            user,
-+            debtToCover,
-+            receiveAToken
-+        );
-+    }
-+}
-diff --git a/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/L2PoolInstance.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/L2PoolInstance.sol
-new file mode 100644
-index 0000000..e9c397f
---- /dev/null
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/L2PoolInstance.sol
-@@ -0,0 +1,11 @@
-+// SPDX-License-Identifier: MIT
-+pragma solidity ^0.8.0;
-+import {L2Pool, IPoolAddressesProvider} from "aave-v3-origin/contracts/protocol/pool/L2Pool.sol";
-+import {PoolInstance3_2} from "./PoolInstance.sol";
-+
-+/**
-+ * @notice L2Pool instance
-+ */
-+contract L2PoolInstance3_2 is L2Pool, PoolInstance3_2 {
-+    constructor(IPoolAddressesProvider provider) PoolInstance3_2(provider) {}
-+}
-diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/LiquidationLogic.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/LiquidationLogic.sol
+diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/LiquidationLogic.sol b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/LiquidationLogic.sol
 index 7dc4f81..51793b6 100644
 --- a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/LiquidationLogic.sol
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/LiquidationLogic.sol
++++ b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/LiquidationLogic.sol
 @@ -5,7 +5,6 @@ import {IERC20} from "../../../dependencies/openzeppelin/contracts//IERC20.sol";
  import {GPv2SafeERC20} from "../../../dependencies/gnosis/contracts/GPv2SafeERC20.sol";
  import {PercentageMath} from "../../libraries/math/PercentageMath.sol";
@@ -2256,10 +1709,10 @@ index 7dc4f81..51793b6 100644
      }
  
      struct AvailableCollateralToLiquidateLocalVars {
-diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/Pool.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/Pool.sol
+diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/Pool.sol b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/Pool.sol
 index ab97ad7..d46f444 100644
 --- a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/Pool.sol
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/Pool.sol
++++ b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/Pool.sol
 @@ -1,7 +1,7 @@
  // SPDX-License-Identifier: BUSL-1.1
  pragma solidity ^0.8.10;
@@ -2482,10 +1935,10 @@ index ab97ad7..d46f444 100644
      }
  
      /// @inheritdoc IPool
-diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/PoolInstance.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/PoolInstance.sol
+diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/PoolInstance.sol b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/PoolInstance.sol
 index 121d18a..31d76b6 100644
 --- a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/PoolInstance.sol
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/PoolInstance.sol
++++ b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/PoolInstance.sol
 @@ -1,22 +1,16 @@
  // SPDX-License-Identifier: MIT
  pragma solidity ^0.8.0;
@@ -2529,10 +1982,10 @@ index 121d18a..31d76b6 100644
 +        CustomInitialize.initialize(_reservesCount, _reservesList, _reserves);
      }
  }
-diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/PoolLogic.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/PoolLogic.sol
+diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/PoolLogic.sol b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/PoolLogic.sol
 index ec1cc3c..5dd80d3 100644
 --- a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/PoolLogic.sol
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/PoolLogic.sol
++++ b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/PoolLogic.sol
 @@ -46,7 +46,6 @@ library PoolLogic {
          require(Address.isContract(params.asset), Errors.NOT_CONTRACT);
          reservesData[params.asset].init(
@@ -2541,10 +1994,10 @@ index ec1cc3c..5dd80d3 100644
              params.variableDebtAddress,
              params.interestRateStrategyAddress
          );
-diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/PoolStorage.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/PoolStorage.sol
+diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/PoolStorage.sol b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/PoolStorage.sol
 index 4b03aa0..8db79fe 100644
 --- a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/PoolStorage.sol
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/PoolStorage.sol
++++ b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/PoolStorage.sol
 @@ -43,8 +43,8 @@ contract PoolStorage {
      // FlashLoan premium paid to protocol treasury, expressed in bps
      uint128 internal _flashLoanPremiumToProtocol;
@@ -2556,10 +2009,10 @@ index 4b03aa0..8db79fe 100644
  
      // Maximum number of active reserves there have been in the protocol. It is the upper bound of the reserves list
      uint16 internal _reservesCount;
-diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/ReserveConfiguration.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/ReserveConfiguration.sol
+diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/ReserveConfiguration.sol b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/ReserveConfiguration.sol
 index 0a37b4b..fc8bcf4 100644
 --- a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/ReserveConfiguration.sol
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/ReserveConfiguration.sol
++++ b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/ReserveConfiguration.sol
 @@ -17,7 +17,6 @@ library ReserveConfiguration {
      uint256 internal constant ACTIVE_MASK =                    0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFF; // prettier-ignore
      uint256 internal constant FROZEN_MASK =                    0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDFFFFFFFFFFFFFF; // prettier-ignore
@@ -2723,10 +2176,10 @@ index 0a37b4b..fc8bcf4 100644
          );
      }
  
-diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/ReserveLogic.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/ReserveLogic.sol
+diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/ReserveLogic.sol b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/ReserveLogic.sol
 index f6215e2..54e3c0e 100644
 --- a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/ReserveLogic.sol
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/ReserveLogic.sol
++++ b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/ReserveLogic.sol
 @@ -3,7 +3,6 @@ pragma solidity ^0.8.10;
  
  import {IERC20} from "../../../dependencies/openzeppelin/contracts/IERC20.sol";
@@ -2946,10 +2399,10 @@ index f6215e2..54e3c0e 100644
          return reserveCache;
      }
  }
-diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/ValidationLogic.sol b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/ValidationLogic.sol
+diff --git a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/ValidationLogic.sol b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/ValidationLogic.sol
 index 2437438..64aa0db 100644
 --- a/tmp/324_0xEe8EBB0704F5954Ab281166f35309087E1b81903_flat/ValidationLogic.sol
-+++ b/tmp/324_0x28Ec03b21440D8F088A35D541b2A77d9857F6b3A_flat/ValidationLogic.sol
++++ b/tmp/324_0x3Db69F17e682a8E6f029a90c8DD04A4689B988b9_flat/ValidationLogic.sol
 @@ -5,6 +5,7 @@ import {IERC20} from "../../../dependencies/openzeppelin/contracts/IERC20.sol";
  import {Address} from "../../../dependencies/openzeppelin/contracts/Address.sol";
  import {GPv2SafeERC20} from "../../../dependencies/gnosis/contracts/GPv2SafeERC20.sol";

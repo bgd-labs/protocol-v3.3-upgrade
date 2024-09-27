@@ -1,56 +1,65 @@
-# BGD forge template
+# Aave v3.2 upgrade
 
-Basic template with prettier and rest configuration
+This repository contains contracts to upgrade existing instances of Aave protocol from v3.1.0 to v3.2.0.
 
-To create a new project using this template run
+<br>
 
-```shell
-$ forge init --template bgd-labs/bgd-forge-template my_new_project
-```
+## Dependencies
 
-## Recommended modules
+- Foundry, [how-to install](https://book.getfoundry.sh/getting-started/installation) (we recommend also update to the last version with `foundryup`).
+- ZkSync Foundry, [how-to install](https://foundry-book.zksync.io/getting-started/installation) (we recommend also update to the last version with `foundryup-zksync`).
 
-[bgd-labs/solidity-utils](https://github.com/bgd-labs/solidity-utils) - common contracts we use everywhere, ie transparent proxy and around
-
-[bgd-labs/aave-address-book](https://github.com/bgd-labs/aave-address-book) - the best and only source about all deployed Aave ecosystem related contracts across all the chains
-
-[bgd-labs/aave-helpers](https://github.com/bgd-labs/aave-helpers) - useful utils for integration, and not only testing related to Aave ecosystem contracts
-
-[Rari-Capital/solmate](https://github.com/Rari-Capital/solmate) - one of the best sources of base contracts for ERC20, ERC21, which will work with transparent proxy pattern out of the box
-
-[OpenZeppelin/openzeppelin-contracts](https://github.com/OpenZeppelin/openzeppelin-contracts) - another very reputable and well organized source of base contracts for tokens, access control and many others
-
-## Development
-
-This project uses [Foundry](https://getfoundry.sh). See the [book](https://book.getfoundry.sh/getting-started/installation.html) for detailed instructions on how to install and use Foundry.
-The template ships with sensible default so you can use default `foundry` commands without resorting to `MakeFile`.
-
-### Setup
+## Setup
 
 ```sh
 cp .env.example .env
 forge install
+
+# optional, to install prettier
+yarn install
 ```
 
-### Test
+## Tests
 
-```sh
-forge test
+Command run test for all networks expect zkSync: `forge test`
+
+Command to run test for zkSync: `FOUNDRY_PROFILE=zksync forge test --zksync`
+
+
+<br>
+
+## Specification
+
+### [PoolInstance3_2](./src/contracts/PoolInstance.sol)
+
+Extends `PoolInstance` contract, and includes custom initialization for the stable debt off-boarding.
+
+The logic of the custom initialization is:
+```
+  currentReserve.__deprecatedStableDebtTokenAddress = address(0);
 ```
 
-## Advanced features
+This makes sure that the `__deprecatedStableDebtTokenAddress` points to `address(0)` and also the `__deprecatedStableBorrowRate` is `0`
 
-### Diffing
+For L2s instances, an additional [L2PoolInstance3_2](./src/contracts/L2PoolInstance.sol) is included, introducing the `L2PoolInstance` contract in the inheritance chain.
 
-For contracts upgrading implementations it's quite important to diff the implementation code to spot potential issues and ensure only the intended changes are included.
-Therefore the `Makefile` includes some commands to streamline the diffing process.
+<br>
 
-#### Download
+### Upgrade payload
 
-You can `download` the current contract code of a deployed contract via `make download chain=polygon address=0x00`. This will download the contract source for specified address to `src/etherscan/chain_address`. This command works for all chains with a etherscan compatible block explorer.
+The payload for the upgrade does the following:
 
-#### Git diff
+- Upgrades the `PoolConfigurator` implementation.
+- Upgrades the `Pool` implementation.
+- Connects the new `PoolDataProvider` to the `PoolAddressesProvider`.
+- Deploys new InterestRateStrategy contract and updates interest rates from the previous strategy contract and sets them on the new one.
+- Migrates all assets currently in eMode to be both borrowable & collateral in eMode
 
-You can `git-diff` a downloaded contract against your src via `make git-diff before=./etherscan/chain_address after=./src out=filename`. This command will diff the two folders via git patience algorithm and write the output to `diffs/filename.md`.
+<br>
 
-**Caveat**: If the onchain implementation was verified using flatten, for generating the diff you need to flatten the new contract via `forge flatten` and supply the flattened file instead fo the whole `./src` folder.
+
+## License
+
+Copyright © 2024, BGD Labs.
+
+This repository is [MIT-licensed](./LICENSE).
