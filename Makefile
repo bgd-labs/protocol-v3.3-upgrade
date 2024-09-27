@@ -28,4 +28,4 @@ deploy :
 	forge script scripts/Deploy.s.sol:Deploy${chain} --rpc-url ${chain} --ledger --mnemonic-indexes ${MNEMONIC_INDEX} --sender ${LEDGER_SENDER} --verify --slow --broadcast
 	npx catapulta-verify -b broadcast/Deploy.s.sol/${chainId}/run-latest.json
 
-deploy-zk :; FOUNDRY_PROFILE=zksync forge script zksync/scripts/Deploy.s.sol:Deployzksync --zksync --system-mode=true --rpc-url zksync --ledger --private-key ${PRIVATE_KEY} --sender ${SENDER} --resume --verify --slow --broadcast
+deploy-zk :; FOUNDRY_PROFILE=zksync forge script zksync/scripts/Deploy.s.sol:Deployzksync --zksync --system-mode=true --rpc-url zksync --private-key ${PRIVATE_KEY} --sender ${SENDER} --verify --slow --broadcast
