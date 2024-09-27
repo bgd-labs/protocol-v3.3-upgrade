@@ -9,7 +9,6 @@ import {AaveV3ZkSync} from 'aave-address-book/AaveV3ZkSync.sol';
 
 import {UpgradePayload} from '../../src/contracts/UpgradePayload.sol';
 import {PoolInstance3_2} from '../../src/contracts/PoolInstance.sol';
-import {L2PoolInstance3_2} from '../../src/contracts/L2PoolInstance.sol';
 
 library DeploymentLibrary {
   function _deployZKSync() internal returns (address) {
@@ -17,11 +16,11 @@ library DeploymentLibrary {
     params.pool = AaveV3ZkSync.POOL;
     params.poolConfigurator = AaveV3ZkSync.POOL_CONFIGURATOR;
     params.poolAddressesProvider = AaveV3ZkSync.POOL_ADDRESSES_PROVIDER;
-    return _deployL2(params);
+    return _deployL1(params);
   }
 
-  function _deployL2(UpgradePayload.ConstructorParams memory params) internal returns (address) {
-    params.poolImpl = address(new L2PoolInstance3_2{salt: 'v1'}(params.poolAddressesProvider));
+  function _deployL1(UpgradePayload.ConstructorParams memory params) internal returns (address) {
+    params.poolImpl = address(new PoolInstance3_2{salt: 'v1'}(params.poolAddressesProvider));
     return _deployPayload(params);
   }
 
