@@ -62,4 +62,4 @@ The payload for the upgrade does the following:
 
 Copyright © 2024, BGD Labs.
 
-This repository is [MIT-licensed](./LICENSE).
+This repository is [BUSL-1.1-licensed](./LICENSE).
