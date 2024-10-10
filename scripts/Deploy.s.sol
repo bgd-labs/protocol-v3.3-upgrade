@@ -20,137 +20,117 @@ import {AaveV3EthereumLido} from 'aave-address-book/AaveV3EthereumLido.sol';
 import {AaveV3EthereumEtherFi} from 'aave-address-book/AaveV3EthereumEtherFi.sol';
 
 import {UpgradePayload} from '../src/contracts/UpgradePayload.sol';
-import {PoolInstance3_2} from '../src/contracts/PoolInstance.sol';
-import {L2PoolInstance3_2} from '../src/contracts/L2PoolInstance.sol';
+import {PoolInstance} from 'aave-v3-origin/contracts/instances/PoolInstance.sol';
+import {L2PoolInstance} from 'aave-v3-origin/contracts/instances/L2PoolInstance.sol';
 
 library DeploymentLibrary {
   // rollups
   function _deployOptimism() internal returns (address) {
     UpgradePayload.ConstructorParams memory params;
-    params.pool = AaveV3Optimism.POOL;
-    params.poolConfigurator = AaveV3Optimism.POOL_CONFIGURATOR;
     params.poolAddressesProvider = AaveV3Optimism.POOL_ADDRESSES_PROVIDER;
+    params.stableDebtToken = 0xd94112B5B62d53C9402e7A60289c6810dEF1dC9B;
     return _deployL2(params);
   }
 
   function _deployBase() internal returns (address) {
     UpgradePayload.ConstructorParams memory params;
-    params.pool = AaveV3Base.POOL;
-    params.poolConfigurator = AaveV3Base.POOL_CONFIGURATOR;
+    params.stableDebtToken = 0xaED3b56FeA82E809665f02AcBcDEc0816c75f4d9; // prev weth
     params.poolAddressesProvider = AaveV3Base.POOL_ADDRESSES_PROVIDER;
     return _deployL2(params);
   }
 
   function _deployArbitrum() internal returns (address) {
     UpgradePayload.ConstructorParams memory params;
-    params.pool = AaveV3Arbitrum.POOL;
-    params.poolConfigurator = AaveV3Arbitrum.POOL_CONFIGURATOR;
     params.poolAddressesProvider = AaveV3Arbitrum.POOL_ADDRESSES_PROVIDER;
+    params.stableDebtToken = 0xd94112B5B62d53C9402e7A60289c6810dEF1dC9B; // prev DAI
     return _deployL2(params);
   }
 
   function _deployScroll() internal returns (address) {
     UpgradePayload.ConstructorParams memory params;
-    params.pool = AaveV3Scroll.POOL;
-    params.poolConfigurator = AaveV3Scroll.POOL_CONFIGURATOR;
+    params.stableDebtToken = 0x117d9cF336287F46DBE509a43925cFF115Aa563c;
     params.poolAddressesProvider = AaveV3Scroll.POOL_ADDRESSES_PROVIDER;
     return _deployL2(params);
   }
 
   function _deployMetis() internal returns (address) {
     UpgradePayload.ConstructorParams memory params;
-    params.pool = AaveV3Metis.POOL;
-    params.poolConfigurator = AaveV3Metis.POOL_CONFIGURATOR;
+    params.stableDebtToken = 0xf1cd706E177F3AEa620c722Dc436B5a2066E4C68; // mDAI
     params.poolAddressesProvider = AaveV3Metis.POOL_ADDRESSES_PROVIDER;
-    params.poolImpl = 0xC89fBD2a15e88A72A76428DA00dDBBE47cb4EBB0;
-    params.poolConfiguratorImpl = 0x4816b2C2895f97fB918f1aE7Da403750a0eE372e;
-    params.poolDataProvider = 0xC01372469A17b6716A38F00c277533917B6859c0;
-    return address(new UpgradePayload(params));
+    return _deployL2(params);
   }
 
   // L1s
   function _deployMainnet() internal returns (address) {
     UpgradePayload.ConstructorParams memory params;
-    params.pool = AaveV3Ethereum.POOL;
-    params.poolConfigurator = AaveV3Ethereum.POOL_CONFIGURATOR;
+    params.stableDebtToken = 0x102633152313C81cD80419b6EcF66d14Ad68949A; // weth
     params.poolAddressesProvider = AaveV3Ethereum.POOL_ADDRESSES_PROVIDER;
     return _deployL1(params);
   }
 
   function _deployMainnetLido() internal returns (address) {
     UpgradePayload.ConstructorParams memory params;
-    params.pool = AaveV3EthereumLido.POOL;
-    params.poolConfigurator = AaveV3EthereumLido.POOL_CONFIGURATOR;
+    params.stableDebtToken = 0x3d0Fd161363b327C704b013a9E63a8Cc03Bec1c4; // wstETH
     params.poolAddressesProvider = AaveV3EthereumLido.POOL_ADDRESSES_PROVIDER;
     return _deployL1(params);
   }
 
   function _deployMainnetEtherfi() internal returns (address) {
     UpgradePayload.ConstructorParams memory params;
-    params.pool = AaveV3EthereumEtherFi.POOL;
-    params.poolConfigurator = AaveV3EthereumEtherFi.POOL_CONFIGURATOR;
+    params.stableDebtToken = 0x57A994227592652D58BBF3D52e34261dF8b354D0; // weETH
     params.poolAddressesProvider = AaveV3EthereumEtherFi.POOL_ADDRESSES_PROVIDER;
     return _deployL1(params);
   }
 
   function _deployGnosis() internal returns (address) {
     UpgradePayload.ConstructorParams memory params;
-    params.pool = AaveV3Gnosis.POOL;
-    params.poolConfigurator = AaveV3Gnosis.POOL_CONFIGURATOR;
+    params.stableDebtToken = 0x436D82d905b014926a2375C576500B6fea0D2496; // weth
     params.poolAddressesProvider = AaveV3Gnosis.POOL_ADDRESSES_PROVIDER;
     return _deployL1(params);
   }
 
   function _deployBNB() internal returns (address) {
     UpgradePayload.ConstructorParams memory params;
-    params.pool = AaveV3BNB.POOL;
-    params.poolConfigurator = AaveV3BNB.POOL_CONFIGURATOR;
+    params.stableDebtToken = 0x57e95511de39890D3e782df4b19F0D97A05DF64A; // prev Cake
     params.poolAddressesProvider = AaveV3BNB.POOL_ADDRESSES_PROVIDER;
     return _deployL1(params);
   }
 
   function _deployAvalanche() internal returns (address) {
     UpgradePayload.ConstructorParams memory params;
-    params.pool = AaveV3Avalanche.POOL;
-    params.poolConfigurator = AaveV3Avalanche.POOL_CONFIGURATOR;
+    params.stableDebtToken = 0xd94112B5B62d53C9402e7A60289c6810dEF1dC9B; // prev DAI.e
     params.poolAddressesProvider = AaveV3Avalanche.POOL_ADDRESSES_PROVIDER;
     return _deployL1(params);
   }
 
   function _deployPolygon() internal returns (address) {
     UpgradePayload.ConstructorParams memory params;
-    params.pool = AaveV3Polygon.POOL;
-    params.poolConfigurator = AaveV3Polygon.POOL_CONFIGURATOR;
+    params.stableDebtToken = 0xd94112B5B62d53C9402e7A60289c6810dEF1dC9B; // prev DAI
     params.poolAddressesProvider = AaveV3Polygon.POOL_ADDRESSES_PROVIDER;
     return _deployL1(params);
   }
 
   function _deployL2(UpgradePayload.ConstructorParams memory params) internal returns (address) {
     params.poolImpl = GovV3Helpers.deployDeterministic(
-      type(L2PoolInstance3_2).creationCode,
+      type(L2PoolInstance).creationCode,
       abi.encode(params.poolAddressesProvider)
     );
+    L2PoolInstance(params.poolImpl).initialize(params.poolAddressesProvider);
     return _deployPayload(params);
   }
 
   function _deployL1(UpgradePayload.ConstructorParams memory params) internal returns (address) {
     params.poolImpl = GovV3Helpers.deployDeterministic(
-      type(PoolInstance3_2).creationCode,
+      type(PoolInstance).creationCode,
       abi.encode(params.poolAddressesProvider)
     );
+    PoolInstance(params.poolImpl).initialize(params.poolAddressesProvider);
     return _deployPayload(params);
   }
 
   function _deployPayload(
     UpgradePayload.ConstructorParams memory params
   ) private returns (address) {
-    params.poolConfiguratorImpl = GovV3Helpers.deployDeterministic(
-      type(PoolConfiguratorInstance).creationCode
-    );
-    params.poolDataProvider = GovV3Helpers.deployDeterministic(
-      type(AaveProtocolDataProvider).creationCode,
-      abi.encode(params.poolAddressesProvider)
-    );
     return address(new UpgradePayload(params));
   }
 }
@@ -212,7 +192,7 @@ contract Deploymetis is MetisScript {
 
 contract Deploymainnet is EthereumScript {
   function run() external broadcast {
-    DeploymentLibrary._deployMainnet();
+    DeploymentLibrary._deployMainnetEtherfi();
   }
 }
 
