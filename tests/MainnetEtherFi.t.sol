@@ -13,8 +13,4 @@ contract MainnetEtherfiTest is UpgradeTest('mainnet', 20930840) {
   function _getDeployedPayload() internal virtual override returns (address) {
     return Payloads.ETHERFI;
   }
-
-  function _getDeprecatedPDP() internal virtual override returns (address) {
-    return address(0x8Cb4b66f7B13F2Ae4D3c91338fC007dbF8C14208);
-  }
 }

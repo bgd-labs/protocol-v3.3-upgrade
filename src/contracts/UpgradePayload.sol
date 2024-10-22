@@ -5,10 +5,8 @@ import {DataTypes} from 'aave-v3-origin/contracts/protocol/libraries/types/DataT
 import {IPool} from 'aave-v3-origin/contracts/interfaces/IPool.sol';
 import {IPoolAddressesProvider} from 'aave-v3-origin/contracts/interfaces/IPoolAddressesProvider.sol';
 import {IPoolConfigurator} from 'aave-v3-origin/contracts/interfaces/IPoolConfigurator.sol';
-import {EModeConfiguration} from 'aave-v3-origin/contracts/protocol/libraries/configuration/EModeConfiguration.sol';
 import {DefaultReserveInterestRateStrategyV2} from 'aave-v3-origin/contracts/misc/DefaultReserveInterestRateStrategyV2.sol';
 import {IDefaultInterestRateStrategyV2} from 'aave-v3-origin/contracts/interfaces/IDefaultInterestRateStrategyV2.sol';
-import {ReserveConfiguration as ReserveConfigurationLegacy} from './lib/LegacyReserveConfiguration.sol';
 
 /**
  * @title v3.2 upgrade, with getReserveData() patch
@@ -18,28 +16,32 @@ import {ReserveConfiguration as ReserveConfigurationLegacy} from './lib/LegacyRe
  * This upgrade adds a deprecated stable debt token to the `getReserveData` response, so view methods no longer revert.
  */
 contract UpgradePayload {
-  using EModeConfiguration for DataTypes.EModeCategory;
-  using ReserveConfigurationLegacy for DataTypes.ReserveConfigurationMap;
-
   struct ConstructorParams {
     IPoolAddressesProvider poolAddressesProvider;
+    IPool pool;
     address poolImpl;
-    address stableDebtToken;
+    address poolDataProvider;
   }
 
   IPoolAddressesProvider public immutable POOL_ADDRESSES_PROVIDER;
+  IPool public immutable POOL;
   address public immutable POOL_IMPL;
-  address public immutable STABLE_DEBT_TOKEN;
+  address public immutable POOL_DATA_PROVIDER;
 
   constructor(ConstructorParams memory params) {
-    require(params.stableDebtToken != address(0), 'MOCK_TOKEN_MUST_BE_SET');
     POOL_ADDRESSES_PROVIDER = params.poolAddressesProvider;
+    POOL = params.pool;
     POOL_IMPL = params.poolImpl;
-    STABLE_DEBT_TOKEN = params.stableDebtToken;
+    POOL_DATA_PROVIDER = params.poolDataProvider;
   }
 
   function execute() external {
+    address[] memory reservesList = POOL.getReservesList();
     POOL_ADDRESSES_PROVIDER.setPoolImpl(POOL_IMPL);
-    POOL_ADDRESSES_PROVIDER.setAddress(bytes32('MOCK_STABLE_DEBT'), STABLE_DEBT_TOKEN);
+    POOL_ADDRESSES_PROVIDER.setPoolDataProvider(POOL_DATA_PROVIDER);
+    for (uint256 i = 0; i < reservesList.length; i++) {
+      // as deficit is reusing old storage we ensure the storage is empty
+      require(POOL.getReserveDeficit(reservesList[0]) == 0, 'STORAGE_MUST_BE_CLEAN');
+    }
   }
 }

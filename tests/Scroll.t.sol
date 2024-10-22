@@ -13,8 +13,4 @@ contract ScrollTest is UpgradeTest('scroll', 10018044) {
   function _getDeployedPayload() internal virtual override returns (address) {
     return Payloads.SCROLL;
   }
-
-  function _getDeprecatedPDP() internal virtual override returns (address) {
-    return address(0xD9b61AC3a94584E7B5253F37Fe7500259D688a63);
-  }
 }

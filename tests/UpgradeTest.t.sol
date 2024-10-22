@@ -18,38 +18,9 @@ abstract contract UpgradeTest is ProtocolV3TestBase {
     vm.createSelectFork(vm.rpcUrl(NETWORK), BLOCK_NUMBER);
   }
 
-  function test_execution() external {
+  function test_execution() external virtual {
     UpgradePayload payload = UpgradePayload(_getTestPayload());
     executePayload(vm, address(payload));
-    IPoolAddressesProvider addressesProvider = UpgradePayload(payload).POOL_ADDRESSES_PROVIDER();
-    address stableMock = addressesProvider.getAddress(bytes32('MOCK_STABLE_DEBT'));
-    require(stableMock != address(0));
-    // checking non revert
-    IERC20(stableMock).totalSupply();
-    IERC20(stableMock).balanceOf(address(0));
-  }
-
-  function test_outdatedPdp() external {
-    UpgradePayload payload = UpgradePayload(_getTestPayload());
-    IPoolAddressesProvider addressesProvider = payload.POOL_ADDRESSES_PROVIDER();
-    IPool pool = IPool(addressesProvider.getPool());
-    address[] memory reserves = pool.getReservesList();
-    for (uint256 i = 0; i < reserves.length; i++) {
-      IPoolDataProvider pdp = IPoolDataProvider(_getDeprecatedPDP());
-      vm.expectRevert();
-      pdp.getReserveData(reserves[i]);
-      vm.expectRevert();
-      pdp.getTotalDebt(reserves[i]);
-      vm.expectRevert();
-      pdp.getUserReserveData(reserves[i], address(0));
-    }
-    executePayload(vm, address(payload));
-    for (uint256 i = 0; i < reserves.length; i++) {
-      IPoolDataProvider pdp = IPoolDataProvider(_getDeprecatedPDP());
-      pdp.getReserveData(reserves[i]);
-      pdp.getTotalDebt(reserves[i]);
-      pdp.getUserReserveData(reserves[i], address(0));
-    }
   }
 
   function test_diff() external {
@@ -63,13 +34,16 @@ abstract contract UpgradeTest is ProtocolV3TestBase {
     );
   }
 
+  function test_ensureDeployed() external {
+    require(_getDeployedPayload() != address(0));
+  }
+
   function _getTestPayload() internal returns (address) {
-    return _getDeployedPayload();
+    address deployed = _getDeployedPayload();
+    if (deployed == address(0)) return _getPayload();
   }
 
   function _getPayload() internal virtual returns (address);
 
   function _getDeployedPayload() internal virtual returns (address);
-
-  function _getDeprecatedPDP() internal virtual returns (address);
 }

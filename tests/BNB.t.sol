@@ -13,8 +13,4 @@ contract BNBTest is UpgradeTest('bnb', 42976011) {
   function _getDeployedPayload() internal virtual override returns (address) {
     return Payloads.BNB;
   }
-
-  function _getDeprecatedPDP() internal virtual override returns (address) {
-    return address(0x6736393C50A4B1bd402d97aa5b979d396e5d8d4B);
-  }
 }
