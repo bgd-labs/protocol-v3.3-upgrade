@@ -38,6 +38,23 @@ contract MainnetTest is UpgradeTest('mainnet', 20930840) {
     this.test_execution();
   }
 
+  function test_stermi() external {
+    this.test_execution();
+
+    IPool pool = IPool(0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2);
+    address usdc = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
+    uint256 usdcSupplyAmount = 100_000e6;
+    uint256 ghoBorrowAmount = 1000e18;
+
+    // Supply USDC, borrow GHO
+    deal(usdc, borrower, usdcSupplyAmount);
+    vm.startPrank(borrower);
+    IERC20(usdc).approve(address(pool), usdcSupplyAmount);
+    pool.supply(usdc, usdcSupplyAmount, borrower, 0);
+    pool.borrow(AaveV3EthereumAssets.GHO_UNDERLYING, ghoBorrowAmount, 2, 0, borrower);
+    vm.stopPrank();
+  }
+
   function _borrowAndLiquidateGHOAmount(
     IPool pool,
     address collateralAsset,
