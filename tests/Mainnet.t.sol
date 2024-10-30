@@ -33,6 +33,10 @@ contract MainnetTest is UpgradeTest('mainnet', 20930840) {
     return Payloads.PROTO;
   }
 
+  function test_yourTest() external {
+    this.test_execution();
+  }
+
   function _borrowAndLiquidateGHOAmount(
     IPool pool,
     address collateralAsset,
