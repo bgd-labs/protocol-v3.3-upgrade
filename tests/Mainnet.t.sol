@@ -33,37 +33,50 @@ contract MainnetTest is UpgradeTest('mainnet', 20930840) {
     return Payloads.PROTO;
   }
 
-  // test stub
-  function test_yourTest() external {
+  function test_liquidateGHO() external {
     this.test_execution();
+
+    IPool pool = AaveV3Ethereum.POOL;
+    address collateralAsset = AaveV3EthereumAssets.USDC_UNDERLYING;
+
+    _borrowAndLiquidateGHOAmount(
+      pool,
+      collateralAsset,
+      AaveV3EthereumAssets.DAI_UNDERLYING,
+      100_000e18,
+      0
+    );
+
+    assertEq(VGHO(AaveV3EthereumAssets.GHO_V_TOKEN).getBalanceFromInterest(borrower), 0);
   }
 
-  function test_stermi() external {
+  function test_liquidateGHO_feeAfter5years() external {
     this.test_execution();
 
-    IPool pool = IPool(0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2);
-    address usdc = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
-    uint256 usdcSupplyAmount = 100_000e6;
-    uint256 ghoBorrowAmount = 1000e18;
+    IPool pool = AaveV3Ethereum.POOL;
+    address collateralAsset = AaveV3EthereumAssets.USDC_UNDERLYING;
 
-    // Supply USDC, borrow GHO
-    deal(usdc, borrower, usdcSupplyAmount);
-    vm.startPrank(borrower);
-    IERC20(usdc).approve(address(pool), usdcSupplyAmount);
-    pool.supply(usdc, usdcSupplyAmount, borrower, 0);
-    pool.borrow(AaveV3EthereumAssets.GHO_UNDERLYING, ghoBorrowAmount, 2, 0, borrower);
-    vm.stopPrank();
+    _borrowAndLiquidateGHOAmount(
+      pool,
+      collateralAsset,
+      AaveV3EthereumAssets.DAI_UNDERLYING,
+      100_000e18,
+      365 * 5 days
+    );
+
+    assertEq(VGHO(AaveV3EthereumAssets.GHO_V_TOKEN).getBalanceFromInterest(borrower), 0);
   }
 
   function _borrowAndLiquidateGHOAmount(
     IPool pool,
     address collateralAsset,
     address borrowAsset,
-    uint256 borrowAmount
+    uint256 borrowAmount,
+    uint256 timeToWait
   ) internal {
     // supply some stkAAVE
     // deal(AaveSafetyModule.STK_AAVE, borrower, 1000 ether);
-    VGHO(AaveV3EthereumAssets.GHO_V_TOKEN).rebalanceUserDiscountPercent(borrower);
+    // VGHO(AaveV3EthereumAssets.GHO_V_TOKEN).rebalanceUserDiscountPercent(borrower);
     address oracle = pool.ADDRESSES_PROVIDER().getPriceOracle();
 
     // supply some minimal collateral to allow borrowing
@@ -84,11 +97,21 @@ contract MainnetTest is UpgradeTest('mainnet', 20930840) {
     );
     // borrow the full emount of the asset
     pool.borrow(borrowAsset, borrowAmount, 2, 0, borrower);
+    vm.mockCall(
+      oracle,
+      abi.encodeWithSelector(
+        IPriceOracleGetter.getAssetPrice.selector,
+        address(AaveV3EthereumAssets.GHO_UNDERLYING)
+      ),
+      abi.encode(0)
+    );
+    // borrow the full emount of the asset
+    pool.borrow(address(AaveV3EthereumAssets.GHO_UNDERLYING), borrowAmount, 2, 0, borrower);
     // revert the oracle price
     vm.clearMockedCalls();
     vm.stopPrank();
 
-    vm.warp(block.timestamp + 100 days);
+    vm.warp(block.timestamp + timeToWait);
 
     vm.startPrank(liquidator);
     deal(borrowAsset, liquidator, borrowAmount);
