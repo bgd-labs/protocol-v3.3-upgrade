@@ -9,11 +9,14 @@ import {DefaultReserveInterestRateStrategyV2} from 'aave-v3-origin/contracts/mis
 import {IDefaultInterestRateStrategyV2} from 'aave-v3-origin/contracts/interfaces/IDefaultInterestRateStrategyV2.sol';
 
 /**
- * @title v3.2 upgrade, with getReserveData() patch
+ * @title v3.3 upgrade
  * @author BGD Labs
- * @dev With the 3.2 going live, we became aware of some integrations that `hard-code` the pool data provider in a non upgreadable fashion.
- * Due to this behavior their contracts are broken and funds are potentially stuck.
- * This upgrade adds a deprecated stable debt token to the `getReserveData` response, so view methods no longer revert.
+ * @dev Upgrade payload to upgrade the Aave v3.2 to v3.3
+ * This proposal:
+ * - updates the pool implementation
+ * - updates the pool configurator implementation
+ * - sets a new pool data provider on the pool addresses provider
+ * In addition as a sanity check it iterates all reseves and ensures that the storage is clean after the upgrade.
  */
 contract UpgradePayload {
   struct ConstructorParams {
@@ -21,23 +24,27 @@ contract UpgradePayload {
     IPool pool;
     address poolImpl;
     address poolDataProvider;
+    address poolConfiguratorImpl;
   }
 
   IPoolAddressesProvider public immutable POOL_ADDRESSES_PROVIDER;
   IPool public immutable POOL;
   address public immutable POOL_IMPL;
+  address public immutable POOL_CONFIGURATOR_IMPL;
   address public immutable POOL_DATA_PROVIDER;
 
   constructor(ConstructorParams memory params) {
     POOL_ADDRESSES_PROVIDER = params.poolAddressesProvider;
     POOL = params.pool;
     POOL_IMPL = params.poolImpl;
+    POOL_CONFIGURATOR_IMPL = params.poolConfiguratorImpl;
     POOL_DATA_PROVIDER = params.poolDataProvider;
   }
 
   function execute() external {
     address[] memory reservesList = POOL.getReservesList();
     POOL_ADDRESSES_PROVIDER.setPoolImpl(POOL_IMPL);
+    POOL_ADDRESSES_PROVIDER.setPoolConfiguratorImpl(POOL_CONFIGURATOR_IMPL);
     POOL_ADDRESSES_PROVIDER.setPoolDataProvider(POOL_DATA_PROVIDER);
     for (uint256 i = 0; i < reservesList.length; i++) {
       // as deficit is reusing old storage we ensure the storage is empty

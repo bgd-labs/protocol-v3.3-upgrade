@@ -135,6 +135,9 @@ library DeploymentLibrary {
       type(AaveProtocolDataProvider).creationCode,
       abi.encode(params.poolAddressesProvider)
     );
+    params.poolConfiguratorImpl = GovV3Helpers.deployDeterministic(
+      type(PoolConfiguratorInstance).creationCode
+    );
     return address(new UpgradePayload(params));
   }
 }
