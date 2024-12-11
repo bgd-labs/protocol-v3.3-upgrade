@@ -6,5 +6,5 @@
 	url = https://github.com/bgd-labs/aave-helpers
 [submodule "lib/aave-v3-origin"]
 	path = lib/aave-v3-origin
-	url = https://github.com/bgd-labs/aave-v3-origin-private
-	branch = fix/call-handleRepayment-when-clearing-deficit
+	url = https://github.com/bgd-labs/aave-v3-origin
+	branch = v3.3.0

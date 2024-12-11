@@ -17,7 +17,7 @@ interface VGHO {
   function rebalanceUserDiscountPercent(address user) external;
 }
 
-contract MainnetTest is UpgradeTest('mainnet', 20930840) {
+contract MainnetTest is UpgradeTest('mainnet', 21378438) {
   // address holding excess funds for borrowing etc
   address whale = makeAddr('whale');
   // liquidator
