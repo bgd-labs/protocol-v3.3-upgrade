@@ -48,7 +48,7 @@ contract UpgradePayload {
     POOL_ADDRESSES_PROVIDER.setPoolDataProvider(POOL_DATA_PROVIDER);
     for (uint256 i = 0; i < reservesList.length; i++) {
       // as deficit is reusing old storage we ensure the storage is empty
-      require(POOL.getReserveDeficit(reservesList[0]) == 0, 'STORAGE_MUST_BE_CLEAN');
+      require(POOL.getReserveDeficit(reservesList[i]) == 0, 'STORAGE_MUST_BE_CLEAN');
     }
   }
 }
