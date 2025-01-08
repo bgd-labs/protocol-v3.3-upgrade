@@ -16,7 +16,7 @@ import {IDefaultInterestRateStrategyV2} from 'aave-v3-origin/contracts/interface
  * - updates the pool implementation
  * - updates the pool configurator implementation
  * - sets a new pool data provider on the pool addresses provider
- * In addition as a sanity check it iterates all reseves and ensures that the storage is clean after the upgrade.
+ * In addition as a sanity check it iterates all reserves and ensures that the storage is clean after the upgrade.
  */
 contract UpgradePayload {
   struct ConstructorParams {
