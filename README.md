@@ -39,7 +39,7 @@ The payload for the upgrade does the following:
 
 ### Misc
 
-Additionally their are new versions of some periphery-contracts that might be deployed alongside the proposal, namely:
+Additionally, there are new versions of some periphery-contracts that might be deployed alongside the proposal, namely:
 
 - `WrappedTokenGatewayV3`
 - `ParaswapAdapters`
