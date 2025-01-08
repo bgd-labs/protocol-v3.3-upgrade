@@ -24,29 +24,6 @@ abstract contract UpgradeTest is ProtocolV3TestBase {
     executePayload(vm, address(payload));
   }
 
-  function test_outdatedPdp() external {
-    UpgradePayload payload = UpgradePayload(_getTestPayload());
-    IPoolAddressesProvider addressesProvider = UpgradePayload(payload).POOL_ADDRESSES_PROVIDER();
-    IPool pool = IPool(addressesProvider.getPool());
-    address[] memory reserves = pool.getReservesList();
-    for (uint256 i = 0; i < reserves.length; i++) {
-      IPoolDataProvider pdp = IPoolDataProvider(_getDeprecatedPDP());
-      vm.expectRevert();
-      pdp.getReserveData(reserves[i]);
-      vm.expectRevert();
-      pdp.getTotalDebt(reserves[i]);
-      vm.expectRevert();
-      pdp.getUserReserveData(reserves[i], address(0));
-    }
-    executePayload(vm, address(payload));
-    for (uint256 i = 0; i < reserves.length; i++) {
-      IPoolDataProvider pdp = IPoolDataProvider(_getDeprecatedPDP());
-      pdp.getReserveData(reserves[i]);
-      pdp.getTotalDebt(reserves[i]);
-      pdp.getUserReserveData(reserves[i], address(0));
-    }
-  }
-
   function test_diff() external {
     UpgradePayload payload = UpgradePayload(_getTestPayload());
     IPoolAddressesProvider addressesProvider = UpgradePayload(payload).POOL_ADDRESSES_PROVIDER();
@@ -59,12 +36,11 @@ abstract contract UpgradeTest is ProtocolV3TestBase {
   }
 
   function _getTestPayload() internal returns (address) {
-    return _getDeployedPayload();
+    address deployed = _getDeployedPayload();
+    if (deployed == address(0)) return _getPayload();
   }
 
   function _getPayload() internal virtual returns (address);
 
   function _getDeployedPayload() internal virtual returns (address);
-
-  function _getDeprecatedPDP() internal virtual returns (address);
 }
