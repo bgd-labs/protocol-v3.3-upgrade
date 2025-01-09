@@ -12,7 +12,7 @@ This repository contains contracts to upgrade existing instances of Aave protoco
 ## Setup
 
 ```sh
-cp .env.example .env
+cp .env.example .env # you need to setup functional rpcs
 forge install
 
 # optional, to install prettier
@@ -24,6 +24,11 @@ yarn install
 Command run test for all networks expect zkSync: `forge test`
 
 Command to run test for zkSync: `FOUNDRY_PROFILE=zksync forge test --zksync`
+
+There are two test templates available:
+
+- [PureTestTemplate.t.sol](./tests/PureTestTemplate.t.sol) which creates a instance of the v3.3 protocol on a pure anvil
+- [UpgradeTestTemplate.t.sol](./tests/UpgradeTestTemplate.t.sol) which upgrades a existing protocol instance from 3.2 to 3.3
 
 <br>
 
