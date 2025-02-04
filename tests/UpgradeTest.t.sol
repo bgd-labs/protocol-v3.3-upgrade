@@ -34,9 +34,7 @@ abstract contract UpgradeTest is ProtocolV3TestBase {
     );
   }
 
-  // skipping test as no payloads are deployed yet
   function test_ensureDeployed() external {
-    vm.skip(true);
     require(_getDeployedPayload() != address(0));
   }
 

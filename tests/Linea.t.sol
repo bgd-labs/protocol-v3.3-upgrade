@@ -7,7 +7,7 @@ import {DeploymentLibrary} from '../scripts/Deploy.s.sol';
 import {Payloads} from './Payloads.sol';
 import {UpgradePayload} from '../src/contracts/UpgradePayload.sol';
 
-contract LineaTest is UpgradeTest('linea', 15421375) {
+contract LineaTest is UpgradeTest('linea', 15423773) {
   function _getPayload() internal virtual override returns (address) {
     return DeploymentLibrary._deployLinea();
   }
