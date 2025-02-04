@@ -34,7 +34,7 @@ contract MainnetTest is UpgradeTest('mainnet', 21378438) {
   }
 
   function test_liquidateGHO() external {
-    this.test_execution();
+    test_execution();
 
     IPool pool = AaveV3Ethereum.POOL;
     address collateralAsset = AaveV3EthereumAssets.USDC_UNDERLYING;
@@ -51,7 +51,7 @@ contract MainnetTest is UpgradeTest('mainnet', 21378438) {
   }
 
   function test_liquidateGHO_feeAfter5years() external {
-    this.test_execution();
+    test_execution();
 
     IPool pool = AaveV3Ethereum.POOL;
     address collateralAsset = AaveV3EthereumAssets.USDC_UNDERLYING;
