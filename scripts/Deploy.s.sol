@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {EthereumScript, PolygonScript, AvalancheScript, OptimismScript, ArbitrumScript, MetisScript, BaseScript, GnosisScript, ScrollScript, BNBScript} from 'solidity-utils/contracts/utils/ScriptUtils.sol';
+import {EthereumScript, PolygonScript, AvalancheScript, OptimismScript, ArbitrumScript, MetisScript, BaseScript, GnosisScript, ScrollScript, BNBScript, LineaScript} from 'solidity-utils/contracts/utils/ScriptUtils.sol';
 import {GovV3Helpers} from 'aave-helpers/src/GovV3Helpers.sol';
 import {AaveProtocolDataProvider} from 'aave-v3-origin/contracts/helpers/AaveProtocolDataProvider.sol';
 import {PoolConfiguratorInstance} from 'aave-v3-origin/contracts/instances/PoolConfiguratorInstance.sol';
@@ -18,6 +18,7 @@ import {AaveV3Base} from 'aave-address-book/AaveV3Base.sol';
 import {AaveV3Metis} from 'aave-address-book/AaveV3Metis.sol';
 import {AaveV3EthereumLido} from 'aave-address-book/AaveV3EthereumLido.sol';
 import {AaveV3EthereumEtherFi} from 'aave-address-book/AaveV3EthereumEtherFi.sol';
+import {AaveV3Linea} from 'aave-address-book/AaveV3Linea.sol';
 
 import {UpgradePayload} from '../src/contracts/UpgradePayload.sol';
 import {PoolInstance} from 'aave-v3-origin/contracts/instances/PoolInstance.sol';
@@ -108,6 +109,13 @@ library DeploymentLibrary {
     params.pool = AaveV3Polygon.POOL;
     params.poolAddressesProvider = AaveV3Polygon.POOL_ADDRESSES_PROVIDER;
     return _deployL1(params);
+  }
+
+  function _deployLinea() internal returns (address) {
+    UpgradePayload.ConstructorParams memory params;
+    params.pool = AaveV3Linea.POOL;
+    params.poolAddressesProvider = AaveV3Linea.POOL_ADDRESSES_PROVIDER;
+    return _deployL2(params);
   }
 
   function _deployL2(UpgradePayload.ConstructorParams memory params) internal returns (address) {
@@ -212,5 +220,11 @@ contract Deploylido is EthereumScript {
 contract Deployetherfi is EthereumScript {
   function run() external broadcast {
     DeploymentLibrary._deployMainnetEtherfi();
+  }
+}
+
+contract Deploylinea is LineaScript {
+  function run() external broadcast {
+    DeploymentLibrary._deployLinea();
   }
 }

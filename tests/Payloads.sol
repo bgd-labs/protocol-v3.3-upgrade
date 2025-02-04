@@ -15,4 +15,5 @@ library Payloads {
   address internal constant METIS = address(0);
   address internal constant LIDO = address(0);
   address internal constant ETHERFI = address(0);
+  address internal constant LINEA = address(0);
 }
