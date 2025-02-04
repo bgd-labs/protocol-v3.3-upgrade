@@ -12,7 +12,7 @@ library Payloads {
   address internal constant BNB = 0x5E76E98E0963EcDC6A065d1435F84065b7523f39;
   address internal constant PROTO = address(0);
   address internal constant ZKSYNC = address(0);
-  address internal constant METIS = address(0);
+  address internal constant METIS = 0xb85d72EC1EfE48168c4aBC4eB855f8Cbcd05cE38;
   address internal constant LIDO = address(0);
   address internal constant ETHERFI = address(0);
   address internal constant LINEA = 0x89654c66A6abd7174b525D05C2f4c442a615cee8;
