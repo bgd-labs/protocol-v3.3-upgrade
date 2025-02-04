@@ -18,14 +18,12 @@ abstract contract UpgradeTest is ProtocolV3TestBase {
     vm.createSelectFork(vm.rpcUrl(NETWORK), BLOCK_NUMBER);
   }
 
-  function test_execution() external virtual {
+  function test_execution() public virtual {
     UpgradePayload payload = UpgradePayload(_getTestPayload());
     executePayload(vm, address(payload));
   }
 
-  // skipping test as no the implementations are not yet deployed, so code diffing does not workq
-  function test_diff() external {
-    vm.skip(true);
+  function test_diff() external virtual {
     UpgradePayload payload = UpgradePayload(_getTestPayload());
     IPoolAddressesProvider addressesProvider = payload.POOL_ADDRESSES_PROVIDER();
     IPool pool = IPool(addressesProvider.getPool());
