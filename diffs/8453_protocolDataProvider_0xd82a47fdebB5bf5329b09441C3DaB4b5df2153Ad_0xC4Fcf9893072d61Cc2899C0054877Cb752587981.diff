@@ -92,7 +92,7 @@ index 9004894..961f63d 100644
 +    }
  }
 diff --git a/tmp/8453_0xd82a47fdebB5bf5329b09441C3DaB4b5df2153Ad_flat/DataTypes.sol b/tmp/8453_0xC4Fcf9893072d61Cc2899C0054877Cb752587981_flat/DataTypes.sol
-index 3eb4af3..15d6b49 100644
+index 45b226c..8e5b1a9 100644
 --- a/tmp/8453_0xd82a47fdebB5bf5329b09441C3DaB4b5df2153Ad_flat/DataTypes.sol
 +++ b/tmp/8453_0xC4Fcf9893072d61Cc2899C0054877Cb752587981_flat/DataTypes.sol
 @@ -50,8 +50,9 @@ library DataTypes {
@@ -107,7 +107,7 @@ index 3eb4af3..15d6b49 100644
          //timestamp of last update
          uint40 lastUpdateTimestamp;
          //the id of the reserve. Represents the position in the list of the active reserves
-@@ -217,6 +218,11 @@ library DataTypes {
+@@ -216,6 +217,11 @@ library DataTypes {
          uint8 userEModeCategory;
      }
  
@@ -133,7 +133,7 @@ index d2a0c13..eb8c305 100644
 +    string public constant USER_CANNOT_HAVE_DEBT = "104"; // Thrown when a user tries to interact with a method that requires a position without debt
  }
 diff --git a/tmp/8453_0xd82a47fdebB5bf5329b09441C3DaB4b5df2153Ad_flat/IPool.sol b/tmp/8453_0xC4Fcf9893072d61Cc2899C0054877Cb752587981_flat/IPool.sol
-index 3561fff..8c6fa9a 100644
+index c65cf8e..f0ed8d2 100644
 --- a/tmp/8453_0xd82a47fdebB5bf5329b09441C3DaB4b5df2153Ad_flat/IPool.sol
 +++ b/tmp/8453_0xC4Fcf9893072d61Cc2899C0054877Cb752587981_flat/IPool.sol
 @@ -204,6 +204,18 @@ interface IPool {
@@ -190,10 +190,10 @@ index 3561fff..8c6fa9a 100644
      /**
       * @notice Returns the virtual underlying balance of the reserve
       * @param asset The address of the underlying asset of the reserve
-@@ -800,7 +815,9 @@ interface IPool {
-      * @param asset The address of the underlying asset
+@@ -802,7 +817,9 @@ interface IPool {
       * @return Timestamp when the liquidation grace period will end
-      **/
+      *
+      */
 -    function getLiquidationGracePeriod(address asset) external returns (uint40);
 +    function getLiquidationGracePeriod(
 +        address asset
@@ -201,7 +201,7 @@ index 3561fff..8c6fa9a 100644
  
      /**
       * @notice Returns the total fee on flash loans
-@@ -859,6 +876,39 @@ interface IPool {
+@@ -861,6 +878,39 @@ interface IPool {
          uint16 referralCode
      ) external;
  
@@ -258,55 +258,62 @@ index d94bdcd..c4f8cb7 100644
 +    function getReserveDeficit(address asset) external view returns (uint256);
  }
 diff --git a/tmp/8453_0xd82a47fdebB5bf5329b09441C3DaB4b5df2153Ad_flat/ReserveConfiguration.sol b/tmp/8453_0xC4Fcf9893072d61Cc2899C0054877Cb752587981_flat/ReserveConfiguration.sol
-index fc8bcf4..a21e5aa 100644
+index e0713b0..a829da8 100644
 --- a/tmp/8453_0xd82a47fdebB5bf5329b09441C3DaB4b5df2153Ad_flat/ReserveConfiguration.sol
 +++ b/tmp/8453_0xC4Fcf9893072d61Cc2899C0054877Cb752587981_flat/ReserveConfiguration.sol
-@@ -10,25 +10,26 @@ import {DataTypes} from "../types/DataTypes.sol";
+@@ -10,32 +10,33 @@ import {DataTypes} from "../types/DataTypes.sol";
   * @notice Implements the bitmap logic to handle the reserve configuration
   */
  library ReserveConfiguration {
--    uint256 internal constant LTV_MASK =                       0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000; // prettier-ignore
--    uint256 internal constant LIQUIDATION_THRESHOLD_MASK =     0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFF; // prettier-ignore
--    uint256 internal constant LIQUIDATION_BONUS_MASK =         0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFF; // prettier-ignore
--    uint256 internal constant DECIMALS_MASK =                  0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFF; // prettier-ignore
--    uint256 internal constant ACTIVE_MASK =                    0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFF; // prettier-ignore
--    uint256 internal constant FROZEN_MASK =                    0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDFFFFFFFFFFFFFF; // prettier-ignore
--    uint256 internal constant BORROWING_MASK =                 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBFFFFFFFFFFFFFF; // prettier-ignore
--    uint256 internal constant PAUSED_MASK =                    0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFF; // prettier-ignore
--    uint256 internal constant BORROWABLE_IN_ISOLATION_MASK =   0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDFFFFFFFFFFFFFFF; // prettier-ignore
--    uint256 internal constant SILOED_BORROWING_MASK =          0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBFFFFFFFFFFFFFFF; // prettier-ignore
--    uint256 internal constant FLASHLOAN_ENABLED_MASK =         0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF; // prettier-ignore
--    uint256 internal constant RESERVE_FACTOR_MASK =            0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFF; // prettier-ignore
--    uint256 internal constant BORROW_CAP_MASK =                0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000FFFFFFFFFFFFFFFFFFFF; // prettier-ignore
--    uint256 internal constant SUPPLY_CAP_MASK =                0xFFFFFFFFFFFFFFFFFFFFFFFFFF000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFF; // prettier-ignore
--    uint256 internal constant LIQUIDATION_PROTOCOL_FEE_MASK =  0xFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; // prettier-ignore
-+    uint256 internal constant LTV_MASK =                       0x000000000000000000000000000000000000000000000000000000000000FFFF; // prettier-ignore
-+    uint256 internal constant LIQUIDATION_THRESHOLD_MASK =     0x00000000000000000000000000000000000000000000000000000000FFFF0000; // prettier-ignore
-+    uint256 internal constant LIQUIDATION_BONUS_MASK =         0x0000000000000000000000000000000000000000000000000000FFFF00000000; // prettier-ignore
-+    uint256 internal constant DECIMALS_MASK =                  0x00000000000000000000000000000000000000000000000000FF000000000000; // prettier-ignore
-+    uint256 internal constant ACTIVE_MASK =                    0x0000000000000000000000000000000000000000000000000100000000000000; // prettier-ignore
-+    uint256 internal constant FROZEN_MASK =                    0x0000000000000000000000000000000000000000000000000200000000000000; // prettier-ignore
-+    uint256 internal constant BORROWING_MASK =                 0x0000000000000000000000000000000000000000000000000400000000000000; // prettier-ignore
+-    uint256 internal constant LTV_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000; // prettier-ignore
++    uint256 internal constant LTV_MASK = 0x000000000000000000000000000000000000000000000000000000000000FFFF; // prettier-ignore
+     uint256 internal constant LIQUIDATION_THRESHOLD_MASK =
+-        0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFF; // prettier-ignore
++        0x00000000000000000000000000000000000000000000000000000000FFFF0000; // prettier-ignore
+     uint256 internal constant LIQUIDATION_BONUS_MASK =
+-        0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFF; // prettier-ignore
+-    uint256 internal constant DECIMALS_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFF; // prettier-ignore
+-    uint256 internal constant ACTIVE_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFF; // prettier-ignore
+-    uint256 internal constant FROZEN_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDFFFFFFFFFFFFFF; // prettier-ignore
+-    uint256 internal constant BORROWING_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBFFFFFFFFFFFFFF; // prettier-ignore
+-    uint256 internal constant PAUSED_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFF; // prettier-ignore
++        0x0000000000000000000000000000000000000000000000000000FFFF00000000; // prettier-ignore
++    uint256 internal constant DECIMALS_MASK = 0x00000000000000000000000000000000000000000000000000FF000000000000; // prettier-ignore
++    uint256 internal constant ACTIVE_MASK = 0x0000000000000000000000000000000000000000000000000100000000000000; // prettier-ignore
++    uint256 internal constant FROZEN_MASK = 0x0000000000000000000000000000000000000000000000000200000000000000; // prettier-ignore
++    uint256 internal constant BORROWING_MASK = 0x0000000000000000000000000000000000000000000000000400000000000000; // prettier-ignore
 +    // @notice there is an unoccupied hole of 1 bit at position 59 from pre 3.2 stableBorrowRateEnabled
-+    uint256 internal constant PAUSED_MASK =                    0x0000000000000000000000000000000000000000000000001000000000000000; // prettier-ignore
-+    uint256 internal constant BORROWABLE_IN_ISOLATION_MASK =   0x0000000000000000000000000000000000000000000000002000000000000000; // prettier-ignore
-+    uint256 internal constant SILOED_BORROWING_MASK =          0x0000000000000000000000000000000000000000000000004000000000000000; // prettier-ignore
-+    uint256 internal constant FLASHLOAN_ENABLED_MASK =         0x0000000000000000000000000000000000000000000000008000000000000000; // prettier-ignore
-+    uint256 internal constant RESERVE_FACTOR_MASK =            0x00000000000000000000000000000000000000000000FFFF0000000000000000; // prettier-ignore
-+    uint256 internal constant BORROW_CAP_MASK =                0x00000000000000000000000000000000000FFFFFFFFF00000000000000000000; // prettier-ignore
-+    uint256 internal constant SUPPLY_CAP_MASK =                0x00000000000000000000000000FFFFFFFFF00000000000000000000000000000; // prettier-ignore
-+    uint256 internal constant LIQUIDATION_PROTOCOL_FEE_MASK =  0x0000000000000000000000FFFF00000000000000000000000000000000000000; // prettier-ignore
++    uint256 internal constant PAUSED_MASK = 0x0000000000000000000000000000000000000000000000001000000000000000; // prettier-ignore
+     uint256 internal constant BORROWABLE_IN_ISOLATION_MASK =
+-        0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDFFFFFFFFFFFFFFF; // prettier-ignore
+-    uint256 internal constant SILOED_BORROWING_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBFFFFFFFFFFFFFFF; // prettier-ignore
++        0x0000000000000000000000000000000000000000000000002000000000000000; // prettier-ignore
++    uint256 internal constant SILOED_BORROWING_MASK = 0x0000000000000000000000000000000000000000000000004000000000000000; // prettier-ignore
+     uint256 internal constant FLASHLOAN_ENABLED_MASK =
+-        0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF; // prettier-ignore
+-    uint256 internal constant RESERVE_FACTOR_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFF; // prettier-ignore
+-    uint256 internal constant BORROW_CAP_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000FFFFFFFFFFFFFFFFFFFF; // prettier-ignore
+-    uint256 internal constant SUPPLY_CAP_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFF000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFF; // prettier-ignore
++        0x0000000000000000000000000000000000000000000000008000000000000000; // prettier-ignore
++    uint256 internal constant RESERVE_FACTOR_MASK = 0x00000000000000000000000000000000000000000000FFFF0000000000000000; // prettier-ignore
++    uint256 internal constant BORROW_CAP_MASK = 0x00000000000000000000000000000000000FFFFFFFFF00000000000000000000; // prettier-ignore
++    uint256 internal constant SUPPLY_CAP_MASK = 0x00000000000000000000000000FFFFFFFFF00000000000000000000000000000; // prettier-ignore
+     uint256 internal constant LIQUIDATION_PROTOCOL_FEE_MASK =
+-        0xFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; // prettier-ignore
++        0x0000000000000000000000FFFF00000000000000000000000000000000000000; // prettier-ignore
      //@notice there is an unoccupied hole of 8 bits from 168 to 176 left from pre 3.2 eModeCategory
--    uint256 internal constant UNBACKED_MINT_CAP_MASK =         0xFFFFFFFFFFF000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; // prettier-ignore
--    uint256 internal constant DEBT_CEILING_MASK =              0xF0000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; // prettier-ignore
--    uint256 internal constant VIRTUAL_ACC_ACTIVE_MASK =        0xEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; // prettier-ignore
-+    uint256 internal constant UNBACKED_MINT_CAP_MASK =         0x00000000000FFFFFFFFF00000000000000000000000000000000000000000000; // prettier-ignore
-+    uint256 internal constant DEBT_CEILING_MASK =              0x0FFFFFFFFFF00000000000000000000000000000000000000000000000000000; // prettier-ignore
-+    uint256 internal constant VIRTUAL_ACC_ACTIVE_MASK =        0x1000000000000000000000000000000000000000000000000000000000000000; // prettier-ignore
+     uint256 internal constant UNBACKED_MINT_CAP_MASK =
+-        0xFFFFFFFFFFF000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; // prettier-ignore
+-    uint256 internal constant DEBT_CEILING_MASK = 0xF0000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; // prettier-ignore
++        0x00000000000FFFFFFFFF00000000000000000000000000000000000000000000; // prettier-ignore
++    uint256 internal constant DEBT_CEILING_MASK = 0x0FFFFFFFFFF00000000000000000000000000000000000000000000000000000; // prettier-ignore
+     uint256 internal constant VIRTUAL_ACC_ACTIVE_MASK =
+-        0xEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; // prettier-ignore
++        0x1000000000000000000000000000000000000000000000000000000000000000; // prettier-ignore
  
      /// @dev For the LTV, the start bit is 0 (up to 15), hence no bitshifting is needed
      uint256 internal constant LIQUIDATION_THRESHOLD_START_BIT_POSITION = 16;
-@@ -75,7 +76,7 @@ library ReserveConfiguration {
+@@ -82,7 +83,7 @@ library ReserveConfiguration {
      ) internal pure {
          require(ltv <= MAX_VALID_LTV, Errors.INVALID_LTV);
  
@@ -315,7 +322,7 @@ index fc8bcf4..a21e5aa 100644
      }
  
      /**
-@@ -86,7 +87,7 @@ library ReserveConfiguration {
+@@ -93,7 +94,7 @@ library ReserveConfiguration {
      function getLtv(
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (uint256) {
@@ -324,7 +331,7 @@ index fc8bcf4..a21e5aa 100644
      }
  
      /**
-@@ -104,7 +105,7 @@ library ReserveConfiguration {
+@@ -111,7 +112,7 @@ library ReserveConfiguration {
          );
  
          self.data =
@@ -333,7 +340,7 @@ index fc8bcf4..a21e5aa 100644
              (threshold << LIQUIDATION_THRESHOLD_START_BIT_POSITION);
      }
  
-@@ -117,7 +118,7 @@ library ReserveConfiguration {
+@@ -124,7 +125,7 @@ library ReserveConfiguration {
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (uint256) {
          return
@@ -342,7 +349,7 @@ index fc8bcf4..a21e5aa 100644
              LIQUIDATION_THRESHOLD_START_BIT_POSITION;
      }
  
-@@ -133,7 +134,7 @@ library ReserveConfiguration {
+@@ -140,7 +141,7 @@ library ReserveConfiguration {
          require(bonus <= MAX_VALID_LIQUIDATION_BONUS, Errors.INVALID_LIQ_BONUS);
  
          self.data =
@@ -351,7 +358,7 @@ index fc8bcf4..a21e5aa 100644
              (bonus << LIQUIDATION_BONUS_START_BIT_POSITION);
      }
  
-@@ -146,7 +147,7 @@ library ReserveConfiguration {
+@@ -153,7 +154,7 @@ library ReserveConfiguration {
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (uint256) {
          return
@@ -360,7 +367,7 @@ index fc8bcf4..a21e5aa 100644
              LIQUIDATION_BONUS_START_BIT_POSITION;
      }
  
-@@ -162,7 +163,7 @@ library ReserveConfiguration {
+@@ -169,7 +170,7 @@ library ReserveConfiguration {
          require(decimals <= MAX_VALID_DECIMALS, Errors.INVALID_DECIMALS);
  
          self.data =
@@ -369,7 +376,7 @@ index fc8bcf4..a21e5aa 100644
              (decimals << RESERVE_DECIMALS_START_BIT_POSITION);
      }
  
-@@ -175,7 +176,7 @@ library ReserveConfiguration {
+@@ -182,7 +183,7 @@ library ReserveConfiguration {
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (uint256) {
          return
@@ -378,7 +385,7 @@ index fc8bcf4..a21e5aa 100644
      }
  
      /**
-@@ -188,7 +189,7 @@ library ReserveConfiguration {
+@@ -195,7 +196,7 @@ library ReserveConfiguration {
          bool active
      ) internal pure {
          self.data =
@@ -387,7 +394,7 @@ index fc8bcf4..a21e5aa 100644
              (uint256(active ? 1 : 0) << IS_ACTIVE_START_BIT_POSITION);
      }
  
-@@ -200,7 +201,7 @@ library ReserveConfiguration {
+@@ -207,7 +208,7 @@ library ReserveConfiguration {
      function getActive(
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (bool) {
@@ -396,7 +403,7 @@ index fc8bcf4..a21e5aa 100644
      }
  
      /**
-@@ -213,7 +214,7 @@ library ReserveConfiguration {
+@@ -220,7 +221,7 @@ library ReserveConfiguration {
          bool frozen
      ) internal pure {
          self.data =
@@ -405,7 +412,7 @@ index fc8bcf4..a21e5aa 100644
              (uint256(frozen ? 1 : 0) << IS_FROZEN_START_BIT_POSITION);
      }
  
-@@ -225,7 +226,7 @@ library ReserveConfiguration {
+@@ -232,7 +233,7 @@ library ReserveConfiguration {
      function getFrozen(
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (bool) {
@@ -414,7 +421,7 @@ index fc8bcf4..a21e5aa 100644
      }
  
      /**
-@@ -238,7 +239,7 @@ library ReserveConfiguration {
+@@ -245,7 +246,7 @@ library ReserveConfiguration {
          bool paused
      ) internal pure {
          self.data =
@@ -423,7 +430,7 @@ index fc8bcf4..a21e5aa 100644
              (uint256(paused ? 1 : 0) << IS_PAUSED_START_BIT_POSITION);
      }
  
-@@ -250,7 +251,7 @@ library ReserveConfiguration {
+@@ -257,7 +258,7 @@ library ReserveConfiguration {
      function getPaused(
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (bool) {
@@ -432,7 +439,7 @@ index fc8bcf4..a21e5aa 100644
      }
  
      /**
-@@ -267,7 +268,7 @@ library ReserveConfiguration {
+@@ -274,7 +275,7 @@ library ReserveConfiguration {
          bool borrowable
      ) internal pure {
          self.data =
@@ -441,7 +448,7 @@ index fc8bcf4..a21e5aa 100644
              (uint256(borrowable ? 1 : 0) <<
                  BORROWABLE_IN_ISOLATION_START_BIT_POSITION);
      }
-@@ -284,7 +285,7 @@ library ReserveConfiguration {
+@@ -291,7 +292,7 @@ library ReserveConfiguration {
      function getBorrowableInIsolation(
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (bool) {
@@ -450,7 +457,7 @@ index fc8bcf4..a21e5aa 100644
      }
  
      /**
-@@ -298,7 +299,7 @@ library ReserveConfiguration {
+@@ -305,7 +306,7 @@ library ReserveConfiguration {
          bool siloed
      ) internal pure {
          self.data =
@@ -459,7 +466,7 @@ index fc8bcf4..a21e5aa 100644
              (uint256(siloed ? 1 : 0) << SILOED_BORROWING_START_BIT_POSITION);
      }
  
-@@ -311,7 +312,7 @@ library ReserveConfiguration {
+@@ -318,7 +319,7 @@ library ReserveConfiguration {
      function getSiloedBorrowing(
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (bool) {
@@ -468,7 +475,7 @@ index fc8bcf4..a21e5aa 100644
      }
  
      /**
-@@ -324,7 +325,7 @@ library ReserveConfiguration {
+@@ -331,7 +332,7 @@ library ReserveConfiguration {
          bool enabled
      ) internal pure {
          self.data =
@@ -477,7 +484,7 @@ index fc8bcf4..a21e5aa 100644
              (uint256(enabled ? 1 : 0) << BORROWING_ENABLED_START_BIT_POSITION);
      }
  
-@@ -336,7 +337,7 @@ library ReserveConfiguration {
+@@ -343,7 +344,7 @@ library ReserveConfiguration {
      function getBorrowingEnabled(
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (bool) {
@@ -486,7 +493,7 @@ index fc8bcf4..a21e5aa 100644
      }
  
      /**
-@@ -354,7 +355,7 @@ library ReserveConfiguration {
+@@ -361,7 +362,7 @@ library ReserveConfiguration {
          );
  
          self.data =
@@ -495,7 +502,7 @@ index fc8bcf4..a21e5aa 100644
              (reserveFactor << RESERVE_FACTOR_START_BIT_POSITION);
      }
  
-@@ -367,7 +368,7 @@ library ReserveConfiguration {
+@@ -374,7 +375,7 @@ library ReserveConfiguration {
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (uint256) {
          return
@@ -504,7 +511,7 @@ index fc8bcf4..a21e5aa 100644
              RESERVE_FACTOR_START_BIT_POSITION;
      }
  
-@@ -383,7 +384,7 @@ library ReserveConfiguration {
+@@ -390,7 +391,7 @@ library ReserveConfiguration {
          require(borrowCap <= MAX_VALID_BORROW_CAP, Errors.INVALID_BORROW_CAP);
  
          self.data =
@@ -513,7 +520,7 @@ index fc8bcf4..a21e5aa 100644
              (borrowCap << BORROW_CAP_START_BIT_POSITION);
      }
  
-@@ -395,7 +396,7 @@ library ReserveConfiguration {
+@@ -402,7 +403,7 @@ library ReserveConfiguration {
      function getBorrowCap(
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (uint256) {
@@ -522,7 +529,7 @@ index fc8bcf4..a21e5aa 100644
      }
  
      /**
-@@ -410,7 +411,7 @@ library ReserveConfiguration {
+@@ -417,7 +418,7 @@ library ReserveConfiguration {
          require(supplyCap <= MAX_VALID_SUPPLY_CAP, Errors.INVALID_SUPPLY_CAP);
  
          self.data =
@@ -531,7 +538,7 @@ index fc8bcf4..a21e5aa 100644
              (supplyCap << SUPPLY_CAP_START_BIT_POSITION);
      }
  
-@@ -422,7 +423,7 @@ library ReserveConfiguration {
+@@ -429,7 +430,7 @@ library ReserveConfiguration {
      function getSupplyCap(
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (uint256) {
@@ -540,7 +547,7 @@ index fc8bcf4..a21e5aa 100644
      }
  
      /**
-@@ -437,7 +438,7 @@ library ReserveConfiguration {
+@@ -444,7 +445,7 @@ library ReserveConfiguration {
          require(ceiling <= MAX_VALID_DEBT_CEILING, Errors.INVALID_DEBT_CEILING);
  
          self.data =
@@ -549,7 +556,7 @@ index fc8bcf4..a21e5aa 100644
              (ceiling << DEBT_CEILING_START_BIT_POSITION);
      }
  
-@@ -450,7 +451,7 @@ library ReserveConfiguration {
+@@ -457,7 +458,7 @@ library ReserveConfiguration {
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (uint256) {
          return
@@ -558,7 +565,7 @@ index fc8bcf4..a21e5aa 100644
      }
  
      /**
-@@ -468,7 +469,7 @@ library ReserveConfiguration {
+@@ -475,7 +476,7 @@ library ReserveConfiguration {
          );
  
          self.data =
@@ -567,7 +574,7 @@ index fc8bcf4..a21e5aa 100644
              (liquidationProtocolFee <<
                  LIQUIDATION_PROTOCOL_FEE_START_BIT_POSITION);
      }
-@@ -482,7 +483,7 @@ library ReserveConfiguration {
+@@ -489,7 +490,7 @@ library ReserveConfiguration {
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (uint256) {
          return
@@ -576,7 +583,7 @@ index fc8bcf4..a21e5aa 100644
              LIQUIDATION_PROTOCOL_FEE_START_BIT_POSITION;
      }
  
-@@ -501,7 +502,7 @@ library ReserveConfiguration {
+@@ -508,7 +509,7 @@ library ReserveConfiguration {
          );
  
          self.data =
@@ -585,7 +592,7 @@ index fc8bcf4..a21e5aa 100644
              (unbackedMintCap << UNBACKED_MINT_CAP_START_BIT_POSITION);
      }
  
-@@ -514,7 +515,7 @@ library ReserveConfiguration {
+@@ -521,7 +522,7 @@ library ReserveConfiguration {
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (uint256) {
          return
@@ -594,7 +601,7 @@ index fc8bcf4..a21e5aa 100644
              UNBACKED_MINT_CAP_START_BIT_POSITION;
      }
  
-@@ -528,7 +529,7 @@ library ReserveConfiguration {
+@@ -535,7 +536,7 @@ library ReserveConfiguration {
          bool flashLoanEnabled
      ) internal pure {
          self.data =
@@ -603,7 +610,7 @@ index fc8bcf4..a21e5aa 100644
              (uint256(flashLoanEnabled ? 1 : 0) <<
                  FLASHLOAN_ENABLED_START_BIT_POSITION);
      }
-@@ -541,7 +542,7 @@ library ReserveConfiguration {
+@@ -548,7 +549,7 @@ library ReserveConfiguration {
      function getFlashLoanEnabled(
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (bool) {
@@ -612,7 +619,7 @@ index fc8bcf4..a21e5aa 100644
      }
  
      /**
-@@ -554,21 +555,24 @@ library ReserveConfiguration {
+@@ -561,21 +562,24 @@ library ReserveConfiguration {
          bool active
      ) internal pure {
          self.data =
@@ -640,7 +647,7 @@ index fc8bcf4..a21e5aa 100644
      }
  
      /**
-@@ -585,10 +589,10 @@ library ReserveConfiguration {
+@@ -592,10 +596,10 @@ library ReserveConfiguration {
          uint256 dataLocal = self.data;
  
          return (
@@ -655,7 +662,7 @@ index fc8bcf4..a21e5aa 100644
          );
      }
  
-@@ -607,13 +611,13 @@ library ReserveConfiguration {
+@@ -614,13 +618,13 @@ library ReserveConfiguration {
          uint256 dataLocal = self.data;
  
          return (
@@ -674,7 +681,7 @@ index fc8bcf4..a21e5aa 100644
                  RESERVE_FACTOR_START_BIT_POSITION
          );
      }
-@@ -630,8 +634,8 @@ library ReserveConfiguration {
+@@ -637,8 +641,8 @@ library ReserveConfiguration {
          uint256 dataLocal = self.data;
  
          return (
