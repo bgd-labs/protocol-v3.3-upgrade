@@ -146,6 +146,7 @@ library DeploymentLibrary {
     params.poolConfiguratorImpl = GovV3Helpers.deployDeterministic(
       type(PoolConfiguratorInstance).creationCode
     );
+    PoolConfiguratorInstance(params.poolConfiguratorImpl).initialize(params.poolAddressesProvider);
     return address(new UpgradePayload(params));
   }
 }
