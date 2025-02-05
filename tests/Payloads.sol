@@ -10,7 +10,7 @@ library Payloads {
   address internal constant BASE = 0x1E81af09001aD208BDa68FF022544dB2102A752d;
   address internal constant SCROLL = 0xb77fc84a549ecc0b410d6fa15159C2df207545a3;
   address internal constant BNB = 0x5E76E98E0963EcDC6A065d1435F84065b7523f39;
-  address internal constant PROTO = address(0);
+  address internal constant PROTO = 0xceDd3bC91c502aA5d74eF4065fbBE5D0b5ECb4C3;
   address internal constant ZKSYNC = address(0);
   address internal constant METIS = 0xb85d72EC1EfE48168c4aBC4eB855f8Cbcd05cE38;
   address internal constant LIDO = address(0);
