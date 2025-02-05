@@ -34,6 +34,10 @@ contract MainnetTest is UpgradeTest('mainnet', 21780271) {
   }
 
   function test_liquidateGHO() external {
+    // disable borrow cap as it's utilized
+    vm.prank(AaveV3Ethereum.ACL_ADMIN);
+    AaveV3Ethereum.POOL_CONFIGURATOR.setBorrowCap(AaveV3EthereumAssets.GHO_UNDERLYING, 0);
+
     test_execution();
 
     IPool pool = AaveV3Ethereum.POOL;
@@ -51,6 +55,10 @@ contract MainnetTest is UpgradeTest('mainnet', 21780271) {
   }
 
   function test_liquidateGHO_feeAfter5years() external {
+    // disable borrow cap as it's utilized
+    vm.prank(AaveV3Ethereum.ACL_ADMIN);
+    AaveV3Ethereum.POOL_CONFIGURATOR.setBorrowCap(AaveV3EthereumAssets.GHO_UNDERLYING, 0);
+
     test_execution();
 
     IPool pool = AaveV3Ethereum.POOL;
