@@ -5,7 +5,7 @@ import {UpgradeTest} from './UpgradeTest.t.sol';
 import {DeploymentLibrary} from '../scripts/Deploy.s.sol';
 import {Payloads} from './Payloads.sol';
 
-contract AvalancheTest is UpgradeTest('avalanche', 54206104) {
+contract AvalancheTest is UpgradeTest('avalanche', 56837213) {
   function _getPayload() internal virtual override returns (address) {
     return DeploymentLibrary._deployAvalanche();
   }

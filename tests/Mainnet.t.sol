@@ -17,7 +17,7 @@ interface VGHO {
   function rebalanceUserDiscountPercent(address user) external;
 }
 
-contract MainnetTest is UpgradeTest('mainnet', 21378438) {
+contract MainnetTest is UpgradeTest('mainnet', 21780680) {
   // address holding excess funds for borrowing etc
   address whale = makeAddr('whale');
   // liquidator
@@ -34,7 +34,11 @@ contract MainnetTest is UpgradeTest('mainnet', 21378438) {
   }
 
   function test_liquidateGHO() external {
-    this.test_execution();
+    // disable borrow cap as it's utilized
+    vm.prank(AaveV3Ethereum.ACL_ADMIN);
+    AaveV3Ethereum.POOL_CONFIGURATOR.setBorrowCap(AaveV3EthereumAssets.GHO_UNDERLYING, 0);
+
+    test_execution();
 
     IPool pool = AaveV3Ethereum.POOL;
     address collateralAsset = AaveV3EthereumAssets.USDC_UNDERLYING;
@@ -51,7 +55,11 @@ contract MainnetTest is UpgradeTest('mainnet', 21378438) {
   }
 
   function test_liquidateGHO_feeAfter5years() external {
-    this.test_execution();
+    // disable borrow cap as it's utilized
+    vm.prank(AaveV3Ethereum.ACL_ADMIN);
+    AaveV3Ethereum.POOL_CONFIGURATOR.setBorrowCap(AaveV3EthereumAssets.GHO_UNDERLYING, 0);
+
+    test_execution();
 
     IPool pool = AaveV3Ethereum.POOL;
     address collateralAsset = AaveV3EthereumAssets.USDC_UNDERLYING;

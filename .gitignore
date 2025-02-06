@@ -14,7 +14,7 @@ reports
 !reports/.empty
 
 # well, looks strange to ignore package-lock, but we have only pretter and it's temproray
-package-lock.json
+yarn.lock
 node_modules
 
 # ignore foundry deploy artifacts
