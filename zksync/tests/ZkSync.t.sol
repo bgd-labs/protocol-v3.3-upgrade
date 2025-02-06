@@ -5,7 +5,7 @@ import {UpgradeTest} from './UpgradeTest.t.sol';
 import {DeploymentLibrary} from '../scripts/Deploy.s.sol';
 import {Payloads} from '../../tests/Payloads.sol';
 
-contract ZkSyncTest is UpgradeTest('zksync', 51023432) {
+contract ZkSyncTest is UpgradeTest('zksync', 55383178) {
   function _getPayload() internal virtual override returns (address) {
     return DeploymentLibrary._deployZKSync();
   }

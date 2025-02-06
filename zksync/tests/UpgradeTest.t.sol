@@ -26,7 +26,6 @@ abstract contract UpgradeTest is ProtocolV3TestBase {
 
   // skipping test as no the implementations are not yet deployed, so code diffing does not workq
   function test_diff() external {
-    vm.skip(true);
     UpgradePayload payload = UpgradePayload(_getTestPayload());
     IPoolAddressesProvider addressesProvider = UpgradePayload(payload).POOL_ADDRESSES_PROVIDER();
     IPool pool = IPool(addressesProvider.getPool());
@@ -39,7 +38,6 @@ abstract contract UpgradeTest is ProtocolV3TestBase {
 
   // skipping test as no payloads are deployed yet
   function test_ensureDeployed() external {
-    vm.skip(true);
     require(_getDeployedPayload() != address(0));
   }
 
