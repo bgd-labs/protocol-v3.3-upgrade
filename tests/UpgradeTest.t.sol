@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+import {WrappedTokenGatewayV3} from 'aave-v3-origin/contracts/helpers/WrappedTokenGatewayV3.sol';
 
 import 'forge-std/Test.sol';
 import {ProtocolV3TestBase, IPool, IPoolDataProvider, IPoolAddressesProvider, IERC20} from 'aave-helpers/src/ProtocolV3TestBase.sol';

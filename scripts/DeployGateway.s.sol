@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
-import {Script, EthereumScript, PolygonScript, AvalancheScript, OptimismScript, ArbitrumScript, MetisScript, BaseScript, GnosisScript, ScrollScript, BNBScript} from 'solidity-utils/contracts/utils/ScriptUtils.sol';
+import {Script, EthereumScript, PolygonScript, AvalancheScript, OptimismScript, ArbitrumScript, MetisScript, BaseScript, GnosisScript, ScrollScript, BNBScript, LineaScript} from 'solidity-utils/contracts/utils/ScriptUtils.sol';
 import {WrappedTokenGatewayV3} from 'aave-v3-origin/contracts/helpers/WrappedTokenGatewayV3.sol';
 
 import {AaveV3Polygon, AaveV3PolygonAssets} from 'aave-address-book/AaveV3Polygon.sol';
@@ -32,6 +32,9 @@ import {GovernanceV3Base} from 'aave-address-book/GovernanceV3Base.sol';
 
 import {AaveV3Metis, AaveV3MetisAssets} from 'aave-address-book/AaveV3Metis.sol';
 import {GovernanceV3Metis} from 'aave-address-book/GovernanceV3Metis.sol';
+
+import {AaveV3Linea, AaveV3LineaAssets} from 'aave-address-book/AaveV3Linea.sol';
+import {GovernanceV3Linea} from 'aave-address-book/GovernanceV3Linea.sol';
 
 import {AaveV3EthereumLido, AaveV3EthereumLidoAssets} from 'aave-address-book/AaveV3EthereumLido.sol';
 import {AaveV3EthereumEtherFi, AaveV3EthereumEtherFiAssets} from 'aave-address-book/AaveV3EthereumEtherFi.sol';
@@ -146,6 +149,15 @@ library DeploymentLibrary {
         AaveV3Polygon.POOL
       );
   }
+
+  function _deployLinea() internal returns (WrappedTokenGatewayV3) {
+    return
+      new WrappedTokenGatewayV3(
+        AaveV3LineaAssets.WETH_UNDERLYING,
+        GovernanceV3Linea.EXECUTOR_LVL_1,
+        AaveV3Linea.POOL
+      );
+  }
 }
 
 contract Deploypolygon is PolygonScript {
@@ -205,7 +217,7 @@ contract Deploymetis is MetisScript {
 
 contract Deploymainnet is EthereumScript {
   function run() external broadcast {
-    DeploymentLibrary._deployMainnetLido();
+    DeploymentLibrary._deployMainnetEtherfi();
   }
 }
 
@@ -218,5 +230,11 @@ contract Deploylido is EthereumScript {
 contract Deployetherfi is EthereumScript {
   function run() external broadcast {
     DeploymentLibrary._deployMainnetEtherfi();
+  }
+}
+
+contract Deploylinea is LineaScript {
+  function run() external broadcast {
+    DeploymentLibrary._deployLinea();
   }
 }
