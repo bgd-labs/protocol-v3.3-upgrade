@@ -1,35 +1,7 @@
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/BorrowLogic.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/BorrowLogic.sol
-index 1b1a18b..e71aecf 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/BorrowLogic.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/BorrowLogic.sol
-@@ -229,6 +229,7 @@ library BorrowLogic {
-             paybackAmount
-         );
- 
-+        // in case of aToken repayment the msg.sender must always repay on behalf of itself
-         if (params.useATokens) {
-             IAToken(reserveCache.aTokenAddress).burn(
-                 msg.sender,
-@@ -236,11 +237,13 @@ library BorrowLogic {
-                 paybackAmount,
-                 reserveCache.nextLiquidityIndex
-             );
--            // in case of aToken repayment the msg.sender must always repay on behalf of itself
-+            bool isCollateral = userConfig.isUsingAsCollateral(reserve.id);
-             if (
-+                isCollateral &&
-                 IAToken(reserveCache.aTokenAddress).scaledBalanceOf(
-                     msg.sender
--                ) == 0
-+                ) ==
-+                0
-             ) {
-                 userConfig.setUsingAsCollateral(reserve.id, false);
-                 emit ReserveUsedAsCollateralDisabled(params.asset, msg.sender);
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/DataTypes.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/DataTypes.sol
+diff --git a/tmp/1088_0xA58FB47bE9074828215A173564C0CD10f6F249bf_flat/DataTypes.sol b/tmp/1088_0xf8C97539934ee66a67C26010e8e027D77E821B0C_flat/DataTypes.sol
 index 45b226c..8e5b1a9 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/DataTypes.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/DataTypes.sol
+--- a/tmp/1088_0xA58FB47bE9074828215A173564C0CD10f6F249bf_flat/DataTypes.sol
++++ b/tmp/1088_0xf8C97539934ee66a67C26010e8e027D77E821B0C_flat/DataTypes.sol
 @@ -50,8 +50,9 @@ library DataTypes {
          uint128 variableBorrowIndex;
          //the current variable borrow rate. Expressed in ray
@@ -54,10 +26,10 @@ index 45b226c..8e5b1a9 100644
      struct ExecuteSetUserEModeParams {
          uint256 reservesCount;
          address oracle;
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/EModeConfiguration.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/EModeConfiguration.sol
+diff --git a/tmp/1088_0xA58FB47bE9074828215A173564C0CD10f6F249bf_flat/EModeConfiguration.sol b/tmp/1088_0xf8C97539934ee66a67C26010e8e027D77E821B0C_flat/EModeConfiguration.sol
 index 2b0489a..5f687dc 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/EModeConfiguration.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/EModeConfiguration.sol
+--- a/tmp/1088_0xA58FB47bE9074828215A173564C0CD10f6F249bf_flat/EModeConfiguration.sol
++++ b/tmp/1088_0xf8C97539934ee66a67C26010e8e027D77E821B0C_flat/EModeConfiguration.sol
 @@ -2,7 +2,6 @@
  pragma solidity ^0.8.0;
  
@@ -66,10 +38,10 @@ index 2b0489a..5f687dc 100644
  import {ReserveConfiguration} from "./ReserveConfiguration.sol";
  
  /**
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/EModeLogic.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/EModeLogic.sol
+diff --git a/tmp/1088_0xA58FB47bE9074828215A173564C0CD10f6F249bf_flat/EModeLogic.sol b/tmp/1088_0xf8C97539934ee66a67C26010e8e027D77E821B0C_flat/EModeLogic.sol
 index 4458909..fd2e7ea 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/EModeLogic.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/EModeLogic.sol
+--- a/tmp/1088_0xA58FB47bE9074828215A173564C0CD10f6F249bf_flat/EModeLogic.sol
++++ b/tmp/1088_0xf8C97539934ee66a67C26010e8e027D77E821B0C_flat/EModeLogic.sol
 @@ -3,7 +3,6 @@ pragma solidity ^0.8.10;
  
  import {GPv2SafeERC20} from "../../../dependencies/gnosis/contracts/GPv2SafeERC20.sol";
@@ -78,10 +50,10 @@ index 4458909..fd2e7ea 100644
  import {UserConfiguration} from "../configuration/UserConfiguration.sol";
  import {WadRayMath} from "../math/WadRayMath.sol";
  import {PercentageMath} from "../math/PercentageMath.sol";
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/Errors.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/Errors.sol
+diff --git a/tmp/1088_0xA58FB47bE9074828215A173564C0CD10f6F249bf_flat/Errors.sol b/tmp/1088_0xf8C97539934ee66a67C26010e8e027D77E821B0C_flat/Errors.sol
 index d2a0c13..eb8c305 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/Errors.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/Errors.sol
+--- a/tmp/1088_0xA58FB47bE9074828215A173564C0CD10f6F249bf_flat/Errors.sol
++++ b/tmp/1088_0xf8C97539934ee66a67C26010e8e027D77E821B0C_flat/Errors.sol
 @@ -101,4 +101,8 @@ library Errors {
      string public constant INVALID_GRACE_PERIOD = "98"; // Grace period above a valid range
      string public constant INVALID_FREEZE_STATE = "99"; // Reserve is already in the passed freeze state
@@ -91,10 +63,10 @@ index d2a0c13..eb8c305 100644
 +    string public constant MUST_NOT_LEAVE_DUST = "103"; // Below a certain threshold liquidators need to take the full position
 +    string public constant USER_CANNOT_HAVE_DEBT = "104"; // Thrown when a user tries to interact with a method that requires a position without debt
  }
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/GenericLogic.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/GenericLogic.sol
+diff --git a/tmp/1088_0xA58FB47bE9074828215A173564C0CD10f6F249bf_flat/GenericLogic.sol b/tmp/1088_0xf8C97539934ee66a67C26010e8e027D77E821B0C_flat/GenericLogic.sol
 index a3efd9a..16d348e 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/GenericLogic.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/GenericLogic.sol
+--- a/tmp/1088_0xA58FB47bE9074828215A173564C0CD10f6F249bf_flat/GenericLogic.sol
++++ b/tmp/1088_0xf8C97539934ee66a67C26010e8e027D77E821B0C_flat/GenericLogic.sol
 @@ -159,12 +159,20 @@ library GenericLogic {
              }
  
@@ -122,10 +94,10 @@ index a3efd9a..16d348e 100644
              }
  
              unchecked {
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/IPool.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/IPool.sol
-index c65cf8e..f0ed8d2 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/IPool.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/IPool.sol
+diff --git a/tmp/1088_0xA58FB47bE9074828215A173564C0CD10f6F249bf_flat/IPool.sol b/tmp/1088_0xf8C97539934ee66a67C26010e8e027D77E821B0C_flat/IPool.sol
+index 90f5c18..f0ed8d2 100644
+--- a/tmp/1088_0xA58FB47bE9074828215A173564C0CD10f6F249bf_flat/IPool.sol
++++ b/tmp/1088_0xf8C97539934ee66a67C26010e8e027D77E821B0C_flat/IPool.sol
 @@ -204,6 +204,18 @@ interface IPool {
          uint256 variableBorrowIndex
      );
@@ -164,12 +136,13 @@ index c65cf8e..f0ed8d2 100644
      /**
       * @notice Mints an `amount` of aTokens to the `onBehalfOf`
       * @param asset The address of the underlying asset to mint
-@@ -600,15 +624,6 @@ interface IPool {
+@@ -600,16 +624,6 @@ interface IPool {
          address asset
      ) external view returns (DataTypes.ReserveDataLegacy memory);
  
 -    /**
 -     * @notice Returns the state and configuration of the reserve, including extra data included with Aave v3.1
+-     * @dev DEPRECATED use independent getters instead (getReserveData, getLiquidationGracePeriod)
 -     * @param asset The address of the underlying asset of the reserve
 -     * @return The state and configuration data of the reserve with virtual accounting
 -     */
@@ -180,7 +153,7 @@ index c65cf8e..f0ed8d2 100644
      /**
       * @notice Returns the virtual underlying balance of the reserve
       * @param asset The address of the underlying asset of the reserve
-@@ -802,7 +817,9 @@ interface IPool {
+@@ -803,7 +817,9 @@ interface IPool {
       * @return Timestamp when the liquidation grace period will end
       *
       */
@@ -191,7 +164,7 @@ index c65cf8e..f0ed8d2 100644
  
      /**
       * @notice Returns the total fee on flash loans
-@@ -861,6 +878,39 @@ interface IPool {
+@@ -862,6 +878,39 @@ interface IPool {
          uint16 referralCode
      ) external;
  
@@ -231,108 +204,11 @@ index c65cf8e..f0ed8d2 100644
      /**
       * @notice Gets the address of the external FlashLoanLogic
       */
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/IsolationModeLogic.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/IsolationModeLogic.sol
-index e5a02ec..e545abc 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/IsolationModeLogic.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/IsolationModeLogic.sol
-@@ -23,7 +23,7 @@ library IsolationModeLogic {
-     );
- 
-     /**
--     * @notice updated the isolated debt whenever a position collateralized by an isolated asset is repaid or liquidated
-+     * @notice updated the isolated debt whenever a position collateralized by an isolated asset is repaid
-      * @param reservesData The state of all the reserves
-      * @param reservesList The addresses of all the active reserves
-      * @param userConfig The user configuration mapping
-@@ -44,36 +44,56 @@ library IsolationModeLogic {
-         ) = userConfig.getIsolationModeState(reservesData, reservesList);
- 
-         if (isolationModeActive) {
--            uint128 isolationModeTotalDebt = reservesData[
-+            updateIsolatedDebt(
-+                reservesData,
-+                reserveCache,
-+                repayAmount,
-                 isolationModeCollateralAddress
--            ].isolationModeTotalDebt;
-+            );
-+        }
-+    }
-+
-+    /**
-+     * @notice updated the isolated debt whenever a position collateralized by an isolated asset is liquidated
-+     * @param reservesData The state of all the reserves
-+     * @param reserveCache The cached data of the reserve
-+     * @param repayAmount The amount being repaid
-+     * @param isolationModeCollateralAddress The address of the isolated collateral
-+     */
-+    function updateIsolatedDebt(
-+        mapping(address => DataTypes.ReserveData) storage reservesData,
-+        DataTypes.ReserveCache memory reserveCache,
-+        uint256 repayAmount,
-+        address isolationModeCollateralAddress
-+    ) internal {
-+        uint128 isolationModeTotalDebt = reservesData[
-+            isolationModeCollateralAddress
-+        ].isolationModeTotalDebt;
- 
--            uint128 isolatedDebtRepaid = (repayAmount /
--                10 **
--                    (reserveCache.reserveConfiguration.getDecimals() -
--                        ReserveConfiguration.DEBT_CEILING_DECIMALS))
--                .toUint128();
-+        uint128 isolatedDebtRepaid = (repayAmount /
-+            10 **
-+                (reserveCache.reserveConfiguration.getDecimals() -
-+                    ReserveConfiguration.DEBT_CEILING_DECIMALS)).toUint128();
- 
--            // since the debt ceiling does not take into account the interest accrued, it might happen that amount
--            // repaid > debt in isolation mode
--            if (isolationModeTotalDebt <= isolatedDebtRepaid) {
--                reservesData[isolationModeCollateralAddress]
--                    .isolationModeTotalDebt = 0;
--                emit IsolationModeTotalDebtUpdated(
--                    isolationModeCollateralAddress,
--                    0
--                );
--            } else {
--                uint256 nextIsolationModeTotalDebt = reservesData[
--                    isolationModeCollateralAddress
--                ].isolationModeTotalDebt =
--                    isolationModeTotalDebt -
--                    isolatedDebtRepaid;
--                emit IsolationModeTotalDebtUpdated(
--                    isolationModeCollateralAddress,
--                    nextIsolationModeTotalDebt
--                );
--            }
-+        // since the debt ceiling does not take into account the interest accrued, it might happen that amount
-+        // repaid > debt in isolation mode
-+        if (isolationModeTotalDebt <= isolatedDebtRepaid) {
-+            reservesData[isolationModeCollateralAddress]
-+                .isolationModeTotalDebt = 0;
-+            emit IsolationModeTotalDebtUpdated(
-+                isolationModeCollateralAddress,
-+                0
-+            );
-+        } else {
-+            uint256 nextIsolationModeTotalDebt = reservesData[
-+                isolationModeCollateralAddress
-+            ].isolationModeTotalDebt =
-+                isolationModeTotalDebt -
-+                isolatedDebtRepaid;
-+            emit IsolationModeTotalDebtUpdated(
-+                isolationModeCollateralAddress,
-+                nextIsolationModeTotalDebt
-+            );
-         }
-     }
- }
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/ReserveConfiguration.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/ReserveConfiguration.sol
-index e0713b0..a829da8 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/ReserveConfiguration.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/ReserveConfiguration.sol
-@@ -10,32 +10,33 @@ import {DataTypes} from "../types/DataTypes.sol";
+diff --git a/tmp/1088_0xA58FB47bE9074828215A173564C0CD10f6F249bf_flat/ReserveConfiguration.sol b/tmp/1088_0xf8C97539934ee66a67C26010e8e027D77E821B0C_flat/ReserveConfiguration.sol
+index 4aa3169..a829da8 100644
+--- a/tmp/1088_0xA58FB47bE9074828215A173564C0CD10f6F249bf_flat/ReserveConfiguration.sol
++++ b/tmp/1088_0xf8C97539934ee66a67C26010e8e027D77E821B0C_flat/ReserveConfiguration.sol
+@@ -10,33 +10,33 @@ import {DataTypes} from "../types/DataTypes.sol";
   * @notice Implements the bitmap logic to handle the reserve configuration
   */
  library ReserveConfiguration {
@@ -347,13 +223,13 @@ index e0713b0..a829da8 100644
 -    uint256 internal constant ACTIVE_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFF; // prettier-ignore
 -    uint256 internal constant FROZEN_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDFFFFFFFFFFFFFF; // prettier-ignore
 -    uint256 internal constant BORROWING_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBFFFFFFFFFFFFFF; // prettier-ignore
--    uint256 internal constant PAUSED_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFF; // prettier-ignore
 +        0x0000000000000000000000000000000000000000000000000000FFFF00000000; // prettier-ignore
 +    uint256 internal constant DECIMALS_MASK = 0x00000000000000000000000000000000000000000000000000FF000000000000; // prettier-ignore
 +    uint256 internal constant ACTIVE_MASK = 0x0000000000000000000000000000000000000000000000000100000000000000; // prettier-ignore
 +    uint256 internal constant FROZEN_MASK = 0x0000000000000000000000000000000000000000000000000200000000000000; // prettier-ignore
 +    uint256 internal constant BORROWING_MASK = 0x0000000000000000000000000000000000000000000000000400000000000000; // prettier-ignore
-+    // @notice there is an unoccupied hole of 1 bit at position 59 from pre 3.2 stableBorrowRateEnabled
+     // @notice there is an unoccupied hole of 1 bit at position 59 from pre 3.2 stableBorrowRateEnabled
+-    uint256 internal constant PAUSED_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFF; // prettier-ignore
 +    uint256 internal constant PAUSED_MASK = 0x0000000000000000000000000000000000000000000000001000000000000000; // prettier-ignore
      uint256 internal constant BORROWABLE_IN_ISOLATION_MASK =
 -        0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDFFFFFFFFFFFFFFF; // prettier-ignore
@@ -371,8 +247,9 @@ index e0713b0..a829da8 100644
 +    uint256 internal constant SUPPLY_CAP_MASK = 0x00000000000000000000000000FFFFFFFFF00000000000000000000000000000; // prettier-ignore
      uint256 internal constant LIQUIDATION_PROTOCOL_FEE_MASK =
 -        0xFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; // prettier-ignore
+-    // @notice there is an unoccupied hole of 8 bits from 168 to 176 left from pre 3.2 eModeCategory
 +        0x0000000000000000000000FFFF00000000000000000000000000000000000000; // prettier-ignore
-     //@notice there is an unoccupied hole of 8 bits from 168 to 176 left from pre 3.2 eModeCategory
++    //@notice there is an unoccupied hole of 8 bits from 168 to 176 left from pre 3.2 eModeCategory
      uint256 internal constant UNBACKED_MINT_CAP_MASK =
 -        0xFFFFFFFFFFF000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; // prettier-ignore
 -    uint256 internal constant DEBT_CEILING_MASK = 0xF0000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; // prettier-ignore
@@ -384,7 +261,7 @@ index e0713b0..a829da8 100644
  
      /// @dev For the LTV, the start bit is 0 (up to 15), hence no bitshifting is needed
      uint256 internal constant LIQUIDATION_THRESHOLD_START_BIT_POSITION = 16;
-@@ -82,7 +83,7 @@ library ReserveConfiguration {
+@@ -83,7 +83,7 @@ library ReserveConfiguration {
      ) internal pure {
          require(ltv <= MAX_VALID_LTV, Errors.INVALID_LTV);
  
@@ -393,7 +270,7 @@ index e0713b0..a829da8 100644
      }
  
      /**
-@@ -93,7 +94,7 @@ library ReserveConfiguration {
+@@ -94,7 +94,7 @@ library ReserveConfiguration {
      function getLtv(
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (uint256) {
@@ -402,7 +279,7 @@ index e0713b0..a829da8 100644
      }
  
      /**
-@@ -111,7 +112,7 @@ library ReserveConfiguration {
+@@ -112,7 +112,7 @@ library ReserveConfiguration {
          );
  
          self.data =
@@ -411,7 +288,7 @@ index e0713b0..a829da8 100644
              (threshold << LIQUIDATION_THRESHOLD_START_BIT_POSITION);
      }
  
-@@ -124,7 +125,7 @@ library ReserveConfiguration {
+@@ -125,7 +125,7 @@ library ReserveConfiguration {
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (uint256) {
          return
@@ -420,7 +297,7 @@ index e0713b0..a829da8 100644
              LIQUIDATION_THRESHOLD_START_BIT_POSITION;
      }
  
-@@ -140,7 +141,7 @@ library ReserveConfiguration {
+@@ -141,7 +141,7 @@ library ReserveConfiguration {
          require(bonus <= MAX_VALID_LIQUIDATION_BONUS, Errors.INVALID_LIQ_BONUS);
  
          self.data =
@@ -429,7 +306,7 @@ index e0713b0..a829da8 100644
              (bonus << LIQUIDATION_BONUS_START_BIT_POSITION);
      }
  
-@@ -153,7 +154,7 @@ library ReserveConfiguration {
+@@ -154,7 +154,7 @@ library ReserveConfiguration {
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (uint256) {
          return
@@ -438,7 +315,7 @@ index e0713b0..a829da8 100644
              LIQUIDATION_BONUS_START_BIT_POSITION;
      }
  
-@@ -169,7 +170,7 @@ library ReserveConfiguration {
+@@ -170,7 +170,7 @@ library ReserveConfiguration {
          require(decimals <= MAX_VALID_DECIMALS, Errors.INVALID_DECIMALS);
  
          self.data =
@@ -447,7 +324,7 @@ index e0713b0..a829da8 100644
              (decimals << RESERVE_DECIMALS_START_BIT_POSITION);
      }
  
-@@ -182,7 +183,7 @@ library ReserveConfiguration {
+@@ -183,7 +183,7 @@ library ReserveConfiguration {
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (uint256) {
          return
@@ -456,7 +333,7 @@ index e0713b0..a829da8 100644
      }
  
      /**
-@@ -195,7 +196,7 @@ library ReserveConfiguration {
+@@ -196,7 +196,7 @@ library ReserveConfiguration {
          bool active
      ) internal pure {
          self.data =
@@ -465,7 +342,7 @@ index e0713b0..a829da8 100644
              (uint256(active ? 1 : 0) << IS_ACTIVE_START_BIT_POSITION);
      }
  
-@@ -207,7 +208,7 @@ library ReserveConfiguration {
+@@ -208,7 +208,7 @@ library ReserveConfiguration {
      function getActive(
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (bool) {
@@ -474,7 +351,7 @@ index e0713b0..a829da8 100644
      }
  
      /**
-@@ -220,7 +221,7 @@ library ReserveConfiguration {
+@@ -221,7 +221,7 @@ library ReserveConfiguration {
          bool frozen
      ) internal pure {
          self.data =
@@ -483,7 +360,7 @@ index e0713b0..a829da8 100644
              (uint256(frozen ? 1 : 0) << IS_FROZEN_START_BIT_POSITION);
      }
  
-@@ -232,7 +233,7 @@ library ReserveConfiguration {
+@@ -233,7 +233,7 @@ library ReserveConfiguration {
      function getFrozen(
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (bool) {
@@ -492,7 +369,7 @@ index e0713b0..a829da8 100644
      }
  
      /**
-@@ -245,7 +246,7 @@ library ReserveConfiguration {
+@@ -246,7 +246,7 @@ library ReserveConfiguration {
          bool paused
      ) internal pure {
          self.data =
@@ -501,7 +378,7 @@ index e0713b0..a829da8 100644
              (uint256(paused ? 1 : 0) << IS_PAUSED_START_BIT_POSITION);
      }
  
-@@ -257,7 +258,7 @@ library ReserveConfiguration {
+@@ -258,7 +258,7 @@ library ReserveConfiguration {
      function getPaused(
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (bool) {
@@ -510,7 +387,7 @@ index e0713b0..a829da8 100644
      }
  
      /**
-@@ -274,7 +275,7 @@ library ReserveConfiguration {
+@@ -275,7 +275,7 @@ library ReserveConfiguration {
          bool borrowable
      ) internal pure {
          self.data =
@@ -519,7 +396,7 @@ index e0713b0..a829da8 100644
              (uint256(borrowable ? 1 : 0) <<
                  BORROWABLE_IN_ISOLATION_START_BIT_POSITION);
      }
-@@ -291,7 +292,7 @@ library ReserveConfiguration {
+@@ -292,7 +292,7 @@ library ReserveConfiguration {
      function getBorrowableInIsolation(
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (bool) {
@@ -528,7 +405,7 @@ index e0713b0..a829da8 100644
      }
  
      /**
-@@ -305,7 +306,7 @@ library ReserveConfiguration {
+@@ -306,7 +306,7 @@ library ReserveConfiguration {
          bool siloed
      ) internal pure {
          self.data =
@@ -537,7 +414,7 @@ index e0713b0..a829da8 100644
              (uint256(siloed ? 1 : 0) << SILOED_BORROWING_START_BIT_POSITION);
      }
  
-@@ -318,7 +319,7 @@ library ReserveConfiguration {
+@@ -319,7 +319,7 @@ library ReserveConfiguration {
      function getSiloedBorrowing(
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (bool) {
@@ -546,7 +423,7 @@ index e0713b0..a829da8 100644
      }
  
      /**
-@@ -331,7 +332,7 @@ library ReserveConfiguration {
+@@ -332,7 +332,7 @@ library ReserveConfiguration {
          bool enabled
      ) internal pure {
          self.data =
@@ -555,7 +432,7 @@ index e0713b0..a829da8 100644
              (uint256(enabled ? 1 : 0) << BORROWING_ENABLED_START_BIT_POSITION);
      }
  
-@@ -343,7 +344,7 @@ library ReserveConfiguration {
+@@ -344,7 +344,7 @@ library ReserveConfiguration {
      function getBorrowingEnabled(
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (bool) {
@@ -564,7 +441,7 @@ index e0713b0..a829da8 100644
      }
  
      /**
-@@ -361,7 +362,7 @@ library ReserveConfiguration {
+@@ -362,7 +362,7 @@ library ReserveConfiguration {
          );
  
          self.data =
@@ -573,7 +450,7 @@ index e0713b0..a829da8 100644
              (reserveFactor << RESERVE_FACTOR_START_BIT_POSITION);
      }
  
-@@ -374,7 +375,7 @@ library ReserveConfiguration {
+@@ -375,7 +375,7 @@ library ReserveConfiguration {
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (uint256) {
          return
@@ -582,7 +459,7 @@ index e0713b0..a829da8 100644
              RESERVE_FACTOR_START_BIT_POSITION;
      }
  
-@@ -390,7 +391,7 @@ library ReserveConfiguration {
+@@ -391,7 +391,7 @@ library ReserveConfiguration {
          require(borrowCap <= MAX_VALID_BORROW_CAP, Errors.INVALID_BORROW_CAP);
  
          self.data =
@@ -591,7 +468,7 @@ index e0713b0..a829da8 100644
              (borrowCap << BORROW_CAP_START_BIT_POSITION);
      }
  
-@@ -402,7 +403,7 @@ library ReserveConfiguration {
+@@ -403,7 +403,7 @@ library ReserveConfiguration {
      function getBorrowCap(
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (uint256) {
@@ -600,7 +477,7 @@ index e0713b0..a829da8 100644
      }
  
      /**
-@@ -417,7 +418,7 @@ library ReserveConfiguration {
+@@ -418,7 +418,7 @@ library ReserveConfiguration {
          require(supplyCap <= MAX_VALID_SUPPLY_CAP, Errors.INVALID_SUPPLY_CAP);
  
          self.data =
@@ -609,7 +486,7 @@ index e0713b0..a829da8 100644
              (supplyCap << SUPPLY_CAP_START_BIT_POSITION);
      }
  
-@@ -429,7 +430,7 @@ library ReserveConfiguration {
+@@ -430,7 +430,7 @@ library ReserveConfiguration {
      function getSupplyCap(
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (uint256) {
@@ -618,7 +495,7 @@ index e0713b0..a829da8 100644
      }
  
      /**
-@@ -444,7 +445,7 @@ library ReserveConfiguration {
+@@ -445,7 +445,7 @@ library ReserveConfiguration {
          require(ceiling <= MAX_VALID_DEBT_CEILING, Errors.INVALID_DEBT_CEILING);
  
          self.data =
@@ -627,7 +504,7 @@ index e0713b0..a829da8 100644
              (ceiling << DEBT_CEILING_START_BIT_POSITION);
      }
  
-@@ -457,7 +458,7 @@ library ReserveConfiguration {
+@@ -458,7 +458,7 @@ library ReserveConfiguration {
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (uint256) {
          return
@@ -636,7 +513,7 @@ index e0713b0..a829da8 100644
      }
  
      /**
-@@ -475,7 +476,7 @@ library ReserveConfiguration {
+@@ -476,7 +476,7 @@ library ReserveConfiguration {
          );
  
          self.data =
@@ -645,7 +522,7 @@ index e0713b0..a829da8 100644
              (liquidationProtocolFee <<
                  LIQUIDATION_PROTOCOL_FEE_START_BIT_POSITION);
      }
-@@ -489,7 +490,7 @@ library ReserveConfiguration {
+@@ -490,7 +490,7 @@ library ReserveConfiguration {
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (uint256) {
          return
@@ -654,7 +531,7 @@ index e0713b0..a829da8 100644
              LIQUIDATION_PROTOCOL_FEE_START_BIT_POSITION;
      }
  
-@@ -508,7 +509,7 @@ library ReserveConfiguration {
+@@ -509,7 +509,7 @@ library ReserveConfiguration {
          );
  
          self.data =
@@ -663,7 +540,7 @@ index e0713b0..a829da8 100644
              (unbackedMintCap << UNBACKED_MINT_CAP_START_BIT_POSITION);
      }
  
-@@ -521,7 +522,7 @@ library ReserveConfiguration {
+@@ -522,7 +522,7 @@ library ReserveConfiguration {
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (uint256) {
          return
@@ -672,7 +549,7 @@ index e0713b0..a829da8 100644
              UNBACKED_MINT_CAP_START_BIT_POSITION;
      }
  
-@@ -535,7 +536,7 @@ library ReserveConfiguration {
+@@ -536,7 +536,7 @@ library ReserveConfiguration {
          bool flashLoanEnabled
      ) internal pure {
          self.data =
@@ -681,7 +558,7 @@ index e0713b0..a829da8 100644
              (uint256(flashLoanEnabled ? 1 : 0) <<
                  FLASHLOAN_ENABLED_START_BIT_POSITION);
      }
-@@ -548,7 +549,7 @@ library ReserveConfiguration {
+@@ -549,7 +549,7 @@ library ReserveConfiguration {
      function getFlashLoanEnabled(
          DataTypes.ReserveConfigurationMap memory self
      ) internal pure returns (bool) {
@@ -690,7 +567,7 @@ index e0713b0..a829da8 100644
      }
  
      /**
-@@ -561,21 +562,24 @@ library ReserveConfiguration {
+@@ -562,21 +562,24 @@ library ReserveConfiguration {
          bool active
      ) internal pure {
          self.data =
@@ -718,7 +595,7 @@ index e0713b0..a829da8 100644
      }
  
      /**
-@@ -592,10 +596,10 @@ library ReserveConfiguration {
+@@ -593,10 +596,10 @@ library ReserveConfiguration {
          uint256 dataLocal = self.data;
  
          return (
@@ -733,7 +610,7 @@ index e0713b0..a829da8 100644
          );
      }
  
-@@ -614,13 +618,13 @@ library ReserveConfiguration {
+@@ -615,13 +618,13 @@ library ReserveConfiguration {
          uint256 dataLocal = self.data;
  
          return (
@@ -752,7 +629,7 @@ index e0713b0..a829da8 100644
                  RESERVE_FACTOR_START_BIT_POSITION
          );
      }
-@@ -637,8 +641,8 @@ library ReserveConfiguration {
+@@ -638,8 +641,8 @@ library ReserveConfiguration {
          uint256 dataLocal = self.data;
  
          return (
@@ -763,10 +640,10 @@ index e0713b0..a829da8 100644
          );
      }
  }
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/ReserveLogic.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/ReserveLogic.sol
+diff --git a/tmp/1088_0xA58FB47bE9074828215A173564C0CD10f6F249bf_flat/ReserveLogic.sol b/tmp/1088_0xf8C97539934ee66a67C26010e8e027D77E821B0C_flat/ReserveLogic.sol
 index 54e3c0e..5feeea6 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/ReserveLogic.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/ReserveLogic.sol
+--- a/tmp/1088_0xA58FB47bE9074828215A173564C0CD10f6F249bf_flat/ReserveLogic.sol
++++ b/tmp/1088_0xf8C97539934ee66a67C26010e8e027D77E821B0C_flat/ReserveLogic.sol
 @@ -101,7 +101,9 @@ library ReserveLogic {
      ) internal {
          // If time didn't pass since last stored timestamp, skip state update
@@ -813,10 +690,10 @@ index 54e3c0e..5feeea6 100644
              if (liquidityAdded > 0) {
                  reserve.virtualUnderlyingBalance += liquidityAdded.toUint128();
              }
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/ValidationLogic.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/ValidationLogic.sol
+diff --git a/tmp/1088_0xA58FB47bE9074828215A173564C0CD10f6F249bf_flat/ValidationLogic.sol b/tmp/1088_0xf8C97539934ee66a67C26010e8e027D77E821B0C_flat/ValidationLogic.sol
 index 64aa0db..c50d1f5 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/ValidationLogic.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/ValidationLogic.sol
+--- a/tmp/1088_0xA58FB47bE9074828215A173564C0CD10f6F249bf_flat/ValidationLogic.sol
++++ b/tmp/1088_0xf8C97539934ee66a67C26010e8e027D77E821B0C_flat/ValidationLogic.sol
 @@ -4,8 +4,6 @@ pragma solidity ^0.8.10;
  import {IERC20} from "../../../dependencies/openzeppelin/contracts/IERC20.sol";
  import {Address} from "../../../dependencies/openzeppelin/contracts/Address.sol";

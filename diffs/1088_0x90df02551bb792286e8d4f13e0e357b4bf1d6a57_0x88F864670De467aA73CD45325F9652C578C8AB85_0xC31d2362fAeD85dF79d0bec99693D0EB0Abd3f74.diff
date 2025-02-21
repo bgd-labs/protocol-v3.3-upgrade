@@ -1,35 +1,7 @@
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/BorrowLogic.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/BorrowLogic.sol
-index 1b1a18b..e71aecf 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/BorrowLogic.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/BorrowLogic.sol
-@@ -229,6 +229,7 @@ library BorrowLogic {
-             paybackAmount
-         );
- 
-+        // in case of aToken repayment the msg.sender must always repay on behalf of itself
-         if (params.useATokens) {
-             IAToken(reserveCache.aTokenAddress).burn(
-                 msg.sender,
-@@ -236,11 +237,13 @@ library BorrowLogic {
-                 paybackAmount,
-                 reserveCache.nextLiquidityIndex
-             );
--            // in case of aToken repayment the msg.sender must always repay on behalf of itself
-+            bool isCollateral = userConfig.isUsingAsCollateral(reserve.id);
-             if (
-+                isCollateral &&
-                 IAToken(reserveCache.aTokenAddress).scaledBalanceOf(
-                     msg.sender
--                ) == 0
-+                ) ==
-+                0
-             ) {
-                 userConfig.setUsingAsCollateral(reserve.id, false);
-                 emit ReserveUsedAsCollateralDisabled(params.asset, msg.sender);
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/DataTypes.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/DataTypes.sol
+diff --git a/tmp/1088_0x88F864670De467aA73CD45325F9652C578C8AB85_flat/DataTypes.sol b/tmp/1088_0xC31d2362fAeD85dF79d0bec99693D0EB0Abd3f74_flat/DataTypes.sol
 index 45b226c..8e5b1a9 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/DataTypes.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/DataTypes.sol
+--- a/tmp/1088_0x88F864670De467aA73CD45325F9652C578C8AB85_flat/DataTypes.sol
++++ b/tmp/1088_0xC31d2362fAeD85dF79d0bec99693D0EB0Abd3f74_flat/DataTypes.sol
 @@ -50,8 +50,9 @@ library DataTypes {
          uint128 variableBorrowIndex;
          //the current variable borrow rate. Expressed in ray
@@ -54,10 +26,10 @@ index 45b226c..8e5b1a9 100644
      struct ExecuteSetUserEModeParams {
          uint256 reservesCount;
          address oracle;
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/EModeConfiguration.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/EModeConfiguration.sol
+diff --git a/tmp/1088_0x88F864670De467aA73CD45325F9652C578C8AB85_flat/EModeConfiguration.sol b/tmp/1088_0xC31d2362fAeD85dF79d0bec99693D0EB0Abd3f74_flat/EModeConfiguration.sol
 index 2b0489a..5f687dc 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/EModeConfiguration.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/EModeConfiguration.sol
+--- a/tmp/1088_0x88F864670De467aA73CD45325F9652C578C8AB85_flat/EModeConfiguration.sol
++++ b/tmp/1088_0xC31d2362fAeD85dF79d0bec99693D0EB0Abd3f74_flat/EModeConfiguration.sol
 @@ -2,7 +2,6 @@
  pragma solidity ^0.8.0;
  
@@ -66,10 +38,10 @@ index 2b0489a..5f687dc 100644
  import {ReserveConfiguration} from "./ReserveConfiguration.sol";
  
  /**
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/EModeLogic.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/EModeLogic.sol
+diff --git a/tmp/1088_0x88F864670De467aA73CD45325F9652C578C8AB85_flat/EModeLogic.sol b/tmp/1088_0xC31d2362fAeD85dF79d0bec99693D0EB0Abd3f74_flat/EModeLogic.sol
 index 4458909..fd2e7ea 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/EModeLogic.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/EModeLogic.sol
+--- a/tmp/1088_0x88F864670De467aA73CD45325F9652C578C8AB85_flat/EModeLogic.sol
++++ b/tmp/1088_0xC31d2362fAeD85dF79d0bec99693D0EB0Abd3f74_flat/EModeLogic.sol
 @@ -3,7 +3,6 @@ pragma solidity ^0.8.10;
  
  import {GPv2SafeERC20} from "../../../dependencies/gnosis/contracts/GPv2SafeERC20.sol";
@@ -78,10 +50,10 @@ index 4458909..fd2e7ea 100644
  import {UserConfiguration} from "../configuration/UserConfiguration.sol";
  import {WadRayMath} from "../math/WadRayMath.sol";
  import {PercentageMath} from "../math/PercentageMath.sol";
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/Errors.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/Errors.sol
+diff --git a/tmp/1088_0x88F864670De467aA73CD45325F9652C578C8AB85_flat/Errors.sol b/tmp/1088_0xC31d2362fAeD85dF79d0bec99693D0EB0Abd3f74_flat/Errors.sol
 index d2a0c13..eb8c305 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/Errors.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/Errors.sol
+--- a/tmp/1088_0x88F864670De467aA73CD45325F9652C578C8AB85_flat/Errors.sol
++++ b/tmp/1088_0xC31d2362fAeD85dF79d0bec99693D0EB0Abd3f74_flat/Errors.sol
 @@ -101,4 +101,8 @@ library Errors {
      string public constant INVALID_GRACE_PERIOD = "98"; // Grace period above a valid range
      string public constant INVALID_FREEZE_STATE = "99"; // Reserve is already in the passed freeze state
@@ -91,10 +63,10 @@ index d2a0c13..eb8c305 100644
 +    string public constant MUST_NOT_LEAVE_DUST = "103"; // Below a certain threshold liquidators need to take the full position
 +    string public constant USER_CANNOT_HAVE_DEBT = "104"; // Thrown when a user tries to interact with a method that requires a position without debt
  }
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/GenericLogic.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/GenericLogic.sol
+diff --git a/tmp/1088_0x88F864670De467aA73CD45325F9652C578C8AB85_flat/GenericLogic.sol b/tmp/1088_0xC31d2362fAeD85dF79d0bec99693D0EB0Abd3f74_flat/GenericLogic.sol
 index a3efd9a..16d348e 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/GenericLogic.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/GenericLogic.sol
+--- a/tmp/1088_0x88F864670De467aA73CD45325F9652C578C8AB85_flat/GenericLogic.sol
++++ b/tmp/1088_0xC31d2362fAeD85dF79d0bec99693D0EB0Abd3f74_flat/GenericLogic.sol
 @@ -159,12 +159,20 @@ library GenericLogic {
              }
  
@@ -122,10 +94,10 @@ index a3efd9a..16d348e 100644
              }
  
              unchecked {
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/IPool.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/IPool.sol
+diff --git a/tmp/1088_0x88F864670De467aA73CD45325F9652C578C8AB85_flat/IPool.sol b/tmp/1088_0xC31d2362fAeD85dF79d0bec99693D0EB0Abd3f74_flat/IPool.sol
 index c65cf8e..f0ed8d2 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/IPool.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/IPool.sol
+--- a/tmp/1088_0x88F864670De467aA73CD45325F9652C578C8AB85_flat/IPool.sol
++++ b/tmp/1088_0xC31d2362fAeD85dF79d0bec99693D0EB0Abd3f74_flat/IPool.sol
 @@ -204,6 +204,18 @@ interface IPool {
          uint256 variableBorrowIndex
      );
@@ -231,107 +203,10 @@ index c65cf8e..f0ed8d2 100644
      /**
       * @notice Gets the address of the external FlashLoanLogic
       */
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/IsolationModeLogic.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/IsolationModeLogic.sol
-index e5a02ec..e545abc 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/IsolationModeLogic.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/IsolationModeLogic.sol
-@@ -23,7 +23,7 @@ library IsolationModeLogic {
-     );
- 
-     /**
--     * @notice updated the isolated debt whenever a position collateralized by an isolated asset is repaid or liquidated
-+     * @notice updated the isolated debt whenever a position collateralized by an isolated asset is repaid
-      * @param reservesData The state of all the reserves
-      * @param reservesList The addresses of all the active reserves
-      * @param userConfig The user configuration mapping
-@@ -44,36 +44,56 @@ library IsolationModeLogic {
-         ) = userConfig.getIsolationModeState(reservesData, reservesList);
- 
-         if (isolationModeActive) {
--            uint128 isolationModeTotalDebt = reservesData[
-+            updateIsolatedDebt(
-+                reservesData,
-+                reserveCache,
-+                repayAmount,
-                 isolationModeCollateralAddress
--            ].isolationModeTotalDebt;
-+            );
-+        }
-+    }
-+
-+    /**
-+     * @notice updated the isolated debt whenever a position collateralized by an isolated asset is liquidated
-+     * @param reservesData The state of all the reserves
-+     * @param reserveCache The cached data of the reserve
-+     * @param repayAmount The amount being repaid
-+     * @param isolationModeCollateralAddress The address of the isolated collateral
-+     */
-+    function updateIsolatedDebt(
-+        mapping(address => DataTypes.ReserveData) storage reservesData,
-+        DataTypes.ReserveCache memory reserveCache,
-+        uint256 repayAmount,
-+        address isolationModeCollateralAddress
-+    ) internal {
-+        uint128 isolationModeTotalDebt = reservesData[
-+            isolationModeCollateralAddress
-+        ].isolationModeTotalDebt;
- 
--            uint128 isolatedDebtRepaid = (repayAmount /
--                10 **
--                    (reserveCache.reserveConfiguration.getDecimals() -
--                        ReserveConfiguration.DEBT_CEILING_DECIMALS))
--                .toUint128();
-+        uint128 isolatedDebtRepaid = (repayAmount /
-+            10 **
-+                (reserveCache.reserveConfiguration.getDecimals() -
-+                    ReserveConfiguration.DEBT_CEILING_DECIMALS)).toUint128();
- 
--            // since the debt ceiling does not take into account the interest accrued, it might happen that amount
--            // repaid > debt in isolation mode
--            if (isolationModeTotalDebt <= isolatedDebtRepaid) {
--                reservesData[isolationModeCollateralAddress]
--                    .isolationModeTotalDebt = 0;
--                emit IsolationModeTotalDebtUpdated(
--                    isolationModeCollateralAddress,
--                    0
--                );
--            } else {
--                uint256 nextIsolationModeTotalDebt = reservesData[
--                    isolationModeCollateralAddress
--                ].isolationModeTotalDebt =
--                    isolationModeTotalDebt -
--                    isolatedDebtRepaid;
--                emit IsolationModeTotalDebtUpdated(
--                    isolationModeCollateralAddress,
--                    nextIsolationModeTotalDebt
--                );
--            }
-+        // since the debt ceiling does not take into account the interest accrued, it might happen that amount
-+        // repaid > debt in isolation mode
-+        if (isolationModeTotalDebt <= isolatedDebtRepaid) {
-+            reservesData[isolationModeCollateralAddress]
-+                .isolationModeTotalDebt = 0;
-+            emit IsolationModeTotalDebtUpdated(
-+                isolationModeCollateralAddress,
-+                0
-+            );
-+        } else {
-+            uint256 nextIsolationModeTotalDebt = reservesData[
-+                isolationModeCollateralAddress
-+            ].isolationModeTotalDebt =
-+                isolationModeTotalDebt -
-+                isolatedDebtRepaid;
-+            emit IsolationModeTotalDebtUpdated(
-+                isolationModeCollateralAddress,
-+                nextIsolationModeTotalDebt
-+            );
-         }
-     }
- }
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/ReserveConfiguration.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/ReserveConfiguration.sol
+diff --git a/tmp/1088_0x88F864670De467aA73CD45325F9652C578C8AB85_flat/ReserveConfiguration.sol b/tmp/1088_0xC31d2362fAeD85dF79d0bec99693D0EB0Abd3f74_flat/ReserveConfiguration.sol
 index e0713b0..a829da8 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/ReserveConfiguration.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/ReserveConfiguration.sol
+--- a/tmp/1088_0x88F864670De467aA73CD45325F9652C578C8AB85_flat/ReserveConfiguration.sol
++++ b/tmp/1088_0xC31d2362fAeD85dF79d0bec99693D0EB0Abd3f74_flat/ReserveConfiguration.sol
 @@ -10,32 +10,33 @@ import {DataTypes} from "../types/DataTypes.sol";
   * @notice Implements the bitmap logic to handle the reserve configuration
   */
@@ -763,10 +638,10 @@ index e0713b0..a829da8 100644
          );
      }
  }
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/ReserveLogic.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/ReserveLogic.sol
+diff --git a/tmp/1088_0x88F864670De467aA73CD45325F9652C578C8AB85_flat/ReserveLogic.sol b/tmp/1088_0xC31d2362fAeD85dF79d0bec99693D0EB0Abd3f74_flat/ReserveLogic.sol
 index 54e3c0e..5feeea6 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/ReserveLogic.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/ReserveLogic.sol
+--- a/tmp/1088_0x88F864670De467aA73CD45325F9652C578C8AB85_flat/ReserveLogic.sol
++++ b/tmp/1088_0xC31d2362fAeD85dF79d0bec99693D0EB0Abd3f74_flat/ReserveLogic.sol
 @@ -101,7 +101,9 @@ library ReserveLogic {
      ) internal {
          // If time didn't pass since last stored timestamp, skip state update
@@ -813,10 +688,10 @@ index 54e3c0e..5feeea6 100644
              if (liquidityAdded > 0) {
                  reserve.virtualUnderlyingBalance += liquidityAdded.toUint128();
              }
-diff --git a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/ValidationLogic.sol b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/ValidationLogic.sol
+diff --git a/tmp/1088_0x88F864670De467aA73CD45325F9652C578C8AB85_flat/ValidationLogic.sol b/tmp/1088_0xC31d2362fAeD85dF79d0bec99693D0EB0Abd3f74_flat/ValidationLogic.sol
 index 64aa0db..c50d1f5 100644
---- a/tmp/1_0xb32381feFFF45eE9F47fD2f2cF83C832637d6EF0_flat/ValidationLogic.sol
-+++ b/tmp/1_0x34039100cc9584Ae5D741d322e16d0d18CEE8770_flat/ValidationLogic.sol
+--- a/tmp/1088_0x88F864670De467aA73CD45325F9652C578C8AB85_flat/ValidationLogic.sol
++++ b/tmp/1088_0xC31d2362fAeD85dF79d0bec99693D0EB0Abd3f74_flat/ValidationLogic.sol
 @@ -4,8 +4,6 @@ pragma solidity ^0.8.10;
  import {IERC20} from "../../../dependencies/openzeppelin/contracts/IERC20.sol";
  import {Address} from "../../../dependencies/openzeppelin/contracts/Address.sol";
