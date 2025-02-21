@@ -1,0 +1,1579 @@
+diff --git a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/DataTypes.sol b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/DataTypes.sol
+index 45b226c..8e5b1a9 100644
+--- a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/DataTypes.sol
++++ b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/DataTypes.sol
+@@ -50,8 +50,9 @@ library DataTypes {
+         uint128 variableBorrowIndex;
+         //the current variable borrow rate. Expressed in ray
+         uint128 currentVariableBorrowRate;
+-        // DEPRECATED on v3.2.0
+-        uint128 __deprecatedStableBorrowRate;
++        /// @notice reused `__deprecatedStableBorrowRate` storage from pre 3.2
++        // the current accumulate deficit in underlying tokens
++        uint128 deficit;
+         //timestamp of last update
+         uint40 lastUpdateTimestamp;
+         //the id of the reserve. Represents the position in the list of the active reserves
+@@ -216,6 +217,11 @@ library DataTypes {
+         uint8 userEModeCategory;
+     }
+ 
++    struct ExecuteEliminateDeficitParams {
++        address asset;
++        uint256 amount;
++    }
++
+     struct ExecuteSetUserEModeParams {
+         uint256 reservesCount;
+         address oracle;
+diff --git a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/EModeConfiguration.sol b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/EModeConfiguration.sol
+index 2b0489a..5f687dc 100644
+--- a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/EModeConfiguration.sol
++++ b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/EModeConfiguration.sol
+@@ -2,7 +2,6 @@
+ pragma solidity ^0.8.0;
+ 
+ import {Errors} from "../helpers/Errors.sol";
+-import {DataTypes} from "../types/DataTypes.sol";
+ import {ReserveConfiguration} from "./ReserveConfiguration.sol";
+ 
+ /**
+diff --git a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/EModeLogic.sol b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/EModeLogic.sol
+index 4458909..fd2e7ea 100644
+--- a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/EModeLogic.sol
++++ b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/EModeLogic.sol
+@@ -3,7 +3,6 @@ pragma solidity ^0.8.10;
+ 
+ import {GPv2SafeERC20} from "../../../dependencies/gnosis/contracts/GPv2SafeERC20.sol";
+ import {IERC20} from "../../../dependencies/openzeppelin/contracts/IERC20.sol";
+-import {IPriceOracleGetter} from "../../../interfaces/IPriceOracleGetter.sol";
+ import {UserConfiguration} from "../configuration/UserConfiguration.sol";
+ import {WadRayMath} from "../math/WadRayMath.sol";
+ import {PercentageMath} from "../math/PercentageMath.sol";
+diff --git a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/Errors.sol b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/Errors.sol
+index d2a0c13..eb8c305 100644
+--- a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/Errors.sol
++++ b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/Errors.sol
+@@ -101,4 +101,8 @@ library Errors {
+     string public constant INVALID_GRACE_PERIOD = "98"; // Grace period above a valid range
+     string public constant INVALID_FREEZE_STATE = "99"; // Reserve is already in the passed freeze state
+     string public constant NOT_BORROWABLE_IN_EMODE = "100"; // Asset not borrowable in eMode
++    string public constant CALLER_NOT_UMBRELLA = "101"; // The caller of the function is not the umbrella contract
++    string public constant RESERVE_NOT_IN_DEFICIT = "102"; // The reserve is not in deficit
++    string public constant MUST_NOT_LEAVE_DUST = "103"; // Below a certain threshold liquidators need to take the full position
++    string public constant USER_CANNOT_HAVE_DEBT = "104"; // Thrown when a user tries to interact with a method that requires a position without debt
+ }
+diff --git a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/GenericLogic.sol b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/GenericLogic.sol
+index a3efd9a..16d348e 100644
+--- a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/GenericLogic.sol
++++ b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/GenericLogic.sol
+@@ -159,12 +159,20 @@ library GenericLogic {
+             }
+ 
+             if (params.userConfig.isBorrowing(vars.i)) {
+-                vars.totalDebtInBaseCurrency += _getUserDebtInBaseCurrency(
+-                    params.user,
+-                    currentReserve,
+-                    vars.assetPrice,
+-                    vars.assetUnit
+-                );
++                if (currentReserve.configuration.getIsVirtualAccActive()) {
++                    vars.totalDebtInBaseCurrency += _getUserDebtInBaseCurrency(
++                        params.user,
++                        currentReserve,
++                        vars.assetPrice,
++                        vars.assetUnit
++                    );
++                } else {
++                    // custom case for GHO, which applies the GHO discount on balanceOf
++                    vars.totalDebtInBaseCurrency +=
++                        (IERC20(currentReserve.variableDebtTokenAddress)
++                            .balanceOf(params.user) * vars.assetPrice) /
++                        vars.assetUnit;
++                }
+             }
+ 
+             unchecked {
+diff --git a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/IPool.sol b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/IPool.sol
+index c65cf8e..f0ed8d2 100644
+--- a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/IPool.sol
++++ b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/IPool.sol
+@@ -204,6 +204,18 @@ interface IPool {
+         uint256 variableBorrowIndex
+     );
+ 
++    /**
++     * @dev Emitted when the deficit of a reserve is covered.
++     * @param reserve The address of the underlying asset of the reserve
++     * @param caller The caller that triggered the DeficitCovered event
++     * @param amountCovered The amount of deficit covered
++     */
++    event DeficitCovered(
++        address indexed reserve,
++        address caller,
++        uint256 amountCovered
++    );
++
+     /**
+      * @dev Emitted when the protocol treasury receives minted aTokens from the accrued interest.
+      * @param reserve The address of the reserve
+@@ -211,6 +223,18 @@ interface IPool {
+      */
+     event MintedToTreasury(address indexed reserve, uint256 amountMinted);
+ 
++    /**
++     * @dev Emitted when deficit is realized on a liquidation.
++     * @param user The user address where the bad debt will be burned
++     * @param debtAsset The address of the underlying borrowed asset to be burned
++     * @param amountCreated The amount of deficit created
++     */
++    event DeficitCreated(
++        address indexed user,
++        address indexed debtAsset,
++        uint256 amountCreated
++    );
++
+     /**
+      * @notice Mints an `amount` of aTokens to the `onBehalfOf`
+      * @param asset The address of the underlying asset to mint
+@@ -600,15 +624,6 @@ interface IPool {
+         address asset
+     ) external view returns (DataTypes.ReserveDataLegacy memory);
+ 
+-    /**
+-     * @notice Returns the state and configuration of the reserve, including extra data included with Aave v3.1
+-     * @param asset The address of the underlying asset of the reserve
+-     * @return The state and configuration data of the reserve with virtual accounting
+-     */
+-    function getReserveDataExtended(
+-        address asset
+-    ) external view returns (DataTypes.ReserveData memory);
+-
+     /**
+      * @notice Returns the virtual underlying balance of the reserve
+      * @param asset The address of the underlying asset of the reserve
+@@ -802,7 +817,9 @@ interface IPool {
+      * @return Timestamp when the liquidation grace period will end
+      *
+      */
+-    function getLiquidationGracePeriod(address asset) external returns (uint40);
++    function getLiquidationGracePeriod(
++        address asset
++    ) external view returns (uint40);
+ 
+     /**
+      * @notice Returns the total fee on flash loans
+@@ -861,6 +878,39 @@ interface IPool {
+         uint16 referralCode
+     ) external;
+ 
++    /**
++     * @notice It covers the deficit of a specified reserve by burning:
++     * - the equivalent aToken `amount` for assets with virtual accounting enabled
++     * - the equivalent `amount` of underlying for assets with virtual accounting disabled (e.g. GHO)
++     * @dev The deficit of a reserve can occur due to situations where borrowed assets are not repaid, leading to bad debt.
++     * @param asset The address of the underlying asset to cover the deficit.
++     * @param amount The amount to be covered, in aToken or underlying on non-virtual accounted assets
++     */
++    function eliminateReserveDeficit(address asset, uint256 amount) external;
++
++    /**
++     * @notice Returns the current deficit of a reserve.
++     * @param asset The address of the underlying asset of the reserve
++     * @return The current deficit of the reserve
++     */
++    function getReserveDeficit(address asset) external view returns (uint256);
++
++    /**
++     * @notice Returns the aToken address of a reserve.
++     * @param asset The address of the underlying asset of the reserve
++     * @return The address of the aToken
++     */
++    function getReserveAToken(address asset) external view returns (address);
++
++    /**
++     * @notice Returns the variableDebtToken address of a reserve.
++     * @param asset The address of the underlying asset of the reserve
++     * @return The address of the variableDebtToken
++     */
++    function getReserveVariableDebtToken(
++        address asset
++    ) external view returns (address);
++
+     /**
+      * @notice Gets the address of the external FlashLoanLogic
+      */
+diff --git a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/IsolationModeLogic.sol b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/IsolationModeLogic.sol
+index e5a02ec..e545abc 100644
+--- a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/IsolationModeLogic.sol
++++ b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/IsolationModeLogic.sol
+@@ -23,7 +23,7 @@ library IsolationModeLogic {
+     );
+ 
+     /**
+-     * @notice updated the isolated debt whenever a position collateralized by an isolated asset is repaid or liquidated
++     * @notice updated the isolated debt whenever a position collateralized by an isolated asset is repaid
+      * @param reservesData The state of all the reserves
+      * @param reservesList The addresses of all the active reserves
+      * @param userConfig The user configuration mapping
+@@ -44,36 +44,56 @@ library IsolationModeLogic {
+         ) = userConfig.getIsolationModeState(reservesData, reservesList);
+ 
+         if (isolationModeActive) {
+-            uint128 isolationModeTotalDebt = reservesData[
++            updateIsolatedDebt(
++                reservesData,
++                reserveCache,
++                repayAmount,
+                 isolationModeCollateralAddress
+-            ].isolationModeTotalDebt;
++            );
++        }
++    }
++
++    /**
++     * @notice updated the isolated debt whenever a position collateralized by an isolated asset is liquidated
++     * @param reservesData The state of all the reserves
++     * @param reserveCache The cached data of the reserve
++     * @param repayAmount The amount being repaid
++     * @param isolationModeCollateralAddress The address of the isolated collateral
++     */
++    function updateIsolatedDebt(
++        mapping(address => DataTypes.ReserveData) storage reservesData,
++        DataTypes.ReserveCache memory reserveCache,
++        uint256 repayAmount,
++        address isolationModeCollateralAddress
++    ) internal {
++        uint128 isolationModeTotalDebt = reservesData[
++            isolationModeCollateralAddress
++        ].isolationModeTotalDebt;
+ 
+-            uint128 isolatedDebtRepaid = (repayAmount /
+-                10 **
+-                    (reserveCache.reserveConfiguration.getDecimals() -
+-                        ReserveConfiguration.DEBT_CEILING_DECIMALS))
+-                .toUint128();
++        uint128 isolatedDebtRepaid = (repayAmount /
++            10 **
++                (reserveCache.reserveConfiguration.getDecimals() -
++                    ReserveConfiguration.DEBT_CEILING_DECIMALS)).toUint128();
+ 
+-            // since the debt ceiling does not take into account the interest accrued, it might happen that amount
+-            // repaid > debt in isolation mode
+-            if (isolationModeTotalDebt <= isolatedDebtRepaid) {
+-                reservesData[isolationModeCollateralAddress]
+-                    .isolationModeTotalDebt = 0;
+-                emit IsolationModeTotalDebtUpdated(
+-                    isolationModeCollateralAddress,
+-                    0
+-                );
+-            } else {
+-                uint256 nextIsolationModeTotalDebt = reservesData[
+-                    isolationModeCollateralAddress
+-                ].isolationModeTotalDebt =
+-                    isolationModeTotalDebt -
+-                    isolatedDebtRepaid;
+-                emit IsolationModeTotalDebtUpdated(
+-                    isolationModeCollateralAddress,
+-                    nextIsolationModeTotalDebt
+-                );
+-            }
++        // since the debt ceiling does not take into account the interest accrued, it might happen that amount
++        // repaid > debt in isolation mode
++        if (isolationModeTotalDebt <= isolatedDebtRepaid) {
++            reservesData[isolationModeCollateralAddress]
++                .isolationModeTotalDebt = 0;
++            emit IsolationModeTotalDebtUpdated(
++                isolationModeCollateralAddress,
++                0
++            );
++        } else {
++            uint256 nextIsolationModeTotalDebt = reservesData[
++                isolationModeCollateralAddress
++            ].isolationModeTotalDebt =
++                isolationModeTotalDebt -
++                isolatedDebtRepaid;
++            emit IsolationModeTotalDebtUpdated(
++                isolationModeCollateralAddress,
++                nextIsolationModeTotalDebt
++            );
+         }
+     }
+ }
+diff --git a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/LiquidationLogic.sol b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/LiquidationLogic.sol
+index 51793b6..d7f3cef 100644
+--- a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/LiquidationLogic.sol
++++ b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/LiquidationLogic.sol
+@@ -10,13 +10,20 @@ import {ReserveLogic} from "./ReserveLogic.sol";
+ import {ValidationLogic} from "./ValidationLogic.sol";
+ import {GenericLogic} from "./GenericLogic.sol";
+ import {IsolationModeLogic} from "./IsolationModeLogic.sol";
+-import {EModeLogic} from "./EModeLogic.sol";
+ import {UserConfiguration} from "../../libraries/configuration/UserConfiguration.sol";
+ import {ReserveConfiguration} from "../../libraries/configuration/ReserveConfiguration.sol";
+ import {EModeConfiguration} from "../../libraries/configuration/EModeConfiguration.sol";
+ import {IAToken} from "../../../interfaces/IAToken.sol";
+ import {IVariableDebtToken} from "../../../interfaces/IVariableDebtToken.sol";
+ import {IPriceOracleGetter} from "../../../interfaces/IPriceOracleGetter.sol";
++import {SafeCast} from "../../../dependencies/openzeppelin/contracts/SafeCast.sol";
++import {Errors} from "../helpers/Errors.sol";
++
++interface IGhoVariableDebtToken {
++    function getBalanceFromInterest(
++        address user
++    ) external view returns (uint256);
++}
+ 
+ /**
+  * @title LiquidationLogic library
+@@ -31,6 +38,7 @@ library LiquidationLogic {
+     using UserConfiguration for DataTypes.UserConfigurationMap;
+     using ReserveConfiguration for DataTypes.ReserveConfigurationMap;
+     using GPv2SafeERC20 for IERC20;
++    using SafeCast for uint256;
+ 
+     // See `IPool` for descriptions
+     event ReserveUsedAsCollateralEnabled(
+@@ -41,6 +49,16 @@ library LiquidationLogic {
+         address indexed reserve,
+         address indexed user
+     );
++    event DeficitCreated(
++        address indexed user,
++        address indexed debtAsset,
++        uint256 amountCreated
++    );
++    event DeficitCovered(
++        address indexed reserve,
++        address caller,
++        uint256 amountCovered
++    );
+     event LiquidationCall(
+         address indexed collateralAsset,
+         address indexed debtAsset,
+@@ -59,27 +77,137 @@ library LiquidationLogic {
+     uint256 internal constant DEFAULT_LIQUIDATION_CLOSE_FACTOR = 0.5e4;
+ 
+     /**
+-     * @dev Maximum percentage of borrower's debt to be repaid in a liquidation
+-     * @dev Percentage applied when the users health factor is below `CLOSE_FACTOR_HF_THRESHOLD`
+-     * Expressed in bps, a value of 1e4 results in 100.00%
++     * @dev This constant represents the upper bound on the health factor, below(inclusive) which the full amount of debt becomes liquidatable.
++     * A value of 0.95e18 results in 0.95
+      */
+-    uint256 public constant MAX_LIQUIDATION_CLOSE_FACTOR = 1e4;
++    uint256 public constant CLOSE_FACTOR_HF_THRESHOLD = 0.95e18;
+ 
+     /**
+-     * @dev This constant represents below which health factor value it is possible to liquidate
+-     * an amount of debt corresponding to `MAX_LIQUIDATION_CLOSE_FACTOR`.
+-     * A value of 0.95e18 results in 0.95
++     * @dev This constant represents a base value threshold.
++     * If the total collateral or debt on a position is below this threshold, the close factor is raised to 100%.
++     * @notice The default value assumes that the basePrice is usd denominated by 8 decimals and needs to be adjusted in a non USD-denominated pool.
+      */
+-    uint256 public constant CLOSE_FACTOR_HF_THRESHOLD = 0.95e18;
++    uint256 public constant MIN_BASE_MAX_CLOSE_FACTOR_THRESHOLD = 2000e8;
++
++    /**
++     * @dev This constant represents the minimum amount of assets in base currency that need to be leftover after a liquidation, if not clearing a position completely.
++     * This parameter is inferred from MIN_BASE_MAX_CLOSE_FACTOR_THRESHOLD as the logic is dependent.
++     * Assuming a MIN_BASE_MAX_CLOSE_FACTOR_THRESHOLD of `n` a liquidation of `n+1` might result in `n/2` leftover which is assumed to be still economically liquidatable.
++     * This mechanic was introduced to ensure liquidators don't optimize gas by leaving some wei on the liquidation.
++     */
++    uint256 public constant MIN_LEFTOVER_BASE =
++        MIN_BASE_MAX_CLOSE_FACTOR_THRESHOLD / 2;
++
++    /**
++     * @notice Reduces a portion or all of the deficit of a specified reserve by burning:
++     * - the equivalent aToken `amount` for assets with virtual accounting enabled
++     * - the equivalent `amount` of underlying for assets with virtual accounting disabled (e.g. GHO)
++     * The caller of this method MUST always be the Umbrella contract and the Umbrella contract is assumed to never have debt.
++     * @dev Emits the `DeficitCovered() event`.
++     * @dev If the coverage admin covers its entire balance, `ReserveUsedAsCollateralDisabled()` is emitted.
++     * @param reservesData The state of all the reserves
++     * @param userConfig The user configuration mapping that tracks the supplied/borrowed assets
++     * @param params The additional parameters needed to execute the eliminateDeficit function
++     */
++    function executeEliminateDeficit(
++        mapping(address => DataTypes.ReserveData) storage reservesData,
++        DataTypes.UserConfigurationMap storage userConfig,
++        DataTypes.ExecuteEliminateDeficitParams memory params
++    ) external {
++        require(params.amount != 0, Errors.INVALID_AMOUNT);
++
++        DataTypes.ReserveData storage reserve = reservesData[params.asset];
++        uint256 currentDeficit = reserve.deficit;
++
++        require(currentDeficit != 0, Errors.RESERVE_NOT_IN_DEFICIT);
++        require(!userConfig.isBorrowingAny(), Errors.USER_CANNOT_HAVE_DEBT);
++
++        DataTypes.ReserveCache memory reserveCache = reserve.cache();
++        reserve.updateState(reserveCache);
++        bool isActive = reserveCache.reserveConfiguration.getActive();
++        require(isActive, Errors.RESERVE_INACTIVE);
++
++        uint256 balanceWriteOff = params.amount;
++
++        if (params.amount > currentDeficit) {
++            balanceWriteOff = currentDeficit;
++        }
++
++        uint256 userBalance = reserveCache
++            .reserveConfiguration
++            .getIsVirtualAccActive()
++            ? IAToken(reserveCache.aTokenAddress)
++                .scaledBalanceOf(msg.sender)
++                .rayMul(reserveCache.nextLiquidityIndex)
++            : IERC20(params.asset).balanceOf(msg.sender);
++        require(
++            balanceWriteOff <= userBalance,
++            Errors.NOT_ENOUGH_AVAILABLE_USER_BALANCE
++        );
++
++        if (reserveCache.reserveConfiguration.getIsVirtualAccActive()) {
++            // assets without virtual accounting can never be a collateral
++            bool isCollateral = userConfig.isUsingAsCollateral(reserve.id);
++            if (isCollateral && balanceWriteOff == userBalance) {
++                userConfig.setUsingAsCollateral(reserve.id, false);
++                emit ReserveUsedAsCollateralDisabled(params.asset, msg.sender);
++            }
++
++            IAToken(reserveCache.aTokenAddress).burn(
++                msg.sender,
++                reserveCache.aTokenAddress,
++                balanceWriteOff,
++                reserveCache.nextLiquidityIndex
++            );
++        } else {
++            // This is a special case to allow mintable assets (ex. GHO), which by definition cannot be supplied
++            // and thus do not use virtual underlying balances.
++            // In that case, the procedure is 1) sending the underlying asset to the aToken and
++            // 2) trigger the handleRepayment() for the aToken to dispose of those assets
++            IERC20(params.asset).safeTransferFrom(
++                msg.sender,
++                reserveCache.aTokenAddress,
++                balanceWriteOff
++            );
++            // it is assumed that handleRepayment does not touch the variable debt balance
++            IAToken(reserveCache.aTokenAddress).handleRepayment(
++                msg.sender,
++                // In the context of GHO it's only relevant that the address has no debt.
++                // Passing the pool is fitting as it's handling the repayment on behalf of the protocol.
++                address(this),
++                balanceWriteOff
++            );
++        }
++
++        reserve.deficit -= balanceWriteOff.toUint128();
++
++        reserve.updateInterestRatesAndVirtualBalance(
++            reserveCache,
++            params.asset,
++            0,
++            0
++        );
++
++        emit DeficitCovered(params.asset, msg.sender, balanceWriteOff);
++    }
+ 
+     struct LiquidationCallLocalVars {
+         uint256 userCollateralBalance;
+-        uint256 userTotalDebt;
++        uint256 userReserveDebt;
+         uint256 actualDebtToLiquidate;
+         uint256 actualCollateralToLiquidate;
+         uint256 liquidationBonus;
+         uint256 healthFactor;
+         uint256 liquidationProtocolFeeAmount;
++        uint256 totalCollateralInBaseCurrency;
++        uint256 totalDebtInBaseCurrency;
++        uint256 collateralToLiquidateInBaseCurrency;
++        uint256 userReserveDebtInBaseCurrency;
++        uint256 userReserveCollateralInBaseCurrency;
++        uint256 collateralAssetPrice;
++        uint256 debtAssetPrice;
++        uint256 collateralAssetUnit;
++        uint256 debtAssetUnit;
+         IAToken collateralAToken;
+         DataTypes.ReserveCache debtReserveCache;
+     }
+@@ -88,7 +216,7 @@ library LiquidationLogic {
+      * @notice Function to liquidate a position if its Health Factor drops below 1. The caller (liquidator)
+      * covers `debtToCover` amount of debt of the user getting liquidated, and receives
+      * a proportional amount of the `collateralAsset` plus a bonus to cover market risk
+-     * @dev Emits the `LiquidationCall()` event
++     * @dev Emits the `LiquidationCall()` event, and the `DeficitCreated()` event if the liquidation results in bad debt
+      * @param reservesData The state of all the reserves
+      * @param reservesList The addresses of all the active reserves
+      * @param usersConfig The users configuration mapping that track the supplied/borrowed assets
+@@ -116,7 +244,14 @@ library LiquidationLogic {
+         vars.debtReserveCache = debtReserve.cache();
+         debtReserve.updateState(vars.debtReserveCache);
+ 
+-        (, , , , vars.healthFactor, ) = GenericLogic.calculateUserAccountData(
++        (
++            vars.totalCollateralInBaseCurrency,
++            vars.totalDebtInBaseCurrency,
++            ,
++            ,
++            vars.healthFactor,
++
++        ) = GenericLogic.calculateUserAccountData(
+             reservesData,
+             reservesList,
+             eModeCategories,
+@@ -129,11 +264,13 @@ library LiquidationLogic {
+             })
+         );
+ 
+-        (vars.userTotalDebt, vars.actualDebtToLiquidate) = _calculateDebt(
+-            vars.debtReserveCache,
+-            params,
+-            vars.healthFactor
++        vars.collateralAToken = IAToken(collateralReserve.aTokenAddress);
++        vars.userCollateralBalance = vars.collateralAToken.balanceOf(
++            params.user
+         );
++        vars.userReserveDebt = IERC20(
++            vars.debtReserveCache.variableDebtTokenAddress
++        ).balanceOf(params.user);
+ 
+         ValidationLogic.validateLiquidationCall(
+             userConfig,
+@@ -141,13 +278,12 @@ library LiquidationLogic {
+             debtReserve,
+             DataTypes.ValidateLiquidationCallParams({
+                 debtReserveCache: vars.debtReserveCache,
+-                totalDebt: vars.userTotalDebt,
++                totalDebt: vars.userReserveDebt,
+                 healthFactor: vars.healthFactor,
+                 priceOracleSentinel: params.priceOracleSentinel
+             })
+         );
+ 
+-        vars.collateralAToken = IAToken(collateralReserve.aTokenAddress);
+         if (
+             params.userEModeCategory != 0 &&
+             EModeConfiguration.isReserveEnabledOnBitmap(
+@@ -162,28 +298,99 @@ library LiquidationLogic {
+                 .configuration
+                 .getLiquidationBonus();
+         }
++        vars.collateralAssetPrice = IPriceOracleGetter(params.priceOracle)
++            .getAssetPrice(params.collateralAsset);
++        vars.debtAssetPrice = IPriceOracleGetter(params.priceOracle)
++            .getAssetPrice(params.debtAsset);
++        vars.collateralAssetUnit =
++            10 ** collateralReserve.configuration.getDecimals();
++        vars.debtAssetUnit =
++            10 ** vars.debtReserveCache.reserveConfiguration.getDecimals();
++
++        vars.userReserveDebtInBaseCurrency =
++            (vars.userReserveDebt * vars.debtAssetPrice) /
++            vars.debtAssetUnit;
++
++        vars.userReserveCollateralInBaseCurrency =
++            (vars.userCollateralBalance * vars.collateralAssetPrice) /
++            vars.collateralAssetUnit;
++
++        // by default whole debt in the reserve could be liquidated
++        uint256 maxLiquidatableDebt = vars.userReserveDebt;
++        // but if debt and collateral is above or equal MIN_BASE_MAX_CLOSE_FACTOR_THRESHOLD
++        // and health factor is above CLOSE_FACTOR_HF_THRESHOLD this amount may be adjusted
++        if (
++            vars.userReserveCollateralInBaseCurrency >=
++            MIN_BASE_MAX_CLOSE_FACTOR_THRESHOLD &&
++            vars.userReserveDebtInBaseCurrency >=
++            MIN_BASE_MAX_CLOSE_FACTOR_THRESHOLD &&
++            vars.healthFactor > CLOSE_FACTOR_HF_THRESHOLD
++        ) {
++            uint256 totalDefaultLiquidatableDebtInBaseCurrency = vars
++                .totalDebtInBaseCurrency
++                .percentMul(DEFAULT_LIQUIDATION_CLOSE_FACTOR);
+ 
+-        vars.userCollateralBalance = vars.collateralAToken.balanceOf(
+-            params.user
+-        );
++            // if the debt is more then DEFAULT_LIQUIDATION_CLOSE_FACTOR % of the whole,
++            // then we CAN liquidate only up to DEFAULT_LIQUIDATION_CLOSE_FACTOR %
++            if (
++                vars.userReserveDebtInBaseCurrency >
++                totalDefaultLiquidatableDebtInBaseCurrency
++            ) {
++                maxLiquidatableDebt =
++                    (totalDefaultLiquidatableDebtInBaseCurrency *
++                        vars.debtAssetUnit) /
++                    vars.debtAssetPrice;
++            }
++        }
++
++        vars.actualDebtToLiquidate = params.debtToCover > maxLiquidatableDebt
++            ? maxLiquidatableDebt
++            : params.debtToCover;
+ 
+         (
+             vars.actualCollateralToLiquidate,
+             vars.actualDebtToLiquidate,
+-            vars.liquidationProtocolFeeAmount
++            vars.liquidationProtocolFeeAmount,
++            vars.collateralToLiquidateInBaseCurrency
+         ) = _calculateAvailableCollateralToLiquidate(
+-            collateralReserve,
+-            vars.debtReserveCache,
+-            params.collateralAsset,
+-            params.debtAsset,
++            collateralReserve.configuration,
++            vars.collateralAssetPrice,
++            vars.collateralAssetUnit,
++            vars.debtAssetPrice,
++            vars.debtAssetUnit,
+             vars.actualDebtToLiquidate,
+             vars.userCollateralBalance,
+-            vars.liquidationBonus,
+-            IPriceOracleGetter(params.priceOracle)
++            vars.liquidationBonus
+         );
+ 
+-        if (vars.userTotalDebt == vars.actualDebtToLiquidate) {
+-            userConfig.setBorrowing(debtReserve.id, false);
++        // to prevent accumulation of dust on the protocol, it is enforced that you either
++        // 1. liquidate all debt
++        // 2. liquidate all collateral
++        // 3. leave more than MIN_LEFTOVER_BASE of collateral & debt
++        if (
++            vars.actualDebtToLiquidate < vars.userReserveDebt &&
++            vars.actualCollateralToLiquidate +
++                vars.liquidationProtocolFeeAmount <
++            vars.userCollateralBalance
++        ) {
++            bool isDebtMoreThanLeftoverThreshold = ((vars.userReserveDebt -
++                vars.actualDebtToLiquidate) * vars.debtAssetPrice) /
++                vars.debtAssetUnit >=
++                MIN_LEFTOVER_BASE;
++
++            bool isCollateralMoreThanLeftoverThreshold = ((vars
++                .userCollateralBalance -
++                vars.actualCollateralToLiquidate -
++                vars.liquidationProtocolFeeAmount) *
++                vars.collateralAssetPrice) /
++                vars.collateralAssetUnit >=
++                MIN_LEFTOVER_BASE;
++
++            require(
++                isDebtMoreThanLeftoverThreshold &&
++                    isCollateralMoreThanLeftoverThreshold,
++                Errors.MUST_NOT_LEAVE_DUST
++            );
+         }
+ 
+         // If the collateral being liquidated is equal to the user balance,
+@@ -200,22 +407,33 @@ library LiquidationLogic {
+             );
+         }
+ 
+-        _burnDebtTokens(params, vars);
+-
+-        debtReserve.updateInterestRatesAndVirtualBalance(
++        bool hasNoCollateralLeft = vars.totalCollateralInBaseCurrency ==
++            vars.collateralToLiquidateInBaseCurrency;
++        _burnDebtTokens(
+             vars.debtReserveCache,
++            debtReserve,
++            userConfig,
++            params.user,
+             params.debtAsset,
++            vars.userReserveDebt,
+             vars.actualDebtToLiquidate,
+-            0
++            hasNoCollateralLeft
+         );
+ 
+-        IsolationModeLogic.updateIsolatedDebtIfIsolated(
+-            reservesData,
+-            reservesList,
+-            userConfig,
+-            vars.debtReserveCache,
+-            vars.actualDebtToLiquidate
+-        );
++        // An asset can only be ceiled if it has no supply or if it was not a collateral previously.
++        // Therefore we can be sure that no inconsistent state can be reached in which a user has multiple collaterals, with one being ceiled.
++        // This allows for the implicit assumption that: if the asset was a collateral & the asset was ceiled, the user must have been in isolation.
++        if (collateralReserve.configuration.getDebtCeiling() != 0) {
++            // IsolationModeTotalDebt only discounts `actualDebtToLiquidate`, not the fully burned amount in case of deficit creation.
++            // This is by design as otherwise the debt ceiling would render ineffective if a collateral asset faces bad debt events.
++            // The governance can decide the raise the ceiling to discount manifested deficit.
++            IsolationModeLogic.updateIsolatedDebt(
++                reservesData,
++                vars.debtReserveCache,
++                vars.actualDebtToLiquidate,
++                params.collateralAsset
++            );
++        }
+ 
+         if (params.receiveAToken) {
+             _liquidateATokens(
+@@ -251,6 +469,19 @@ library LiquidationLogic {
+             );
+         }
+ 
++        // burn bad debt if necessary
++        // Each additional debt asset already adds around ~75k gas to the liquidation.
++        // To keep the liquidation gas under control, 0 usd collateral positions are not touched, as there is no immediate benefit in burning or transferring to treasury.
++        if (hasNoCollateralLeft && userConfig.isBorrowingAny()) {
++            _burnBadDebt(
++                reservesData,
++                reservesList,
++                userConfig,
++                params.reservesCount,
++                params.user
++            );
++        }
++
+         // Transfers the debt asset being repaid to the aToken, where the liquidity is kept
+         IERC20(params.debtAsset).safeTransferFrom(
+             msg.sender,
+@@ -333,7 +564,15 @@ library LiquidationLogic {
+             vars.actualCollateralToLiquidate
+         );
+ 
+-        if (liquidatorPreviousATokenBalance == 0) {
++        if (
++            // For the special case of msg.sender == params.user (self-liquidation) the liquidatorPreviousATokenBalance
++            // will not yet be 0, but the liquidation will result in collateral being fully liquidated and then resupplied.
++            liquidatorPreviousATokenBalance == 0 ||
++            (msg.sender == params.user &&
++                vars.actualCollateralToLiquidate +
++                    vars.liquidationProtocolFeeAmount ==
++                vars.userCollateralBalance)
++        ) {
+             DataTypes.UserConfigurationMap
+                 storage liquidatorConfig = usersConfig[msg.sender];
+             if (
+@@ -358,70 +597,112 @@ library LiquidationLogic {
+     }
+ 
+     /**
+-     * @notice Burns the debt tokens of the user up to the amount being repaid by the liquidator.
++     * @notice Burns the debt tokens of the user up to the amount being repaid by the liquidator
++     * or the entire debt if the user is in a bad debt scenario.
+      * @dev The function alters the `debtReserveCache` state in `vars` to update the debt related data.
+-     * @param params The additional parameters needed to execute the liquidation function
+-     * @param vars the executeLiquidationCall() function local vars
++     * @param debtReserveCache The cached debt reserve parameters
++     * @param debtReserve The storage pointer of the debt reserve parameters
++     * @param userConfig The pointer of the user configuration
++     * @param user The user address
++     * @param debtAsset The debt asset address
++     * @param actualDebtToLiquidate The actual debt to liquidate
++     * @param hasNoCollateralLeft The flag representing, will user will have no collateral left after liquidation
+      */
+     function _burnDebtTokens(
+-        DataTypes.ExecuteLiquidationCallParams memory params,
+-        LiquidationCallLocalVars memory vars
+-    ) internal {
+-        vars.debtReserveCache.nextScaledVariableDebt = IVariableDebtToken(
+-            vars.debtReserveCache.variableDebtTokenAddress
+-        ).burn(
+-                params.user,
+-                vars.actualDebtToLiquidate,
+-                vars.debtReserveCache.nextVariableBorrowIndex
+-            );
+-    }
+-
+-    /**
+-     * @notice Calculates the total debt of the user and the actual amount to liquidate depending on the health factor
+-     * and corresponding close factor.
+-     * @dev If the Health Factor is below CLOSE_FACTOR_HF_THRESHOLD, the close factor is increased to MAX_LIQUIDATION_CLOSE_FACTOR
+-     * @param debtReserveCache The reserve cache data object of the debt reserve
+-     * @param params The additional parameters needed to execute the liquidation function
+-     * @param healthFactor The health factor of the position
+-     * @return The total debt of the user
+-     * @return The actual debt to liquidate as a function of the closeFactor
+-     */
+-    function _calculateDebt(
+         DataTypes.ReserveCache memory debtReserveCache,
+-        DataTypes.ExecuteLiquidationCallParams memory params,
+-        uint256 healthFactor
+-    ) internal view returns (uint256, uint256) {
+-        uint256 userVariableDebt = IERC20(
+-            debtReserveCache.variableDebtTokenAddress
+-        ).balanceOf(params.user);
++        DataTypes.ReserveData storage debtReserve,
++        DataTypes.UserConfigurationMap storage userConfig,
++        address user,
++        address debtAsset,
++        uint256 userReserveDebt,
++        uint256 actualDebtToLiquidate,
++        bool hasNoCollateralLeft
++    ) internal {
++        // Prior v3.1, there were cases where, after liquidation, the `isBorrowing` flag was left on
++        // even after the user debt was fully repaid, so to avoid this function reverting in the `_burnScaled`
++        // (see ScaledBalanceTokenBase contract), we check for any debt remaining.
++        if (userReserveDebt != 0) {
++            debtReserveCache.nextScaledVariableDebt = IVariableDebtToken(
++                debtReserveCache.variableDebtTokenAddress
++            ).burn(
++                    user,
++                    hasNoCollateralLeft
++                        ? userReserveDebt
++                        : actualDebtToLiquidate,
++                    debtReserveCache.nextVariableBorrowIndex
++                );
++        }
+ 
+-        uint256 closeFactor = healthFactor > CLOSE_FACTOR_HF_THRESHOLD
+-            ? DEFAULT_LIQUIDATION_CLOSE_FACTOR
+-            : MAX_LIQUIDATION_CLOSE_FACTOR;
++        uint256 outstandingDebt = userReserveDebt - actualDebtToLiquidate;
++        if (hasNoCollateralLeft && outstandingDebt != 0) {
++            /**
++             * Special handling of GHO. Implicitly assuming that virtual acc !active == GHO, which is true.
++             * Scenario 1: The amount of GHO debt being liquidated is greater or equal to the GHO accrued interest.
++             *             In this case, the outer handleRepayment will clear the storage and all additional operations can be skipped.
++             * Scenario 2: The amount of debt being liquidated is lower than the GHO accrued interest.
++             *             In this case handleRepayment will be called with the difference required to clear the storage.
++             *             If we assume a liquidation of n debt, and m accrued interest, the difference is k = m-n.
++             *             Therefore we call handleRepayment(k).
++             *             Additionally, as the dao (GHO issuer) accepts the loss on interest on the bad debt,
++             *             we need to discount k from the deficit (via reducing outstandingDebt).
++             * Note: If a non GHO asset is liquidated and GHO bad debt is created in the process, Scenario 2 applies with n = 0.
++             */
++            if (
++                !debtReserveCache.reserveConfiguration.getIsVirtualAccActive()
++            ) {
++                uint256 accruedInterest = IGhoVariableDebtToken(
++                    debtReserveCache.variableDebtTokenAddress
++                ).getBalanceFromInterest(user);
++                // handleRepayment() will first discount the protocol fee from an internal `accumulatedDebtInterest` variable
++                // and then burn the excess GHO
++                if (
++                    accruedInterest != 0 &&
++                    accruedInterest > actualDebtToLiquidate
++                ) {
++                    // in order to clean the `accumulatedDebtInterest` storage the function will need to be called with the accruedInterest
++                    // discounted by the actualDebtToLiquidate, as in the main flow `handleRepayment` will be called with actualDebtToLiquidate already
++                    uint256 amountToBurn = accruedInterest -
++                        actualDebtToLiquidate;
++                    // In the case of GHO, all obligations are to the protocol
++                    // therefore the protocol assumes the losses on interest and only tracks the pure deficit by discounting the not-collected & burned debt
++                    outstandingDebt -= amountToBurn;
++                    // IMPORTANT: address(0) is used here to indicate that the accrued fee is discounted and not actually repayed.
++                    // The value passed has no relevance as it is unused on the aGHO.handleRepayment, therefore the value is purely esthetical.
++                    IAToken(debtReserveCache.aTokenAddress).handleRepayment(
++                        address(0),
++                        user,
++                        amountToBurn
++                    );
++                }
++            }
++            debtReserve.deficit += outstandingDebt.toUint128();
++            emit DeficitCreated(user, debtAsset, outstandingDebt);
+ 
+-        uint256 maxLiquidatableDebt = userVariableDebt.percentMul(closeFactor);
++            outstandingDebt = 0;
++        }
+ 
+-        uint256 actualDebtToLiquidate = params.debtToCover > maxLiquidatableDebt
+-            ? maxLiquidatableDebt
+-            : params.debtToCover;
++        if (outstandingDebt == 0) {
++            userConfig.setBorrowing(debtReserve.id, false);
++        }
+ 
+-        return (userVariableDebt, actualDebtToLiquidate);
++        debtReserve.updateInterestRatesAndVirtualBalance(
++            debtReserveCache,
++            debtAsset,
++            actualDebtToLiquidate,
++            0
++        );
+     }
+ 
+     struct AvailableCollateralToLiquidateLocalVars {
+-        uint256 collateralPrice;
+-        uint256 debtAssetPrice;
+         uint256 maxCollateralToLiquidate;
+         uint256 baseCollateral;
+         uint256 bonusCollateral;
+-        uint256 debtAssetDecimals;
+-        uint256 collateralDecimals;
+-        uint256 collateralAssetUnit;
+-        uint256 debtAssetUnit;
+         uint256 collateralAmount;
+         uint256 debtAmountNeeded;
+         uint256 liquidationProtocolFeePercentage;
+         uint256 liquidationProtocolFee;
++        uint256 collateralToLiquidateInBaseCurrency;
++        uint256 collateralAssetPrice;
+     }
+ 
+     /**
+@@ -429,50 +710,38 @@ library LiquidationLogic {
+      * a certain amount of debt asset.
+      * @dev This function needs to be called after all the checks to validate the liquidation have been performed,
+      *   otherwise it might fail.
+-     * @param collateralReserve The data of the collateral reserve
+-     * @param debtReserveCache The cached data of the debt reserve
+-     * @param collateralAsset The address of the underlying asset used as collateral, to receive as result of the liquidation
+-     * @param debtAsset The address of the underlying borrowed asset to be repaid with the liquidation
++     * @param collateralReserveConfiguration The data of the collateral reserve
++     * @param collateralAssetPrice The price of the underlying asset used as collateral
++     * @param collateralAssetUnit The asset units of the collateral
++     * @param debtAssetPrice The price of the underlying borrowed asset to be repaid with the liquidation
++     * @param debtAssetUnit The asset units of the debt
+      * @param debtToCover The debt amount of borrowed `asset` the liquidator wants to cover
+      * @param userCollateralBalance The collateral balance for the specific `collateralAsset` of the user being liquidated
+      * @param liquidationBonus The collateral bonus percentage to receive as result of the liquidation
+      * @return The maximum amount that is possible to liquidate given all the liquidation constraints (user balance, close factor)
+      * @return The amount to repay with the liquidation
+      * @return The fee taken from the liquidation bonus amount to be paid to the protocol
++     * @return The collateral amount to liquidate in the base currency used by the price feed
+      */
+     function _calculateAvailableCollateralToLiquidate(
+-        DataTypes.ReserveData storage collateralReserve,
+-        DataTypes.ReserveCache memory debtReserveCache,
+-        address collateralAsset,
+-        address debtAsset,
++        DataTypes.ReserveConfigurationMap memory collateralReserveConfiguration,
++        uint256 collateralAssetPrice,
++        uint256 collateralAssetUnit,
++        uint256 debtAssetPrice,
++        uint256 debtAssetUnit,
+         uint256 debtToCover,
+         uint256 userCollateralBalance,
+-        uint256 liquidationBonus,
+-        IPriceOracleGetter oracle
+-    ) internal view returns (uint256, uint256, uint256) {
++        uint256 liquidationBonus
++    ) internal pure returns (uint256, uint256, uint256, uint256) {
+         AvailableCollateralToLiquidateLocalVars memory vars;
+-
+-        vars.collateralPrice = oracle.getAssetPrice(collateralAsset);
+-        vars.debtAssetPrice = oracle.getAssetPrice(debtAsset);
+-
+-        vars.collateralDecimals = collateralReserve.configuration.getDecimals();
+-        vars.debtAssetDecimals = debtReserveCache
+-            .reserveConfiguration
+-            .getDecimals();
+-
+-        unchecked {
+-            vars.collateralAssetUnit = 10 ** vars.collateralDecimals;
+-            vars.debtAssetUnit = 10 ** vars.debtAssetDecimals;
+-        }
+-
+-        vars.liquidationProtocolFeePercentage = collateralReserve
+-            .configuration
++        vars.collateralAssetPrice = collateralAssetPrice;
++        vars.liquidationProtocolFeePercentage = collateralReserveConfiguration
+             .getLiquidationProtocolFee();
+ 
+         // This is the base collateral to liquidate based on the given debt to cover
+         vars.baseCollateral =
+-            ((vars.debtAssetPrice * debtToCover * vars.collateralAssetUnit)) /
+-            (vars.collateralPrice * vars.debtAssetUnit);
++            ((debtAssetPrice * debtToCover * collateralAssetUnit)) /
++            (vars.collateralAssetPrice * debtAssetUnit);
+ 
+         vars.maxCollateralToLiquidate = vars.baseCollateral.percentMul(
+             liquidationBonus
+@@ -480,17 +749,19 @@ library LiquidationLogic {
+ 
+         if (vars.maxCollateralToLiquidate > userCollateralBalance) {
+             vars.collateralAmount = userCollateralBalance;
+-            vars.debtAmountNeeded = ((vars.collateralPrice *
++            vars.debtAmountNeeded = ((vars.collateralAssetPrice *
+                 vars.collateralAmount *
+-                vars.debtAssetUnit) /
+-                (vars.debtAssetPrice * vars.collateralAssetUnit)).percentDiv(
+-                    liquidationBonus
+-                );
++                debtAssetUnit) / (debtAssetPrice * collateralAssetUnit))
++                .percentDiv(liquidationBonus);
+         } else {
+             vars.collateralAmount = vars.maxCollateralToLiquidate;
+             vars.debtAmountNeeded = debtToCover;
+         }
+ 
++        vars.collateralToLiquidateInBaseCurrency =
++            (vars.collateralAmount * vars.collateralAssetPrice) /
++            collateralAssetUnit;
++
+         if (vars.liquidationProtocolFeePercentage != 0) {
+             vars.bonusCollateral =
+                 vars.collateralAmount -
+@@ -499,14 +770,61 @@ library LiquidationLogic {
+             vars.liquidationProtocolFee = vars.bonusCollateral.percentMul(
+                 vars.liquidationProtocolFeePercentage
+             );
++            vars.collateralAmount -= vars.liquidationProtocolFee;
++        }
++        return (
++            vars.collateralAmount,
++            vars.debtAmountNeeded,
++            vars.liquidationProtocolFee,
++            vars.collateralToLiquidateInBaseCurrency
++        );
++    }
++
++    /**
++     * @notice Remove a user's bad debt by burning debt tokens.
++     * @dev This function iterates through all active reserves where the user has a debt position,
++     * updates their state, and performs the necessary burn.
++     * @param reservesData The state of all the reserves
++     * @param reservesList The addresses of all the active reserves
++     * @param userConfig The user configuration
++     * @param reservesCount The total number of valid reserves
++     * @param user The user from which the debt will be burned.
++     */
++    function _burnBadDebt(
++        mapping(address => DataTypes.ReserveData) storage reservesData,
++        mapping(uint256 => address) storage reservesList,
++        DataTypes.UserConfigurationMap storage userConfig,
++        uint256 reservesCount,
++        address user
++    ) internal {
++        for (uint256 i; i < reservesCount; i++) {
++            if (!userConfig.isBorrowing(i)) {
++                continue;
++            }
+ 
+-            return (
+-                vars.collateralAmount - vars.liquidationProtocolFee,
+-                vars.debtAmountNeeded,
+-                vars.liquidationProtocolFee
++            address reserveAddress = reservesList[i];
++            if (reserveAddress == address(0)) {
++                continue;
++            }
++
++            DataTypes.ReserveData storage currentReserve = reservesData[
++                reserveAddress
++            ];
++            DataTypes.ReserveCache memory reserveCache = currentReserve.cache();
++            if (!reserveCache.reserveConfiguration.getActive()) continue;
++
++            currentReserve.updateState(reserveCache);
++
++            _burnDebtTokens(
++                reserveCache,
++                currentReserve,
++                userConfig,
++                user,
++                reserveAddress,
++                IERC20(reserveCache.variableDebtTokenAddress).balanceOf(user),
++                0,
++                true
+             );
+-        } else {
+-            return (vars.collateralAmount, vars.debtAmountNeeded, 0);
+         }
+     }
+ }
+diff --git a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/ReserveConfiguration.sol b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/ReserveConfiguration.sol
+index e0713b0..a829da8 100644
+--- a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/ReserveConfiguration.sol
++++ b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/ReserveConfiguration.sol
+@@ -10,32 +10,33 @@ import {DataTypes} from "../types/DataTypes.sol";
+  * @notice Implements the bitmap logic to handle the reserve configuration
+  */
+ library ReserveConfiguration {
+-    uint256 internal constant LTV_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000; // prettier-ignore
++    uint256 internal constant LTV_MASK = 0x000000000000000000000000000000000000000000000000000000000000FFFF; // prettier-ignore
+     uint256 internal constant LIQUIDATION_THRESHOLD_MASK =
+-        0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFF; // prettier-ignore
++        0x00000000000000000000000000000000000000000000000000000000FFFF0000; // prettier-ignore
+     uint256 internal constant LIQUIDATION_BONUS_MASK =
+-        0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFF; // prettier-ignore
+-    uint256 internal constant DECIMALS_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFF; // prettier-ignore
+-    uint256 internal constant ACTIVE_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFF; // prettier-ignore
+-    uint256 internal constant FROZEN_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDFFFFFFFFFFFFFF; // prettier-ignore
+-    uint256 internal constant BORROWING_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBFFFFFFFFFFFFFF; // prettier-ignore
+-    uint256 internal constant PAUSED_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFF; // prettier-ignore
++        0x0000000000000000000000000000000000000000000000000000FFFF00000000; // prettier-ignore
++    uint256 internal constant DECIMALS_MASK = 0x00000000000000000000000000000000000000000000000000FF000000000000; // prettier-ignore
++    uint256 internal constant ACTIVE_MASK = 0x0000000000000000000000000000000000000000000000000100000000000000; // prettier-ignore
++    uint256 internal constant FROZEN_MASK = 0x0000000000000000000000000000000000000000000000000200000000000000; // prettier-ignore
++    uint256 internal constant BORROWING_MASK = 0x0000000000000000000000000000000000000000000000000400000000000000; // prettier-ignore
++    // @notice there is an unoccupied hole of 1 bit at position 59 from pre 3.2 stableBorrowRateEnabled
++    uint256 internal constant PAUSED_MASK = 0x0000000000000000000000000000000000000000000000001000000000000000; // prettier-ignore
+     uint256 internal constant BORROWABLE_IN_ISOLATION_MASK =
+-        0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDFFFFFFFFFFFFFFF; // prettier-ignore
+-    uint256 internal constant SILOED_BORROWING_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBFFFFFFFFFFFFFFF; // prettier-ignore
++        0x0000000000000000000000000000000000000000000000002000000000000000; // prettier-ignore
++    uint256 internal constant SILOED_BORROWING_MASK = 0x0000000000000000000000000000000000000000000000004000000000000000; // prettier-ignore
+     uint256 internal constant FLASHLOAN_ENABLED_MASK =
+-        0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF; // prettier-ignore
+-    uint256 internal constant RESERVE_FACTOR_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFF; // prettier-ignore
+-    uint256 internal constant BORROW_CAP_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000FFFFFFFFFFFFFFFFFFFF; // prettier-ignore
+-    uint256 internal constant SUPPLY_CAP_MASK = 0xFFFFFFFFFFFFFFFFFFFFFFFFFF000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFF; // prettier-ignore
++        0x0000000000000000000000000000000000000000000000008000000000000000; // prettier-ignore
++    uint256 internal constant RESERVE_FACTOR_MASK = 0x00000000000000000000000000000000000000000000FFFF0000000000000000; // prettier-ignore
++    uint256 internal constant BORROW_CAP_MASK = 0x00000000000000000000000000000000000FFFFFFFFF00000000000000000000; // prettier-ignore
++    uint256 internal constant SUPPLY_CAP_MASK = 0x00000000000000000000000000FFFFFFFFF00000000000000000000000000000; // prettier-ignore
+     uint256 internal constant LIQUIDATION_PROTOCOL_FEE_MASK =
+-        0xFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; // prettier-ignore
++        0x0000000000000000000000FFFF00000000000000000000000000000000000000; // prettier-ignore
+     //@notice there is an unoccupied hole of 8 bits from 168 to 176 left from pre 3.2 eModeCategory
+     uint256 internal constant UNBACKED_MINT_CAP_MASK =
+-        0xFFFFFFFFFFF000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; // prettier-ignore
+-    uint256 internal constant DEBT_CEILING_MASK = 0xF0000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; // prettier-ignore
++        0x00000000000FFFFFFFFF00000000000000000000000000000000000000000000; // prettier-ignore
++    uint256 internal constant DEBT_CEILING_MASK = 0x0FFFFFFFFFF00000000000000000000000000000000000000000000000000000; // prettier-ignore
+     uint256 internal constant VIRTUAL_ACC_ACTIVE_MASK =
+-        0xEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; // prettier-ignore
++        0x1000000000000000000000000000000000000000000000000000000000000000; // prettier-ignore
+ 
+     /// @dev For the LTV, the start bit is 0 (up to 15), hence no bitshifting is needed
+     uint256 internal constant LIQUIDATION_THRESHOLD_START_BIT_POSITION = 16;
+@@ -82,7 +83,7 @@ library ReserveConfiguration {
+     ) internal pure {
+         require(ltv <= MAX_VALID_LTV, Errors.INVALID_LTV);
+ 
+-        self.data = (self.data & LTV_MASK) | ltv;
++        self.data = (self.data & ~LTV_MASK) | ltv;
+     }
+ 
+     /**
+@@ -93,7 +94,7 @@ library ReserveConfiguration {
+     function getLtv(
+         DataTypes.ReserveConfigurationMap memory self
+     ) internal pure returns (uint256) {
+-        return self.data & ~LTV_MASK;
++        return self.data & LTV_MASK;
+     }
+ 
+     /**
+@@ -111,7 +112,7 @@ library ReserveConfiguration {
+         );
+ 
+         self.data =
+-            (self.data & LIQUIDATION_THRESHOLD_MASK) |
++            (self.data & ~LIQUIDATION_THRESHOLD_MASK) |
+             (threshold << LIQUIDATION_THRESHOLD_START_BIT_POSITION);
+     }
+ 
+@@ -124,7 +125,7 @@ library ReserveConfiguration {
+         DataTypes.ReserveConfigurationMap memory self
+     ) internal pure returns (uint256) {
+         return
+-            (self.data & ~LIQUIDATION_THRESHOLD_MASK) >>
++            (self.data & LIQUIDATION_THRESHOLD_MASK) >>
+             LIQUIDATION_THRESHOLD_START_BIT_POSITION;
+     }
+ 
+@@ -140,7 +141,7 @@ library ReserveConfiguration {
+         require(bonus <= MAX_VALID_LIQUIDATION_BONUS, Errors.INVALID_LIQ_BONUS);
+ 
+         self.data =
+-            (self.data & LIQUIDATION_BONUS_MASK) |
++            (self.data & ~LIQUIDATION_BONUS_MASK) |
+             (bonus << LIQUIDATION_BONUS_START_BIT_POSITION);
+     }
+ 
+@@ -153,7 +154,7 @@ library ReserveConfiguration {
+         DataTypes.ReserveConfigurationMap memory self
+     ) internal pure returns (uint256) {
+         return
+-            (self.data & ~LIQUIDATION_BONUS_MASK) >>
++            (self.data & LIQUIDATION_BONUS_MASK) >>
+             LIQUIDATION_BONUS_START_BIT_POSITION;
+     }
+ 
+@@ -169,7 +170,7 @@ library ReserveConfiguration {
+         require(decimals <= MAX_VALID_DECIMALS, Errors.INVALID_DECIMALS);
+ 
+         self.data =
+-            (self.data & DECIMALS_MASK) |
++            (self.data & ~DECIMALS_MASK) |
+             (decimals << RESERVE_DECIMALS_START_BIT_POSITION);
+     }
+ 
+@@ -182,7 +183,7 @@ library ReserveConfiguration {
+         DataTypes.ReserveConfigurationMap memory self
+     ) internal pure returns (uint256) {
+         return
+-            (self.data & ~DECIMALS_MASK) >> RESERVE_DECIMALS_START_BIT_POSITION;
++            (self.data & DECIMALS_MASK) >> RESERVE_DECIMALS_START_BIT_POSITION;
+     }
+ 
+     /**
+@@ -195,7 +196,7 @@ library ReserveConfiguration {
+         bool active
+     ) internal pure {
+         self.data =
+-            (self.data & ACTIVE_MASK) |
++            (self.data & ~ACTIVE_MASK) |
+             (uint256(active ? 1 : 0) << IS_ACTIVE_START_BIT_POSITION);
+     }
+ 
+@@ -207,7 +208,7 @@ library ReserveConfiguration {
+     function getActive(
+         DataTypes.ReserveConfigurationMap memory self
+     ) internal pure returns (bool) {
+-        return (self.data & ~ACTIVE_MASK) != 0;
++        return (self.data & ACTIVE_MASK) != 0;
+     }
+ 
+     /**
+@@ -220,7 +221,7 @@ library ReserveConfiguration {
+         bool frozen
+     ) internal pure {
+         self.data =
+-            (self.data & FROZEN_MASK) |
++            (self.data & ~FROZEN_MASK) |
+             (uint256(frozen ? 1 : 0) << IS_FROZEN_START_BIT_POSITION);
+     }
+ 
+@@ -232,7 +233,7 @@ library ReserveConfiguration {
+     function getFrozen(
+         DataTypes.ReserveConfigurationMap memory self
+     ) internal pure returns (bool) {
+-        return (self.data & ~FROZEN_MASK) != 0;
++        return (self.data & FROZEN_MASK) != 0;
+     }
+ 
+     /**
+@@ -245,7 +246,7 @@ library ReserveConfiguration {
+         bool paused
+     ) internal pure {
+         self.data =
+-            (self.data & PAUSED_MASK) |
++            (self.data & ~PAUSED_MASK) |
+             (uint256(paused ? 1 : 0) << IS_PAUSED_START_BIT_POSITION);
+     }
+ 
+@@ -257,7 +258,7 @@ library ReserveConfiguration {
+     function getPaused(
+         DataTypes.ReserveConfigurationMap memory self
+     ) internal pure returns (bool) {
+-        return (self.data & ~PAUSED_MASK) != 0;
++        return (self.data & PAUSED_MASK) != 0;
+     }
+ 
+     /**
+@@ -274,7 +275,7 @@ library ReserveConfiguration {
+         bool borrowable
+     ) internal pure {
+         self.data =
+-            (self.data & BORROWABLE_IN_ISOLATION_MASK) |
++            (self.data & ~BORROWABLE_IN_ISOLATION_MASK) |
+             (uint256(borrowable ? 1 : 0) <<
+                 BORROWABLE_IN_ISOLATION_START_BIT_POSITION);
+     }
+@@ -291,7 +292,7 @@ library ReserveConfiguration {
+     function getBorrowableInIsolation(
+         DataTypes.ReserveConfigurationMap memory self
+     ) internal pure returns (bool) {
+-        return (self.data & ~BORROWABLE_IN_ISOLATION_MASK) != 0;
++        return (self.data & BORROWABLE_IN_ISOLATION_MASK) != 0;
+     }
+ 
+     /**
+@@ -305,7 +306,7 @@ library ReserveConfiguration {
+         bool siloed
+     ) internal pure {
+         self.data =
+-            (self.data & SILOED_BORROWING_MASK) |
++            (self.data & ~SILOED_BORROWING_MASK) |
+             (uint256(siloed ? 1 : 0) << SILOED_BORROWING_START_BIT_POSITION);
+     }
+ 
+@@ -318,7 +319,7 @@ library ReserveConfiguration {
+     function getSiloedBorrowing(
+         DataTypes.ReserveConfigurationMap memory self
+     ) internal pure returns (bool) {
+-        return (self.data & ~SILOED_BORROWING_MASK) != 0;
++        return (self.data & SILOED_BORROWING_MASK) != 0;
+     }
+ 
+     /**
+@@ -331,7 +332,7 @@ library ReserveConfiguration {
+         bool enabled
+     ) internal pure {
+         self.data =
+-            (self.data & BORROWING_MASK) |
++            (self.data & ~BORROWING_MASK) |
+             (uint256(enabled ? 1 : 0) << BORROWING_ENABLED_START_BIT_POSITION);
+     }
+ 
+@@ -343,7 +344,7 @@ library ReserveConfiguration {
+     function getBorrowingEnabled(
+         DataTypes.ReserveConfigurationMap memory self
+     ) internal pure returns (bool) {
+-        return (self.data & ~BORROWING_MASK) != 0;
++        return (self.data & BORROWING_MASK) != 0;
+     }
+ 
+     /**
+@@ -361,7 +362,7 @@ library ReserveConfiguration {
+         );
+ 
+         self.data =
+-            (self.data & RESERVE_FACTOR_MASK) |
++            (self.data & ~RESERVE_FACTOR_MASK) |
+             (reserveFactor << RESERVE_FACTOR_START_BIT_POSITION);
+     }
+ 
+@@ -374,7 +375,7 @@ library ReserveConfiguration {
+         DataTypes.ReserveConfigurationMap memory self
+     ) internal pure returns (uint256) {
+         return
+-            (self.data & ~RESERVE_FACTOR_MASK) >>
++            (self.data & RESERVE_FACTOR_MASK) >>
+             RESERVE_FACTOR_START_BIT_POSITION;
+     }
+ 
+@@ -390,7 +391,7 @@ library ReserveConfiguration {
+         require(borrowCap <= MAX_VALID_BORROW_CAP, Errors.INVALID_BORROW_CAP);
+ 
+         self.data =
+-            (self.data & BORROW_CAP_MASK) |
++            (self.data & ~BORROW_CAP_MASK) |
+             (borrowCap << BORROW_CAP_START_BIT_POSITION);
+     }
+ 
+@@ -402,7 +403,7 @@ library ReserveConfiguration {
+     function getBorrowCap(
+         DataTypes.ReserveConfigurationMap memory self
+     ) internal pure returns (uint256) {
+-        return (self.data & ~BORROW_CAP_MASK) >> BORROW_CAP_START_BIT_POSITION;
++        return (self.data & BORROW_CAP_MASK) >> BORROW_CAP_START_BIT_POSITION;
+     }
+ 
+     /**
+@@ -417,7 +418,7 @@ library ReserveConfiguration {
+         require(supplyCap <= MAX_VALID_SUPPLY_CAP, Errors.INVALID_SUPPLY_CAP);
+ 
+         self.data =
+-            (self.data & SUPPLY_CAP_MASK) |
++            (self.data & ~SUPPLY_CAP_MASK) |
+             (supplyCap << SUPPLY_CAP_START_BIT_POSITION);
+     }
+ 
+@@ -429,7 +430,7 @@ library ReserveConfiguration {
+     function getSupplyCap(
+         DataTypes.ReserveConfigurationMap memory self
+     ) internal pure returns (uint256) {
+-        return (self.data & ~SUPPLY_CAP_MASK) >> SUPPLY_CAP_START_BIT_POSITION;
++        return (self.data & SUPPLY_CAP_MASK) >> SUPPLY_CAP_START_BIT_POSITION;
+     }
+ 
+     /**
+@@ -444,7 +445,7 @@ library ReserveConfiguration {
+         require(ceiling <= MAX_VALID_DEBT_CEILING, Errors.INVALID_DEBT_CEILING);
+ 
+         self.data =
+-            (self.data & DEBT_CEILING_MASK) |
++            (self.data & ~DEBT_CEILING_MASK) |
+             (ceiling << DEBT_CEILING_START_BIT_POSITION);
+     }
+ 
+@@ -457,7 +458,7 @@ library ReserveConfiguration {
+         DataTypes.ReserveConfigurationMap memory self
+     ) internal pure returns (uint256) {
+         return
+-            (self.data & ~DEBT_CEILING_MASK) >> DEBT_CEILING_START_BIT_POSITION;
++            (self.data & DEBT_CEILING_MASK) >> DEBT_CEILING_START_BIT_POSITION;
+     }
+ 
+     /**
+@@ -475,7 +476,7 @@ library ReserveConfiguration {
+         );
+ 
+         self.data =
+-            (self.data & LIQUIDATION_PROTOCOL_FEE_MASK) |
++            (self.data & ~LIQUIDATION_PROTOCOL_FEE_MASK) |
+             (liquidationProtocolFee <<
+                 LIQUIDATION_PROTOCOL_FEE_START_BIT_POSITION);
+     }
+@@ -489,7 +490,7 @@ library ReserveConfiguration {
+         DataTypes.ReserveConfigurationMap memory self
+     ) internal pure returns (uint256) {
+         return
+-            (self.data & ~LIQUIDATION_PROTOCOL_FEE_MASK) >>
++            (self.data & LIQUIDATION_PROTOCOL_FEE_MASK) >>
+             LIQUIDATION_PROTOCOL_FEE_START_BIT_POSITION;
+     }
+ 
+@@ -508,7 +509,7 @@ library ReserveConfiguration {
+         );
+ 
+         self.data =
+-            (self.data & UNBACKED_MINT_CAP_MASK) |
++            (self.data & ~UNBACKED_MINT_CAP_MASK) |
+             (unbackedMintCap << UNBACKED_MINT_CAP_START_BIT_POSITION);
+     }
+ 
+@@ -521,7 +522,7 @@ library ReserveConfiguration {
+         DataTypes.ReserveConfigurationMap memory self
+     ) internal pure returns (uint256) {
+         return
+-            (self.data & ~UNBACKED_MINT_CAP_MASK) >>
++            (self.data & UNBACKED_MINT_CAP_MASK) >>
+             UNBACKED_MINT_CAP_START_BIT_POSITION;
+     }
+ 
+@@ -535,7 +536,7 @@ library ReserveConfiguration {
+         bool flashLoanEnabled
+     ) internal pure {
+         self.data =
+-            (self.data & FLASHLOAN_ENABLED_MASK) |
++            (self.data & ~FLASHLOAN_ENABLED_MASK) |
+             (uint256(flashLoanEnabled ? 1 : 0) <<
+                 FLASHLOAN_ENABLED_START_BIT_POSITION);
+     }
+@@ -548,7 +549,7 @@ library ReserveConfiguration {
+     function getFlashLoanEnabled(
+         DataTypes.ReserveConfigurationMap memory self
+     ) internal pure returns (bool) {
+-        return (self.data & ~FLASHLOAN_ENABLED_MASK) != 0;
++        return (self.data & FLASHLOAN_ENABLED_MASK) != 0;
+     }
+ 
+     /**
+@@ -561,21 +562,24 @@ library ReserveConfiguration {
+         bool active
+     ) internal pure {
+         self.data =
+-            (self.data & VIRTUAL_ACC_ACTIVE_MASK) |
++            (self.data & ~VIRTUAL_ACC_ACTIVE_MASK) |
+             (uint256(active ? 1 : 0) << VIRTUAL_ACC_START_BIT_POSITION);
+     }
+ 
+     /**
+      * @notice Gets the virtual account active/not state of the reserve
+      * @dev The state should be true for all normal assets and should be false
+-     *  only in special cases (ex. GHO) where an asset is minted instead of supplied.
++     * Virtual accounting being disabled means that the asset:
++     * - is GHO
++     * - can never be supplied
++     * - the interest rate strategy is not influenced by the virtual balance
+      * @param self The reserve configuration
+      * @return The active state
+      */
+     function getIsVirtualAccActive(
+         DataTypes.ReserveConfigurationMap memory self
+     ) internal pure returns (bool) {
+-        return (self.data & ~VIRTUAL_ACC_ACTIVE_MASK) != 0;
++        return (self.data & VIRTUAL_ACC_ACTIVE_MASK) != 0;
+     }
+ 
+     /**
+@@ -592,10 +596,10 @@ library ReserveConfiguration {
+         uint256 dataLocal = self.data;
+ 
+         return (
+-            (dataLocal & ~ACTIVE_MASK) != 0,
+-            (dataLocal & ~FROZEN_MASK) != 0,
+-            (dataLocal & ~BORROWING_MASK) != 0,
+-            (dataLocal & ~PAUSED_MASK) != 0
++            (dataLocal & ACTIVE_MASK) != 0,
++            (dataLocal & FROZEN_MASK) != 0,
++            (dataLocal & BORROWING_MASK) != 0,
++            (dataLocal & PAUSED_MASK) != 0
+         );
+     }
+ 
+@@ -614,13 +618,13 @@ library ReserveConfiguration {
+         uint256 dataLocal = self.data;
+ 
+         return (
+-            dataLocal & ~LTV_MASK,
+-            (dataLocal & ~LIQUIDATION_THRESHOLD_MASK) >>
++            dataLocal & LTV_MASK,
++            (dataLocal & LIQUIDATION_THRESHOLD_MASK) >>
+                 LIQUIDATION_THRESHOLD_START_BIT_POSITION,
+-            (dataLocal & ~LIQUIDATION_BONUS_MASK) >>
++            (dataLocal & LIQUIDATION_BONUS_MASK) >>
+                 LIQUIDATION_BONUS_START_BIT_POSITION,
+-            (dataLocal & ~DECIMALS_MASK) >> RESERVE_DECIMALS_START_BIT_POSITION,
+-            (dataLocal & ~RESERVE_FACTOR_MASK) >>
++            (dataLocal & DECIMALS_MASK) >> RESERVE_DECIMALS_START_BIT_POSITION,
++            (dataLocal & RESERVE_FACTOR_MASK) >>
+                 RESERVE_FACTOR_START_BIT_POSITION
+         );
+     }
+@@ -637,8 +641,8 @@ library ReserveConfiguration {
+         uint256 dataLocal = self.data;
+ 
+         return (
+-            (dataLocal & ~BORROW_CAP_MASK) >> BORROW_CAP_START_BIT_POSITION,
+-            (dataLocal & ~SUPPLY_CAP_MASK) >> SUPPLY_CAP_START_BIT_POSITION
++            (dataLocal & BORROW_CAP_MASK) >> BORROW_CAP_START_BIT_POSITION,
++            (dataLocal & SUPPLY_CAP_MASK) >> SUPPLY_CAP_START_BIT_POSITION
+         );
+     }
+ }
+diff --git a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/ReserveLogic.sol b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/ReserveLogic.sol
+index 54e3c0e..5feeea6 100644
+--- a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/ReserveLogic.sol
++++ b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/ReserveLogic.sol
+@@ -101,7 +101,9 @@ library ReserveLogic {
+     ) internal {
+         // If time didn't pass since last stored timestamp, skip state update
+         //solium-disable-next-line
+-        if (reserve.lastUpdateTimestamp == uint40(block.timestamp)) {
++        if (
++            reserveCache.reserveLastUpdateTimestamp == uint40(block.timestamp)
++        ) {
+             return;
+         }
+ 
+@@ -110,6 +112,7 @@ library ReserveLogic {
+ 
+         //solium-disable-next-line
+         reserve.lastUpdateTimestamp = uint40(block.timestamp);
++        reserveCache.reserveLastUpdateTimestamp = uint40(block.timestamp);
+     }
+ 
+     /**
+@@ -183,14 +186,14 @@ library ReserveLogic {
+         ) = IReserveInterestRateStrategy(reserve.interestRateStrategyAddress)
+                 .calculateInterestRates(
+                     DataTypes.CalculateInterestRatesParams({
+-                        unbacked: reserve.unbacked,
++                        unbacked: reserve.unbacked + reserve.deficit,
+                         liquidityAdded: liquidityAdded,
+                         liquidityTaken: liquidityTaken,
+                         totalDebt: totalVariableDebt,
+                         reserveFactor: reserveCache.reserveFactor,
+                         reserve: reserveAddress,
+-                        usingVirtualBalance: reserve
+-                            .configuration
++                        usingVirtualBalance: reserveCache
++                            .reserveConfiguration
+                             .getIsVirtualAccActive(),
+                         virtualUnderlyingBalance: reserve
+                             .virtualUnderlyingBalance
+@@ -201,7 +204,7 @@ library ReserveLogic {
+         reserve.currentVariableBorrowRate = nextVariableRate.toUint128();
+ 
+         // Only affect virtual balance if the reserve uses it
+-        if (reserve.configuration.getIsVirtualAccActive()) {
++        if (reserveCache.reserveConfiguration.getIsVirtualAccActive()) {
+             if (liquidityAdded > 0) {
+                 reserve.virtualUnderlyingBalance += liquidityAdded.toUint128();
+             }
+diff --git a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/ValidationLogic.sol b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/ValidationLogic.sol
+index 64aa0db..c50d1f5 100644
+--- a/tmp/100_0x80d16970B31243Fe67DaB028115f3E4c3E3510Ad_flat/ValidationLogic.sol
++++ b/tmp/100_0x4731bF01583F991278692E8727d0700a00A1fBBf_flat/ValidationLogic.sol
+@@ -4,8 +4,6 @@ pragma solidity ^0.8.10;
+ import {IERC20} from "../../../dependencies/openzeppelin/contracts/IERC20.sol";
+ import {Address} from "../../../dependencies/openzeppelin/contracts/Address.sol";
+ import {GPv2SafeERC20} from "../../../dependencies/gnosis/contracts/GPv2SafeERC20.sol";
+-import {IReserveInterestRateStrategy} from "../../../interfaces/IReserveInterestRateStrategy.sol";
+-import {IScaledBalanceToken} from "../../../interfaces/IScaledBalanceToken.sol";
+ import {IPriceOracleGetter} from "../../../interfaces/IPriceOracleGetter.sol";
+ import {IAToken} from "../../../interfaces/IAToken.sol";
+ import {IPriceOracleSentinel} from "../../../interfaces/IPriceOracleSentinel.sol";
+@@ -24,7 +22,7 @@ import {SafeCast} from "../../../dependencies/openzeppelin/contracts/SafeCast.so
+ import {IncentivizedERC20} from "../../tokenization/base/IncentivizedERC20.sol";
+ 
+ /**
+- * @title ReserveLogic library
++ * @title ValidationLogic library
+  * @author Aave
+  * @notice Implements functions to validate the different actions of the protocol
+  */
