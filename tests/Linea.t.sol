@@ -8,7 +8,7 @@ import {DeploymentLibrary} from '../scripts/Deploy.s.sol';
 import {Payloads} from './Payloads.sol';
 import {UpgradePayload} from '../src/contracts/UpgradePayload.sol';
 
-contract LineaTest is UpgradeTest('linea', 15493477) {
+contract LineaTest is UpgradeTest('linea', 16145068) {
   function _getPayload() internal virtual override returns (address) {
     return DeploymentLibrary._deployLinea();
   }
@@ -18,7 +18,6 @@ contract LineaTest is UpgradeTest('linea', 15493477) {
   }
 
   function test_diff() external virtual override {
-    GovV3Helpers.executePayload(vm, 3);
     UpgradePayload payload = UpgradePayload(_getTestPayload());
     IPoolAddressesProvider addressesProvider = payload.POOL_ADDRESSES_PROVIDER();
     IPool pool = IPool(addressesProvider.getPool());
