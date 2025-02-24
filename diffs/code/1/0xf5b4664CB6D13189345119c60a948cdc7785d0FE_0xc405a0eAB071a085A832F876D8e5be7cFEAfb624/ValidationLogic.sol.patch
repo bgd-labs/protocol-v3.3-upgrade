@@ -1,7 +1,7 @@
-Index: lib/aave-v3-origin/src/contracts/protocol/libraries/logic/ValidationLogic.sol
+Index: ValidationLogic.sol
 ===================================================================
---- lib/aave-v3-origin/src/contracts/protocol/libraries/logic/ValidationLogic.sol
-+++ lib/aave-v3-origin/src/contracts/protocol/libraries/logic/ValidationLogic.sol
+--- ValidationLogic.sol
++++ ValidationLogic.sol
 @@ -3,10 +3,8 @@
  
  import {IERC20} from "../../../dependencies/openzeppelin/contracts/IERC20.sol";

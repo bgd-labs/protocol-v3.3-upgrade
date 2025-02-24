@@ -1,6 +1,7 @@
+Index: AaveProtocolDataProvider.sol
 ===================================================================
---- lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/helpers/AaveProtocolDataProvider.sol
-+++ lib/aave-v3-origin/src/contracts/helpers/AaveProtocolDataProvider.sol
+--- AaveProtocolDataProvider.sol
++++ AaveProtocolDataProvider.sol
 @@ -78,13 +78,12 @@
          IPool pool = IPool(ADDRESSES_PROVIDER.getPool());
          address[] memory reserves = pool.getReservesList();

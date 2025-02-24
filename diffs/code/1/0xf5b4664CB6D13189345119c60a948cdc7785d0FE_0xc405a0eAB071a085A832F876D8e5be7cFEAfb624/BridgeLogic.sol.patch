@@ -1,7 +1,7 @@
-Index: lib/aave-v3-origin/src/contracts/protocol/libraries/logic/BridgeLogic.sol
+Index: BridgeLogic.sol
 ===================================================================
---- lib/aave-v3-origin/src/contracts/protocol/libraries/logic/BridgeLogic.sol
-+++ lib/aave-v3-origin/src/contracts/protocol/libraries/logic/BridgeLogic.sol
+--- BridgeLogic.sol
++++ BridgeLogic.sol
 @@ -13,8 +13,13 @@
  import {Errors} from "../helpers/Errors.sol";
  import {ValidationLogic} from "./ValidationLogic.sol";

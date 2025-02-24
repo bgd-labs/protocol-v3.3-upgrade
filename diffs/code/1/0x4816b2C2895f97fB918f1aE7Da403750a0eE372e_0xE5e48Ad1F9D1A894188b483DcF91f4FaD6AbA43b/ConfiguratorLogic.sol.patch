@@ -1,6 +1,7 @@
+Index: ConfiguratorLogic.sol
 ===================================================================
---- lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/logic/ConfiguratorLogic.sol
-+++ lib/aave-v3-origin/src/contracts/protocol/libraries/logic/ConfiguratorLogic.sol
+--- ConfiguratorLogic.sol
++++ ConfiguratorLogic.sol
 @@ -126,14 +126,13 @@
      function executeUpdateAToken(
          IPool cachedPool,

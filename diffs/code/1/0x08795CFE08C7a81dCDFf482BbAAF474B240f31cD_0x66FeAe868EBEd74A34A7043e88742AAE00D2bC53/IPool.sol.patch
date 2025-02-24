@@ -1,6 +1,7 @@
+Index: IPool.sol
 ===================================================================
---- lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPool.sol
-+++ lib/aave-v3-origin/src/contracts/interfaces/IPool.sol
+--- IPool.sol
++++ IPool.sol
 @@ -204,15 +204,39 @@
          uint256 variableBorrowIndex
      );

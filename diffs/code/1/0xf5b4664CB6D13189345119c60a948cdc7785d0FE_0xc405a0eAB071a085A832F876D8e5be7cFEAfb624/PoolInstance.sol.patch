@@ -1,7 +1,7 @@
-Index: lib/aave-v3-origin/src/contracts/instances/PoolInstance.sol
+Index: PoolInstance.sol
 ===================================================================
---- lib/aave-v3-origin/src/contracts/instances/PoolInstance.sol
-+++ lib/aave-v3-origin/src/contracts/instances/PoolInstance.sol
+--- PoolInstance.sol
++++ PoolInstance.sol
 @@ -5,17 +5,17 @@
  import {IPoolAddressesProvider} from "../interfaces/IPoolAddressesProvider.sol";
  import {Errors} from "../protocol/libraries/helpers/Errors.sol";

@@ -1,7 +1,7 @@
-Index: lib/aave-v3-origin/src/contracts/protocol/pool/L2Pool.sol
+Index: L2Pool.sol
 ===================================================================
---- lib/aave-v3-origin/src/contracts/protocol/pool/L2Pool.sol
-+++ lib/aave-v3-origin/src/contracts/protocol/pool/L2Pool.sol
+--- L2Pool.sol
++++ L2Pool.sol
 @@ -1,9 +1,8 @@
  // SPDX-License-Identifier: BUSL-1.1
  pragma solidity ^0.8.10;

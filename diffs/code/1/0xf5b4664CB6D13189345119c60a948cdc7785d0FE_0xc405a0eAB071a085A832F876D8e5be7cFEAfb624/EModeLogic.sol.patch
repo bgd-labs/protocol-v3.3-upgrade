@@ -1,7 +1,7 @@
-Index: lib/aave-v3-origin/src/contracts/protocol/libraries/logic/EModeLogic.sol
+Index: EModeLogic.sol
 ===================================================================
---- lib/aave-v3-origin/src/contracts/protocol/libraries/logic/EModeLogic.sol
-+++ lib/aave-v3-origin/src/contracts/protocol/libraries/logic/EModeLogic.sol
+--- EModeLogic.sol
++++ EModeLogic.sol
 @@ -2,9 +2,8 @@
  pragma solidity ^0.8.10;
  

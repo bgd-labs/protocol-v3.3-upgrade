@@ -1,7 +1,7 @@
-Index: lib/aave-v3-origin/src/contracts/protocol/libraries/logic/ReserveLogic.sol
+Index: ReserveLogic.sol
 ===================================================================
---- lib/aave-v3-origin/src/contracts/protocol/libraries/logic/ReserveLogic.sol
-+++ lib/aave-v3-origin/src/contracts/protocol/libraries/logic/ReserveLogic.sol
+--- ReserveLogic.sol
++++ ReserveLogic.sol
 @@ -100,17 +100,20 @@
          DataTypes.ReserveCache memory reserveCache
      ) internal {

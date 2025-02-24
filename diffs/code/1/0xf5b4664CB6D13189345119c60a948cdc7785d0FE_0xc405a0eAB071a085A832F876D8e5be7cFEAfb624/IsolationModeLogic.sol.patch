@@ -1,7 +1,7 @@
-Index: lib/aave-v3-origin/src/contracts/protocol/libraries/logic/IsolationModeLogic.sol
+Index: IsolationModeLogic.sol
 ===================================================================
---- lib/aave-v3-origin/src/contracts/protocol/libraries/logic/IsolationModeLogic.sol
-+++ lib/aave-v3-origin/src/contracts/protocol/libraries/logic/IsolationModeLogic.sol
+--- IsolationModeLogic.sol
++++ IsolationModeLogic.sol
 @@ -22,9 +22,9 @@
          uint256 totalDebt
      );

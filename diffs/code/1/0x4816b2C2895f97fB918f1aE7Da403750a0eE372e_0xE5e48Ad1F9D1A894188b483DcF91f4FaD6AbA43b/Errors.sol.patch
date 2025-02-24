@@ -1,6 +1,7 @@
+Index: Errors.sol
 ===================================================================
---- lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/protocol/libraries/helpers/Errors.sol
-+++ lib/aave-v3-origin/src/contracts/protocol/libraries/helpers/Errors.sol
+--- Errors.sol
++++ Errors.sol
 @@ -100,5 +100,9 @@
      string public constant LIQUIDATION_GRACE_SENTINEL_CHECK_FAILED = "97"; // 'Liquidation grace sentinel validation failed'
      string public constant INVALID_GRACE_PERIOD = "98"; // Grace period above a valid range
