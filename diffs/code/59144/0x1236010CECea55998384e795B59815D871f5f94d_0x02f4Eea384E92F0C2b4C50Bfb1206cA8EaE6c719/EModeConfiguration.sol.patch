@@ -1,0 +1,13 @@
+===================================================================
+--- src/contracts/protocol/libraries/configuration/EModeConfiguration.sol
++++ lib/aave-v3-origin/src/contracts/protocol/libraries/configuration/EModeConfiguration.sol
+@@ -1,9 +1,8 @@
+ // SPDX-License-Identifier: MIT
+ pragma solidity ^0.8.0;
+ 
+ import {Errors} from "../helpers/Errors.sol";
+-import {DataTypes} from "../types/DataTypes.sol";
+ import {ReserveConfiguration} from "./ReserveConfiguration.sol";
+ 
+ /**
+  * @title EModeConfiguration library

@@ -1,0 +1,17 @@
+===================================================================
+--- lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/instances/PoolConfiguratorInstance.sol
++++ lib/aave-v3-origin/src/contracts/instances/PoolConfiguratorInstance.sol
+@@ -1,11 +1,11 @@
+-// SPDX-License-Identifier: MIT
++// SPDX-License-Identifier: BUSL-1.1
+ pragma solidity ^0.8.0;
+ 
+ import {PoolConfigurator, IPoolAddressesProvider, IPool, VersionedInitializable} from "../protocol/pool/PoolConfigurator.sol";
+ 
+ contract PoolConfiguratorInstance is PoolConfigurator {
+-    uint256 public constant CONFIGURATOR_REVISION = 4;
++    uint256 public constant CONFIGURATOR_REVISION = 5;
+ 
+     /// @inheritdoc VersionedInitializable
+     function getRevision() internal pure virtual override returns (uint256) {
+         return CONFIGURATOR_REVISION;

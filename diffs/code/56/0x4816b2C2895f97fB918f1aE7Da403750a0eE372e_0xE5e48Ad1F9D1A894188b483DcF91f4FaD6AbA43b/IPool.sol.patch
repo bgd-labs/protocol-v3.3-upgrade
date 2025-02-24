@@ -1,0 +1,117 @@
+===================================================================
+--- lib/aave-helpers/lib/aave-address-book/lib/aave-v3-origin/src/contracts/interfaces/IPool.sol
++++ lib/aave-v3-origin/src/contracts/interfaces/IPool.sol
+@@ -204,15 +204,39 @@
+         uint256 variableBorrowIndex
+     );
+ 
+     /**
++     * @dev Emitted when the deficit of a reserve is covered.
++     * @param reserve The address of the underlying asset of the reserve
++     * @param caller The caller that triggered the DeficitCovered event
++     * @param amountCovered The amount of deficit covered
++     */
++    event DeficitCovered(
++        address indexed reserve,
++        address caller,
++        uint256 amountCovered
++    );
++
++    /**
+      * @dev Emitted when the protocol treasury receives minted aTokens from the accrued interest.
+      * @param reserve The address of the reserve
+      * @param amountMinted The amount minted to the treasury
+      */
+     event MintedToTreasury(address indexed reserve, uint256 amountMinted);
+ 
+     /**
++     * @dev Emitted when deficit is realized on a liquidation.
++     * @param user The user address where the bad debt will be burned
++     * @param debtAsset The address of the underlying borrowed asset to be burned
++     * @param amountCreated The amount of deficit created
++     */
++    event DeficitCreated(
++        address indexed user,
++        address indexed debtAsset,
++        uint256 amountCreated
++    );
++
++    /**
+      * @notice Mints an `amount` of aTokens to the `onBehalfOf`
+      * @param asset The address of the underlying asset to mint
+      * @param amount The amount to mint
+      * @param onBehalfOf The address that will receive the aTokens
+@@ -600,18 +624,8 @@
+         address asset
+     ) external view returns (DataTypes.ReserveDataLegacy memory);
+ 
+     /**
+-     * @notice Returns the state and configuration of the reserve, including extra data included with Aave v3.1
+-     * @dev DEPRECATED use independent getters instead (getReserveData, getLiquidationGracePeriod)
+-     * @param asset The address of the underlying asset of the reserve
+-     * @return The state and configuration data of the reserve with virtual accounting
+-     */
+-    function getReserveDataExtended(
+-        address asset
+-    ) external view returns (DataTypes.ReserveData memory);
+-
+-    /**
+      * @notice Returns the virtual underlying balance of the reserve
+      * @param asset The address of the underlying asset of the reserve
+      * @return The reserve virtual underlying balance
+      */
+@@ -800,9 +814,11 @@
+      * @notice Returns the liquidation grace period of the given asset
+      * @param asset The address of the underlying asset
+      * @return Timestamp when the liquidation grace period will end
+      **/
+-    function getLiquidationGracePeriod(address asset) external returns (uint40);
++    function getLiquidationGracePeriod(
++        address asset
++    ) external view returns (uint40);
+ 
+     /**
+      * @notice Returns the total fee on flash loans
+      * @return The total fee on flashloans
+@@ -860,8 +876,41 @@
+         uint16 referralCode
+     ) external;
+ 
+     /**
++     * @notice It covers the deficit of a specified reserve by burning:
++     * - the equivalent aToken `amount` for assets with virtual accounting enabled
++     * - the equivalent `amount` of underlying for assets with virtual accounting disabled (e.g. GHO)
++     * @dev The deficit of a reserve can occur due to situations where borrowed assets are not repaid, leading to bad debt.
++     * @param asset The address of the underlying asset to cover the deficit.
++     * @param amount The amount to be covered, in aToken or underlying on non-virtual accounted assets
++     */
++    function eliminateReserveDeficit(address asset, uint256 amount) external;
++
++    /**
++     * @notice Returns the current deficit of a reserve.
++     * @param asset The address of the underlying asset of the reserve
++     * @return The current deficit of the reserve
++     */
++    function getReserveDeficit(address asset) external view returns (uint256);
++
++    /**
++     * @notice Returns the aToken address of a reserve.
++     * @param asset The address of the underlying asset of the reserve
++     * @return The address of the aToken
++     */
++    function getReserveAToken(address asset) external view returns (address);
++
++    /**
++     * @notice Returns the variableDebtToken address of a reserve.
++     * @param asset The address of the underlying asset of the reserve
++     * @return The address of the variableDebtToken
++     */
++    function getReserveVariableDebtToken(
++        address asset
++    ) external view returns (address);
++
++    /**
+      * @notice Gets the address of the external FlashLoanLogic
+      */
+     function getFlashLoanLogic() external view returns (address);
+ 

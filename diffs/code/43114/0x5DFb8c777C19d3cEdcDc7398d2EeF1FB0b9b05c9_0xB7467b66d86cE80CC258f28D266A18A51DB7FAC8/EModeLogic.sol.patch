@@ -1,0 +1,14 @@
+Index: lib/aave-v3-origin/src/contracts/protocol/libraries/logic/EModeLogic.sol
+===================================================================
+--- lib/aave-v3-origin/src/contracts/protocol/libraries/logic/EModeLogic.sol
++++ lib/aave-v3-origin/src/contracts/protocol/libraries/logic/EModeLogic.sol
+@@ -2,9 +2,8 @@
+ pragma solidity ^0.8.10;
+ 
+ import {GPv2SafeERC20} from "../../../dependencies/gnosis/contracts/GPv2SafeERC20.sol";
+ import {IERC20} from "../../../dependencies/openzeppelin/contracts/IERC20.sol";
+-import {IPriceOracleGetter} from "../../../interfaces/IPriceOracleGetter.sol";
+ import {UserConfiguration} from "../configuration/UserConfiguration.sol";
+ import {WadRayMath} from "../math/WadRayMath.sol";
+ import {PercentageMath} from "../math/PercentageMath.sol";
+ import {DataTypes} from "../types/DataTypes.sol";
