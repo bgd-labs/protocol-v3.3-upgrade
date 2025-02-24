@@ -60,7 +60,7 @@ Using the newer versions will result in slightly lower gas usage on certain oper
 ### Diffs
 
 The repository contains [code-diffs](./diffs/code) for all the targeted networks.
-The diffs were created by diffing the verified implementations etherscan code against new implementations etherscan code.
+The diffs were created by diffing the current explorer code against new explorer code.
 Once the diff is created the script deletes all duplicates, so eventually what is left is the differences between the different instances.
 As expected:
 
