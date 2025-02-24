@@ -1,0 +1,81 @@
+Index: ConfiguratorLogic.sol
+===================================================================
+--- ConfiguratorLogic.sol
++++ ConfiguratorLogic.sol
+@@ -126,14 +126,13 @@
+     function executeUpdateAToken(
+         IPool cachedPool,
+         ConfiguratorInputTypes.UpdateATokenInput calldata input
+     ) external {
+-        DataTypes.ReserveDataLegacy memory reserveData = cachedPool
+-            .getReserveData(input.asset);
++        address aTokenAddress = cachedPool.getReserveAToken(input.asset);
+ 
+-        (, , , uint256 decimals, ) = cachedPool
++        uint256 decimals = cachedPool
+             .getConfiguration(input.asset)
+-            .getParams();
++            .getDecimals();
+ 
+         bytes memory encodedCall = abi.encodeWithSelector(
+             IInitializableAToken.initialize.selector,
+             cachedPool,
+@@ -146,18 +145,14 @@
+             input.params
+         );
+ 
+         _upgradeTokenImplementation(
+-            reserveData.aTokenAddress,
++            aTokenAddress,
+             input.implementation,
+             encodedCall
+         );
+ 
+-        emit ATokenUpgraded(
+-            input.asset,
+-            reserveData.aTokenAddress,
+-            input.implementation
+-        );
++        emit ATokenUpgraded(input.asset, aTokenAddress, input.implementation);
+     }
+ 
+     /**
+      * @notice Updates the variable debt token implementation and initializes it
+@@ -168,14 +163,14 @@
+     function executeUpdateVariableDebtToken(
+         IPool cachedPool,
+         ConfiguratorInputTypes.UpdateDebtTokenInput calldata input
+     ) external {
+-        DataTypes.ReserveDataLegacy memory reserveData = cachedPool
+-            .getReserveData(input.asset);
++        address variableDebtTokenAddress = cachedPool
++            .getReserveVariableDebtToken(input.asset);
+ 
+-        (, , , uint256 decimals, ) = cachedPool
++        uint256 decimals = cachedPool
+             .getConfiguration(input.asset)
+-            .getParams();
++            .getDecimals();
+ 
+         bytes memory encodedCall = abi.encodeWithSelector(
+             IInitializableDebtToken.initialize.selector,
+             cachedPool,
+@@ -187,16 +182,16 @@
+             input.params
+         );
+ 
+         _upgradeTokenImplementation(
+-            reserveData.variableDebtTokenAddress,
++            variableDebtTokenAddress,
+             input.implementation,
+             encodedCall
+         );
+ 
+         emit VariableDebtTokenUpgraded(
+             input.asset,
+-            reserveData.variableDebtTokenAddress,
++            variableDebtTokenAddress,
+             input.implementation
+         );
+     }
+ 
